@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "1008956719365",
+    "firebase_url": "https://chat-e0b6f.firebaseio.com",
+    "project_id": "chat-e0b6f",
+    "storage_bucket": "chat-e0b6f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1008956719365:android:e70a799bcdb2461d88f76c",
+        "android_client_info": {
+          "package_name": "com.barlis.chat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1008956719365-qm0n8o9f7hbr0d7u2ughtt554obqr5dj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBvP8kyEcbKILMlcnGKCeI3zjQQcM-cA9E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1008956719365-qm0n8o9f7hbr0d7u2ughtt554obqr5dj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
