@@ -87,10 +87,10 @@ public class RegisterActivity extends AppCompatActivity {
                     hashMap.put("email", email);
                     hashMap.put("status", "offline");
                     hashMap.put("search", username.toLowerCase());
-                    hashMap.put("facebook", username.toLowerCase());
-                    hashMap.put("instagram", username.toLowerCase());
-                    hashMap.put("github", username.toLowerCase());
-                    hashMap.put("linkedin", username.toLowerCase());
+                    hashMap.put("facebook", "");
+                    hashMap.put("instagram", "");
+                    hashMap.put("github", "");
+                    hashMap.put("linkedin", "");
 
                     reference.setValue(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override

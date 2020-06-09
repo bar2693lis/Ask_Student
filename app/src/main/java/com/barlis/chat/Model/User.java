@@ -6,8 +6,10 @@ public class User {
     private String username;
     private String imageURL;
     private String email;
+
     private String status;
     private String search;
+
     private String facebook;
     private String instagram;
     private String github;

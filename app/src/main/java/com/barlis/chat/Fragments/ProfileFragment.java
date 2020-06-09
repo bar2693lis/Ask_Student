@@ -14,7 +14,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.MimeTypeMap;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -46,9 +49,13 @@ import static android.app.Activity.RESULT_OK;
 
 public class ProfileFragment extends Fragment {
 
-    CircleImageView image_profile;
+    CircleImageView image_profile, cancel_btn, save_btn;
     TextView username, email;
-    ImageView choose_image, facebook_account, instagram_account, github_account, linkedin_account;
+    ImageView choose_image, edit_accounts_btn, facebook_account, instagram_account, github_account, linkedin_account;
+    EditText edit_facebook_account, edit_instagram_account, edit_github_account, edit_linkedin_account;
+    LinearLayout accounts, edit_accounts;
+
+    private String facebookUrl, instagramUrl, githubUrl, linkedinUrl;
 
     DatabaseReference mDatabaseReference;
     FirebaseUser mFirebaseUser;
@@ -60,8 +67,6 @@ public class ProfileFragment extends Fragment {
 
     private StorageTask<UploadTask.TaskSnapshot> uploadTask;
 
-    private String facebookUrl, instagramUrl, githubUrl, linkedinUrl;
-
     public ProfileFragment() {
         // Required empty public constructor
     }
@@ -72,14 +77,26 @@ public class ProfileFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
         image_profile = view.findViewById(R.id.profile_image);
-        choose_image = view.findViewById(R.id.choose_image);
         username = view.findViewById(R.id.username);
         email = view.findViewById(R.id.email);
-
         facebook_account = view.findViewById(R.id.facebook_account);
         instagram_account = view.findViewById(R.id.instagram_account);
         github_account = view.findViewById(R.id.github_account);
         linkedin_account = view.findViewById(R.id.linkedin_account);
+
+        choose_image = view.findViewById(R.id.choose_image);
+        edit_accounts_btn = view.findViewById(R.id.edit_accounts_btn);
+
+        accounts = view.findViewById(R.id.accounts);
+        edit_accounts = view.findViewById(R.id.edit_accounts);
+
+        edit_facebook_account = view.findViewById(R.id.edit_facebook_account);
+        edit_instagram_account = view.findViewById(R.id.edit_instagram_account);
+        edit_github_account = view.findViewById(R.id.edit_github_account);
+        edit_linkedin_account = view.findViewById(R.id.edit_linkedin_account);
+
+        save_btn = view.findViewById(R.id.save_btn);
+        cancel_btn = view.findViewById(R.id.cancel_btn);
 
         mStorageReference = FirebaseStorage.getInstance().getReference("Uploads");
 
@@ -121,28 +138,104 @@ public class ProfileFragment extends Fragment {
         facebook_account.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openWebsite(facebookUrl);
+                if(!facebookUrl.equals("")){
+                    openWebsite(facebookUrl);
+                }
+                else {
+                    Toast.makeText(getContext(), "No Facebook account found", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
         instagram_account.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openWebsite(instagramUrl);
+                if(!instagramUrl.equals("")){
+                    openWebsite(instagramUrl);
+                }
+                else {
+                    Toast.makeText(getContext(), "No Instagram account found", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
         github_account.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openWebsite(githubUrl);
+                if(!githubUrl.equals("")){
+                    openWebsite(githubUrl);
+                }
+                else {
+                    Toast.makeText(getContext(), "No GitHub account found", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
         linkedin_account.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openWebsite(linkedinUrl);
+                if(!linkedinUrl.equals("")){
+                    openWebsite(linkedinUrl);
+                }
+                else {
+                    Toast.makeText(getContext(), "No Linkedin account found", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        edit_accounts_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                accounts.setVisibility(View.GONE);
+                edit_accounts.setVisibility(View.VISIBLE);
+            }
+        });
+
+        save_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mDatabaseReference = FirebaseDatabase.getInstance().getReference("Users").child(mFirebaseUser.getUid());
+
+                if(edit_facebook_account.getText().toString().equals("") && edit_instagram_account.getText().toString().equals("") && edit_github_account.getText().toString().equals("") && edit_linkedin_account.getText().toString().equals("")){
+                    Toast.makeText(getContext(), "You haven't added any accounts", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    HashMap<String, Object> hashMap = new HashMap<>();
+
+                    if(!edit_facebook_account.getText().toString().equals("")){
+                        hashMap.put("facebook", "https://www.facebook.com/" + edit_facebook_account.getText().toString() + "/");
+                        edit_facebook_account.setText("");
+                    }
+                    if(!edit_instagram_account.getText().toString().equals("")){
+                        hashMap.put("instagram", "https://www.instagram.com/" + edit_instagram_account.getText().toString() + "/");
+                        edit_instagram_account.setText("");
+                    }
+                    if(!edit_github_account.getText().toString().equals("")){
+                        hashMap.put("github", "https://github.com/" + edit_github_account.getText().toString() + "/");
+                        edit_github_account.setText("");
+                    }
+                    if(!edit_linkedin_account.getText().toString().equals("")){
+                        hashMap.put("linkedin", "https://www.linkedin.com/in/" + edit_linkedin_account.getText().toString() + "/");
+                        edit_linkedin_account.setText("");
+                    }
+
+                    mDatabaseReference.updateChildren(hashMap);
+
+                    accounts.setVisibility(View.VISIBLE);
+                    edit_accounts.setVisibility(View.GONE);
+
+                    Toast.makeText(getContext(), "Accounts saved", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        cancel_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                accounts.setVisibility(View.VISIBLE);
+                edit_accounts.setVisibility(View.GONE);
+
+                Toast.makeText(getContext(), "Accounts didn't saved", Toast.LENGTH_SHORT).show();
             }
         });
 
