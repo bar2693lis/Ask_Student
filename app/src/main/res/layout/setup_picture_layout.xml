@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
+    >
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:id="@+id/setup_Picture_image"
+        android:src="@mipmap/ic_launcher"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+
+        >
+
+    </de.hdodenhof.circleimageview.CircleImageView>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/setup_Picture_image"
+        android:layout_marginTop="20dp"
+        android:text="Pick a picture"
+        android:gravity="center"
+        android:id="@+id/setup_Picture_takePicBtn"
+        android:background="@color/colorAccent"
+        >
+
+    </Button>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/setup_Picture_takePicBtn"
+        android:layout_marginTop="20dp"
+        android:text="skip"
+        android:id="@+id/setup_Picture_skipBtn"
+        android:background="@color/colorAccent"
+        >
+
+    </Button>
+</RelativeLayout>
