@@ -55,7 +55,7 @@ public class UsersFragment extends Fragment {
 
         mUsers = new ArrayList<>();
 
-        readUsers();
+        //readUsers();
 
         search_users = view.findViewById(R.id.search_users);
         search_users.addTextChangedListener(new TextWatcher() {
@@ -136,4 +136,40 @@ public class UsersFragment extends Fragment {
             }
         });
     }
+
+    //Hanan
+    public void setNewSearchQuery(String Profession,String qualification)
+    {
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users");
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot snapshot:dataSnapshot.getChildren())
+                {
+                    User user = snapshot.getValue(User.class);
+                    if(user!=null && firebaseUser!=null)
+                    {
+                        if(user.getProfession()!=null && user.getQualifications()!=null)
+                        if(!user.getId().equals(firebaseUser.getUid()))
+                        {
+                            if(Profession.contains(user.getProfession()))
+                                mUsers.add(user);
+                            else if(qualification.contains(user.getQualifications()))
+                                mUsers.add(user);
+                        }
+                    }
+                }
+                userAdapter = new UserAdapter(getContext(), mUsers, false);
+                recyclerView.setAdapter(userAdapter);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+
 }

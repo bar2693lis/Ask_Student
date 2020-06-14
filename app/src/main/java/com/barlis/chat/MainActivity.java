@@ -4,15 +4,19 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import android.content.Intent;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 
 import com.barlis.chat.Fragments.ChatsFragment;
@@ -20,6 +24,7 @@ import com.barlis.chat.Fragments.ProfileFragment;
 import com.barlis.chat.Fragments.UsersFragment;
 import com.barlis.chat.Model.Chat;
 import com.barlis.chat.Model.User;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -30,6 +35,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -40,82 +46,127 @@ public class MainActivity extends AppCompatActivity {
     CircleImageView profileImage;
     TextView username;
 
+    //Start Hanan part
+    CoordinatorLayout coordinatorLayout;
+    FloatingActionButton floatingBtn;
+    String profession = "",job_description = "",note = "",qualifications = "";//looking for
+   // String userProfession,userQualification,userExperience,userPersonal;
+    private Uri imageUri = null;
+    //End Hanan part
     FirebaseUser firebaseUser;
     DatabaseReference reference;
-
+    private UsersFragment usersFragment;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        /*if(getIntent().getBooleanExtra("employer",true))
+        {
+            setContentView(R.layout.employer_layout);
+        }*/
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("");
 
-        profileImage = findViewById(R.id.profile_image);
-        username = findViewById(R.id.username);
 
-        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        reference = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid());
 
-        reference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                User user = dataSnapshot.getValue(User.class);
-                username.setText(user.getUsername());
+        //else {
+            setContentView(R.layout.activity_main);
 
-                if(user.getImageURL().equals("default")){
-                    profileImage.setImageResource(R.mipmap.ic_launcher);
+            usersFragment = new UsersFragment();
+
+            Toolbar toolbar = findViewById(R.id.toolbar);
+            setSupportActionBar(toolbar);
+            getSupportActionBar().setTitle("");
+            coordinatorLayout = findViewById(R.id.coordinator);
+            floatingBtn = findViewById(R.id.floatingBtn);
+            floatingBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent popUpIntent = new Intent(getApplicationContext(), PopUpActivity.class);
+                    startActivity(popUpIntent);
                 }
-                else{
-                    Picasso.get().load(user.getImageURL()).into(profileImage);
-                }
-            }
+            });
+        /*if(getIntent().hasExtra("userProfession"))
+        {//from profile activity - after registration with email part
+            userProfession = getIntent().getStringExtra("userProfession");
+            userQualification = getIntent().getStringExtra("userQualification");
+            userPersonal = getIntent().getStringExtra("personal");
+            userExperience = getIntent().getStringExtra("userExperience");
+            if(getIntent().hasExtra("imageUri"))
+                imageUri = getIntent().getParcelableExtra("imageUri");
+        }*/
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
 
-            }
-        });
+            profileImage = findViewById(R.id.profile_image);
+            username = findViewById(R.id.username);
 
-        TabLayout tabLayout = findViewById(R.id.tab_layout);
-        ViewPager viewPager = findViewById(R.id.view_pager);
+            firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+            reference = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid());
 
-        reference = FirebaseDatabase.getInstance().getReference("Chats");
-        reference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
+            reference.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    User user = dataSnapshot.getValue(User.class);
+                    if (user != null)
+                        System.out.println("user profession: " + user.getProfession());
+                /*if(user.getEmployee()==null)
+                    floatingBtn.hide();
+                else
+                    floatingBtn.show();*/
+                    username.setText(user.getUsername());
 
-                int unreadMessages = 0;
-
-                for(DataSnapshot snapshot : dataSnapshot.getChildren()){
-                    Chat chat = snapshot.getValue(Chat.class);
-
-                    if(chat.getReceiver().equals(firebaseUser.getUid()) && !chat.isIsseen()){
-                        unreadMessages++;
+                    if (user.getImageURL().equals("default")) {
+                        profileImage.setImageResource(R.mipmap.ic_launcher);
+                    } else {
+                        Picasso.get().load(user.getImageURL()).into(profileImage);
                     }
                 }
 
-                if(unreadMessages == 0){
-                    viewPagerAdapter.addFragment(new ChatsFragment(), "Chats");
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
                 }
-                else{
-                    viewPagerAdapter.addFragment(new ChatsFragment(), "(" + unreadMessages +") Chats");
+            });
+
+            TabLayout tabLayout = findViewById(R.id.tab_layout);
+            ViewPager viewPager = findViewById(R.id.view_pager);
+
+            reference = FirebaseDatabase.getInstance().getReference("Chats");
+            reference.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
+
+                    int unreadMessages = 0;
+
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        Chat chat = snapshot.getValue(Chat.class);
+
+                        if (chat.getReceiver().equals(firebaseUser.getUid()) && !chat.isIsseen()) {
+                            unreadMessages++;
+                        }
+                    }
+
+                    if (unreadMessages == 0) {
+                        viewPagerAdapter.addFragment(new ChatsFragment(), "Chats");
+                    } else {
+                        viewPagerAdapter.addFragment(new ChatsFragment(), "(" + unreadMessages + ") Chats");
+                    }
+
+                    //viewPagerAdapter.addFragment(new UsersFragment(), "Users");
+                    viewPagerAdapter.addFragment(usersFragment, "Users");
+                    viewPagerAdapter.addFragment(new ProfileFragment(), "Profile");
+
+                    viewPager.setAdapter(viewPagerAdapter);
+
+                    tabLayout.setupWithViewPager(viewPager);
                 }
 
-                viewPagerAdapter.addFragment(new UsersFragment(), "Users");
-                viewPagerAdapter.addFragment(new ProfileFragment(), "Profile");
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                }
+            });
+        }
+    //}
 
-                viewPager.setAdapter(viewPagerAdapter);
-
-                tabLayout.setupWithViewPager(viewPager);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) { }
-        });
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -135,6 +186,7 @@ public class MainActivity extends AppCompatActivity {
 
         return false;
     }
+
 
     class ViewPagerAdapter extends FragmentPagerAdapter{
 
@@ -182,7 +234,27 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        userStatus("online");
+        //if(!getIntent().getBooleanExtra("employer",true))
+            userStatus("online");
+        //getting information back from popUp activity
+        if(getIntent().hasExtra("Profession")) {
+            profession = getIntent().getStringExtra("Profession");
+        }
+        if(getIntent().hasExtra("Job Description")) {
+            job_description = getIntent().getStringExtra("Job Description");
+        }
+        if(getIntent().hasExtra("note")) {
+            note = getIntent().getStringExtra("note");
+        }
+        if(getIntent().hasExtra("qualifications")){
+            qualifications = getIntent().getStringExtra("qualifications");
+        }
+        //call for fragment update
+        if(getIntent().hasExtra("distance"))
+            usersFragment.setNewSearchQuery(profession,qualifications);
+
+        //opens job ticket page
+
     }
 
     @Override

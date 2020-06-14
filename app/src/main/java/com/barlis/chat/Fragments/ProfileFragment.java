@@ -14,7 +14,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.MimeTypeMap;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -188,6 +187,7 @@ public class ProfileFragment extends Fragment {
             public void onClick(View v) {
                 accounts.setVisibility(View.GONE);
                 edit_accounts.setVisibility(View.VISIBLE);
+
             }
         });
 

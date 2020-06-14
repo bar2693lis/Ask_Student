@@ -15,6 +15,17 @@ public class User {
     private String github;
     private String linkedin;
 
+
+    //Hanan
+    private String profession;
+    private String qualifications;
+    private String experience;
+    private String personal;
+    private String employee;
+    private String employer;
+
+
+
     public User(String id, String username, String imageURL, String email, String status, String search, String facebook, String instagram, String github, String linkedin) {
         this.id = id;
         this.username = username;
@@ -30,6 +41,54 @@ public class User {
     }
 
     public User() {
+    }
+
+    public String getEmployee() {
+        return employee;
+    }
+
+    public void setEmployee(String employee) {
+        this.employee = employee;
+    }
+
+    public String getEmployer() {
+        return employer;
+    }
+
+    public void setEmployer(String employer) {
+        this.employer = employer;
+    }
+
+    public void setProfession(String profession) {
+        this.profession = profession;
+    }
+
+    public void setQualifications(String qualifications) {
+        this.qualifications = qualifications;
+    }
+
+    public void setExperience(String experience) {
+        this.experience = experience;
+    }
+
+    public void setPersonal(String personal) {
+        this.personal = personal;
+    }
+
+    public String getProfession() {
+        return profession;
+    }
+
+    public String getQualifications() {
+        return qualifications;
+    }
+
+    public String getExperience() {
+        return experience;
+    }
+
+    public String getPersonal() {
+        return personal;
     }
 
     public String getId() {
