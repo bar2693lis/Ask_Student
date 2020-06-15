@@ -138,7 +138,16 @@ public class MessageActivity extends AppCompatActivity {
                     Picasso.get().load(user.getImageURL()).into(profile_image);
 
                 }
-
+                //Tom
+                toolbar.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent viewProfileIntent = new Intent(getApplicationContext(), ViewUserProfileActivity.class);
+                        viewProfileIntent.putExtra("userId", userId);
+                        startActivity(viewProfileIntent);
+                    }
+                });
+                //End Tom
                 readMessage(fuser.getUid(), userId, user.getImageURL());
             }
 
