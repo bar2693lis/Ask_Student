@@ -24,6 +24,10 @@ public class User {
     private String employee;
     private String employer;
 
+    //Tom
+    private float rating;
+    private int numberOfReviews;
+
 
 
     public User(String id, String username, String imageURL, String email, String status, String search, String facebook, String instagram, String github, String linkedin) {
@@ -169,5 +173,21 @@ public class User {
 
     public void setLinkedin(String linkedin) {
         this.linkedin = linkedin;
+    }
+
+    public float getRating() {
+        return rating;
+    }
+
+    public void setRating(float rating) {
+        this.rating = rating;
+    }
+
+    public int getNumberOfReviews() {
+        return numberOfReviews;
+    }
+
+    public void setNumberOfReviews(int numberOfReviews) {
+        this.numberOfReviews = numberOfReviews;
     }
 }
