@@ -103,6 +103,7 @@
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center"
                         android:orientation="horizontal">
 
                         <ImageView
@@ -134,7 +135,50 @@
                             android:layout_margin="10dp"/>
 
                     </LinearLayout>
-
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:id="@+id/star_layout"
+                        android:orientation="horizontal">
+                        <ImageView
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:id="@+id/star_one"
+                            android:src="@drawable/empty_star"
+                            android:layout_margin="10dp"/>
+                        <ImageView
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:id="@+id/star_two"
+                            android:src="@drawable/empty_star"
+                            android:layout_margin="10dp"/>
+                        <ImageView
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:id="@+id/star_three"
+                            android:src="@drawable/empty_star"
+                            android:layout_margin="10dp"/>
+                        <ImageView
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:id="@+id/star_four"
+                            android:src="@drawable/empty_star"
+                            android:layout_margin="10dp"/>
+                        <ImageView
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:id="@+id/star_five"
+                            android:src="@drawable/empty_star"
+                            android:layout_margin="10dp"/>
+                    </LinearLayout>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="1 reviews"
+                        android:textSize="15sp"
+                        android:id="@+id/reviewer_count_text"
+                        android:layout_marginStart="10dp"/>
                     <ImageView
                         android:id="@+id/edit_accounts_btn"
                         android:layout_width="25dp"

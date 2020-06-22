@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/popUpLayout"
+            android:background="@color/colorPrimary">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Looking for"
+                android:gravity="center"
+                android:layout_marginTop="20dp"
+                android:textSize="30sp"
+                android:id="@+id/LookingForTextView"
+                />
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:id="@+id/professionEt"
+                android:layout_marginTop="20dp"
+                android:hint="profession"
+                android:gravity="center"
+                android:inputType="textMultiLine"
+                android:layout_below="@id/LookingForTextView"
+                >
+
+            </EditText>
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:layout_below="@+id/professionEt"
+                android:hint="job description"
+                android:gravity="center"
+                android:id="@+id/jobDesc"
+                android:inputType="textMultiLine"
+                >
+
+            </EditText>
+
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:id="@+id/qualificationsEt"
+                android:layout_below="@+id/jobDesc"
+                android:hint="qualifications"
+                android:gravity="center"
+                android:inputType="textMultiLine"
+                >
+
+            </EditText>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:layout_below="@+id/qualificationsEt"
+                android:gravity="center"
+                android:hint="add note"
+                android:id="@+id/note"
+                >
+
+            </EditText>
+            <Switch
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/note"
+                android:id="@+id/locationSwitch"
+                android:text="Search AnyWhere      "
+                android:layout_marginBottom="20dp"
+                android:layout_centerInParent="true"
+                android:checked="true"
+                >
+
+            </Switch>
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:id="@+id/distanceEt"
+                android:layout_below="@+id/locationSwitch"
+                android:visibility="invisible"
+                android:hint="distance in KM"
+                android:gravity="center"
+                >
+
+            </EditText>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/distanceEt"
+                android:text="done"
+                android:id="@+id/doneBtn"
+                android:layout_centerInParent="true"
+                >
+
+            </Button>
+        </RelativeLayout>
+
+    </ScrollView>
+</RelativeLayout>

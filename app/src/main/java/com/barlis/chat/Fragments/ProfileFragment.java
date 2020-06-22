@@ -49,8 +49,8 @@ import static android.app.Activity.RESULT_OK;
 public class ProfileFragment extends Fragment {
 
     CircleImageView image_profile, cancel_btn, save_btn;
-    TextView username, email;
-    ImageView choose_image, edit_accounts_btn, facebook_account, instagram_account, github_account, linkedin_account;
+    TextView username, email, reviewerCount;
+    ImageView choose_image, edit_accounts_btn, facebook_account, instagram_account, github_account, linkedin_account, stars[];
     EditText edit_facebook_account, edit_instagram_account, edit_github_account, edit_linkedin_account;
     LinearLayout accounts, edit_accounts;
 
@@ -96,6 +96,13 @@ public class ProfileFragment extends Fragment {
 
         save_btn = view.findViewById(R.id.save_btn);
         cancel_btn = view.findViewById(R.id.cancel_btn);
+        stars = new ImageView[5];
+        stars[0] = view.findViewById(R.id.star_one);
+        stars[1] = view.findViewById(R.id.star_two);
+        stars[2] = view.findViewById(R.id.star_three);
+        stars[3] = view.findViewById(R.id.star_four);
+        stars[4] = view.findViewById(R.id.star_five);
+        reviewerCount = view.findViewById(R.id.reviewer_count_text);
 
         mStorageReference = FirebaseStorage.getInstance().getReference("Uploads");
 
@@ -119,6 +126,9 @@ public class ProfileFragment extends Fragment {
                 else{
                     Picasso.get().load(user.getImageURL()).into(image_profile);
                 }
+
+                reviewerCount.setText(user.getNumberOfReviews() + " reviews");
+                fillStarRating(user.getRating());
             }
 
             @Override
@@ -240,6 +250,22 @@ public class ProfileFragment extends Fragment {
         });
 
         return view;
+    }
+
+    private void fillStarRating(float rating) {
+        for (int i = 0; i < 5; i++) {
+            stars[i].setImageResource(R.drawable.empty_star);
+        }
+
+        int currentStar = 0;
+        while (rating >= 1) {
+            rating--;
+            stars[currentStar].setImageResource(R.drawable.full_star);
+            currentStar++;
+        }
+        if (rating != 0) {
+            stars[currentStar].setImageResource(R.drawable.half_star);
+        }
     }
 
     private void openWebsite(String url) {
