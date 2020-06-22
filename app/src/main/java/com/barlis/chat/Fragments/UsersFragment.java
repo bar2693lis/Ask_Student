@@ -111,9 +111,9 @@ public class UsersFragment extends Fragment {
 
     private void readUsers() {
         final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users");
+        Query query = FirebaseDatabase.getInstance().getReference("Users").orderByChild("search").startAt("").endAt("\uf8ff");
 
-        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(search_users.getText().toString().equals("")){
@@ -127,7 +127,6 @@ public class UsersFragment extends Fragment {
                             mUsers.add(user);
                         }
                     }
-//                    userAdapter.notifyDataSetChanged();
                     userAdapter = new UserAdapter(getContext(), mUsers, false);
                     recyclerView.setAdapter(userAdapter);
                 }

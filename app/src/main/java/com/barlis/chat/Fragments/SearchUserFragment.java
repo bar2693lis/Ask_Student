@@ -59,7 +59,7 @@ public class SearchUserFragment extends Fragment {
                             intent.putExtra("distance", Integer.parseInt(distance.getText().toString()));
                         }
                         intent.putExtra("searchByDistance", searchByDistance);
-                        getActivity().setResult(10, intent);
+                        getActivity().setResult(2, intent);
                         getActivity().finish();
                     }
                 }
