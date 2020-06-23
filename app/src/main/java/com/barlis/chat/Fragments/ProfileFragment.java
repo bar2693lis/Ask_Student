@@ -137,7 +137,7 @@ public class ProfileFragment extends Fragment {
         facebook_account.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!facebookUrl.equals("")){
+                if(!facebookUrl.equals("none")){
                     openWebsite(facebookUrl);
                 }
                 else {
@@ -149,7 +149,7 @@ public class ProfileFragment extends Fragment {
         instagram_account.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!instagramUrl.equals("")){
+                if(!instagramUrl.equals("none")){
                     openWebsite(instagramUrl);
                 }
                 else {
@@ -161,7 +161,7 @@ public class ProfileFragment extends Fragment {
         github_account.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!githubUrl.equals("")){
+                if(!githubUrl.equals("none")){
                     openWebsite(githubUrl);
                 }
                 else {
@@ -173,7 +173,7 @@ public class ProfileFragment extends Fragment {
         linkedin_account.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!linkedinUrl.equals("")){
+                if(!linkedinUrl.equals("none")){
                     openWebsite(linkedinUrl);
                 }
                 else {

@@ -9,8 +9,6 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CompoundButton;
-import android.widget.Switch;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -32,7 +30,6 @@ public class RegisterActivity extends AppCompatActivity {
     FirebaseAuth auth;
     DatabaseReference reference;
 
-    private Switch employeeSwitch;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,19 +40,7 @@ public class RegisterActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("Register");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        //Hanan
-        /*employeeSwitch = findViewById(R.id.employeeSwitch);
-        employeeSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked)
-                    buttonView.setText("im an employee");
-                else
-                    buttonView.setText("im an employer");
-            }
-        });*/
 
-        //end Hanan
         username = findViewById(R.id.username);
         email = findViewById(R.id.email);
         password = findViewById(R.id.password);
@@ -80,7 +65,6 @@ public class RegisterActivity extends AppCompatActivity {
                 else{
                     register(txt_username, txt_email, txt_password);
                 }
-
             }
         });
     }
@@ -107,33 +91,14 @@ public class RegisterActivity extends AppCompatActivity {
                     hashMap.put("instagram", "");
                     hashMap.put("github", "");
                     hashMap.put("linkedin", "");
-                    //Hanan
-                    hashMap.put("profession","");
-                    hashMap.put("qualifications","");
-                    hashMap.put("experience","");
-                    hashMap.put("personal","");
-                    /*if(employeeSwitch.isChecked())
-                    {
-                        hashMap.put("employee","employee");
-                        reference = FirebaseDatabase.getInstance().getReference("Users").child(userId);
-                    }
-                    else
-                    {
-                        hashMap.put("employer","employer");
-                        reference = FirebaseDatabase.getInstance().getReference("Employers").child(userId);
-                    }*/
-                    //end Hanan
+
                     reference.setValue(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if(task.isSuccessful()){
-                                Intent moreInformationIntent = new Intent(RegisterActivity.this, SetupProfileActivity.class);
-                                //moreInformationIntent.putExtra("employee",employeeSwitch.isChecked());
-                                moreInformationIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                                startActivity(moreInformationIntent);
-                                /*Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
+                                Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
                                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                                startActivity(intent);*/
+                                startActivity(intent);
                                 finish();
                             }
                         }
