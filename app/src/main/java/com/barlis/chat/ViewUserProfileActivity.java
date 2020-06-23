@@ -205,7 +205,7 @@ public class ViewUserProfileActivity extends AppCompatActivity implements RateUs
             currentStar++;
         }
         if (rating != 0) {
-            stars[currentStar].setImageResource(R.drawable.half_star);
+            stars[currentStar].setImageResource(R.drawable.half_star_bitmap);
         }
     }
 
