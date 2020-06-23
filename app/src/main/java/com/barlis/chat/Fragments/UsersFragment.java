@@ -1,5 +1,6 @@
 package com.barlis.chat.Fragments;
 
+import android.location.Location;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -13,8 +14,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.barlis.chat.Adapter.UserAdapter;
+import com.barlis.chat.MainActivity;
 import com.barlis.chat.Model.User;
 import com.barlis.chat.R;
 import com.google.firebase.auth.FirebaseAuth;
@@ -55,7 +58,7 @@ public class UsersFragment extends Fragment {
 
         mUsers = new ArrayList<>();
 
-        //readUsers();
+        readUsers();
 
         search_users = view.findViewById(R.id.search_users);
         search_users.addTextChangedListener(new TextWatcher() {
@@ -81,7 +84,7 @@ public class UsersFragment extends Fragment {
     private void searchUsers(String s) {
         final FirebaseUser fuser = FirebaseAuth.getInstance().getCurrentUser();
         Query query = FirebaseDatabase.getInstance().getReference("Users").orderByChild("search").startAt(s).endAt(s + "\uf8ff");
-        query.addValueEventListener(new ValueEventListener() {
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 mUsers.clear();
@@ -108,9 +111,9 @@ public class UsersFragment extends Fragment {
 
     private void readUsers() {
         final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users");
+        Query query = FirebaseDatabase.getInstance().getReference("Users").orderByChild("search").startAt("").endAt("\uf8ff");
 
-        reference.addValueEventListener(new ValueEventListener() {
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(search_users.getText().toString().equals("")){
@@ -124,7 +127,6 @@ public class UsersFragment extends Fragment {
                             mUsers.add(user);
                         }
                     }
-
                     userAdapter = new UserAdapter(getContext(), mUsers, false);
                     recyclerView.setAdapter(userAdapter);
                 }
@@ -138,30 +140,36 @@ public class UsersFragment extends Fragment {
     }
 
     //Hanan
-    public void setNewSearchQuery(String Profession,String qualification)
+    public void setNewSearchQuery(String profession, final boolean searchByDistance, Location userLocation, int maxDistance)
     {
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users");
-        reference.addValueEventListener(new ValueEventListener() {
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for(DataSnapshot snapshot:dataSnapshot.getChildren())
-                {
+                mUsers.clear();
+                for(DataSnapshot snapshot:dataSnapshot.getChildren()) {
                     User user = snapshot.getValue(User.class);
-                    if(user!=null && firebaseUser!=null)
-                    {
-                        if(user.getProfession()!=null && user.getQualifications()!=null)
-                        if(!user.getId().equals(firebaseUser.getUid()))
-                        {
-                            if(Profession.contains(user.getProfession()))
-                                mUsers.add(user);
-                            else if(qualification.contains(user.getQualifications()))
-                                mUsers.add(user);
+                    if (user!=null && firebaseUser!=null && !user.getId().equals(firebaseUser.getUid())
+                            && user.getProfession() != null && user.getQualifications() != null
+                            && !user.getId().equals(firebaseUser.getUid())
+                            && profession.equals(user.getProfession().toLowerCase())) {
+                        if (searchByDistance) {
+                            if (snapshot.hasChild("latitude")) {
+                                Location dest = new Location("");
+                                dest.setLatitude(snapshot.child("latitude").getValue(double.class));
+                                dest.setLongitude(snapshot.child("longitude").getValue(double.class));
+                                if (userLocation.distanceTo(dest) < maxDistance) {
+                                    mUsers.add(user);
+                                }
+                            }
+                        }
+                        else {
+                            mUsers.add(user);
                         }
                     }
                 }
-                userAdapter = new UserAdapter(getContext(), mUsers, false);
-                recyclerView.setAdapter(userAdapter);
+                userAdapter.notifyDataSetChanged();
             }
 
             @Override

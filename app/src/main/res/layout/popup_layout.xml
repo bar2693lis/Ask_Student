@@ -1,123 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView android:layout_height="wrap_content"
+<LinearLayout
+    android:layout_height="wrap_content"
     android:layout_width="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/popUpCardView"
-    app:cardCornerRadius="15dp"
-    app:cardElevation="12dp"
-    app:cardBackgroundColor="@color/colorPrimary"
+    android:background="@android:color/transparent">
 
-    >
-<ScrollView
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-
-    <RelativeLayout android:layout_height="match_parent"
+    <androidx.cardview.widget.CardView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:id="@+id/popUpCardView"
+        app:cardCornerRadius="15dp"
+        app:cardElevation="12dp"
+        app:cardBackgroundColor="@color/colorPrimary">
+    <LinearLayout
         android:layout_width="match_parent"
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/popUpLayout"
-        android:background="@color/colorPrimary">
-
-        <TextView
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Looking for"
-            android:gravity="center"
-            android:layout_marginTop="20dp"
-            android:textSize="30sp"
-            android:id="@+id/LookingForTextView"
-
-            >
-
-        </TextView>
-
-        <EditText
+            android:layout_height="wrap_content">
+            <com.google.android.material.tabs.TabLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorPrimary"
+                android:id="@+id/tab_layout"/>
+        </com.google.android.material.appbar.AppBarLayout>
+        <androidx.viewpager.widget.ViewPager
             android:layout_width="match_parent"
-            android:layout_height="150dp"
-            android:id="@+id/professionEt"
-            android:layout_marginTop="20dp"
-            android:hint="profession"
-            android:gravity="center"
-            android:inputType="textMultiLine"
-            android:layout_below="@id/LookingForTextView"
-            >
-
-        </EditText>
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="150dp"
-            android:layout_below="@+id/professionEt"
-            android:hint="job description"
-            android:gravity="center"
-            android:id="@+id/jobDesc"
-            android:inputType="textMultiLine"
-            >
-
-        </EditText>
-
-
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="150dp"
-            android:id="@+id/qualificationsEt"
-            android:layout_below="@+id/jobDesc"
-            android:hint="qualifications"
-            android:gravity="center"
-            android:inputType="textMultiLine"
-            >
-
-        </EditText>
-
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="150dp"
-            android:layout_below="@+id/qualificationsEt"
-            android:gravity="center"
-            android:hint="add note"
-            android:id="@+id/note"
-            >
-
-        </EditText>
-        <Switch
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/note"
-            android:id="@+id/locationSwitch"
-            android:text="Search AnyWhere      "
-            android:layout_marginBottom="20dp"
-            android:layout_centerInParent="true"
-            android:checked="true"
-            >
-
-        </Switch>
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="150dp"
-            android:id="@+id/distanceEt"
-            android:layout_below="@+id/locationSwitch"
-            android:visibility="invisible"
-            android:hint="distance in KM"
-            android:gravity="center"
-            >
-
-        </EditText>
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/distanceEt"
-            android:text="done"
-            android:id="@+id/doneBtn"
-            android:layout_centerInParent="true"
-            >
-
-        </Button>
-
-    </RelativeLayout>
-
-</ScrollView>
-
-
-
-</androidx.cardview.widget.CardView>
+            android:layout_height="match_parent"
+            android:id="@+id/view_pager"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+    </LinearLayout>
+    </androidx.cardview.widget.CardView>
+</LinearLayout>

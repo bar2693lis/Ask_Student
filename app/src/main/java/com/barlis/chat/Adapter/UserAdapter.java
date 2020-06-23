@@ -31,14 +31,14 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
     private Context mContext;
     private List<User> mUsers;
 
-    private boolean ischat;
+    private boolean isChat;
 
     String theLastMessage;
 
-    public UserAdapter(Context mContext, List<User> mUsers, boolean iscaht){
+    public UserAdapter(Context mContext, List<User> mUsers, boolean isChat){
         this.mContext = mContext;
         this.mUsers = mUsers;
-        this.ischat = iscaht;
+        this.isChat = isChat;
     }
 
     @NonNull
@@ -59,14 +59,14 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
             Picasso.get().load(user.getImageURL()).into(holder.profile_image);
         }
 
-        if(ischat){
+        if(isChat){
             lastMessage(user.getId(), holder.last_message);
         }
         else{
             holder.last_message.setVisibility(View.GONE);
         }
 
-        if(ischat){
+        if(isChat){
             if(user.getStatus().equals("online")){
                 holder.img_on.setVisibility(View.VISIBLE);
                 holder.img_off.setVisibility(View.GONE);

@@ -2,7 +2,6 @@ package com.barlis.chat;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
@@ -11,26 +10,20 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
-import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.barlis.chat.Fragments.ChatsFragment;
-import com.barlis.chat.Fragments.GroupChatFragment;
 import com.barlis.chat.Fragments.ProfileFragment;
 import com.barlis.chat.Fragments.UsersFragment;
 import com.barlis.chat.Model.Chat;
 import com.barlis.chat.Model.User;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
@@ -42,6 +35,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -56,12 +50,11 @@ public class MainActivity extends AppCompatActivity {
     CoordinatorLayout coordinatorLayout;
     FloatingActionButton floatingBtn;
     String profession = "",job_description = "",note = "",qualifications = "";//looking for
+   // String userProfession,userQualification,userExperience,userPersonal;
+    private Uri imageUri = null;
     //End Hanan part
     FirebaseUser firebaseUser;
     DatabaseReference reference;
-    FirebaseDatabase rootReference;
-   // String userProfession,userQualification,userExperience,userPersonal;
-    private Uri imageUri = null;
     private UsersFragment usersFragment;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,8 +100,6 @@ public class MainActivity extends AppCompatActivity {
 
             firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
             reference = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid());
-
-            rootReference = FirebaseDatabase.getInstance();
 
             reference.addValueEventListener(new ValueEventListener() {
                 @Override
@@ -160,13 +151,8 @@ public class MainActivity extends AppCompatActivity {
                         viewPagerAdapter.addFragment(new ChatsFragment(), "(" + unreadMessages + ") Chats");
                     }
 
-                    viewPagerAdapter.addFragment(new GroupChatFragment(), "Groups"); // Start, Bar
-                    CreateNewGroup(); // End, Bar
-
-
                     //viewPagerAdapter.addFragment(new UsersFragment(), "Users");
                     viewPagerAdapter.addFragment(usersFragment, "Users");
-
                     viewPagerAdapter.addFragment(new ProfileFragment(), "Profile");
 
                     viewPager.setAdapter(viewPagerAdapter);
@@ -179,6 +165,8 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         }
+    //}
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -199,40 +187,40 @@ public class MainActivity extends AppCompatActivity {
         return false;
     }
 
-    private void CreateNewGroup() { // Start, Bar
-        rootReference.getReference().child("Groups").child("Computer Science - Work Group").setValue("").addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if(task.isSuccessful()){
 
-                }
-            }
-        });
-        rootReference.getReference().child("Groups").child("Electronic Engineering - Work Group").setValue("").addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if(task.isSuccessful()){
+    class ViewPagerAdapter extends FragmentPagerAdapter{
 
-                }
-            }
-        });
-        rootReference.getReference().child("Groups").child("Applied Mathematics - Work Group").setValue("").addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if(task.isSuccessful()){
+        private ArrayList<Fragment> fragments;
+        private ArrayList<String> titles;
 
-                }
-            }
-        });
-        rootReference.getReference().child("Groups").child("Industrial design - Work Group").setValue("").addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if(task.isSuccessful()){
+        ViewPagerAdapter (FragmentManager fm){
+            super(fm);
+            this.fragments = new ArrayList<>();
+            this.titles = new ArrayList<>();
+        }
 
-                }
-            }
-        });
-    } // End, Bar
+        @NonNull
+        @Override
+        public Fragment getItem(int position) {
+            return fragments.get(position);
+        }
+
+        @Override
+        public int getCount() {
+            return fragments.size();
+        }
+
+        public void addFragment(Fragment fragment, String title){
+            fragments.add(fragment);
+            titles.add(title);
+        }
+
+        @Nullable
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return titles.get(position);
+        }
+    }
 
     private void userStatus(String status){
         reference = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid());
@@ -273,39 +261,5 @@ public class MainActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         userStatus("offline");
-    }
-
-    class ViewPagerAdapter extends FragmentPagerAdapter{
-
-        private ArrayList<Fragment> fragments;
-        private ArrayList<String> titles;
-
-        ViewPagerAdapter (FragmentManager fm){
-            super(fm);
-            this.fragments = new ArrayList<>();
-            this.titles = new ArrayList<>();
-        }
-
-        @NonNull
-        @Override
-        public Fragment getItem(int position) {
-            return fragments.get(position);
-        }
-
-        @Override
-        public int getCount() {
-            return fragments.size();
-        }
-
-        public void addFragment(Fragment fragment, String title){
-            fragments.add(fragment);
-            titles.add(title);
-        }
-
-        @Nullable
-        @Override
-        public CharSequence getPageTitle(int position) {
-            return titles.get(position);
-        }
     }
 }
