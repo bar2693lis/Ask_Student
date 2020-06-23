@@ -72,7 +72,7 @@ public class RateUserDialogFragment extends DialogFragment implements View.OnCli
         profileImg = dialogView.findViewById(R.id.profile_image);
         title = dialogView.findViewById(R.id.title);
 
-        title.setText("Rate " + userName);
+        title.setText(getResources().getString(R.string.rate) + " " + userName);
         if (imageUrl.equals("default")) {
             profileImg.setImageResource(R.mipmap.ic_launcher);
         }
@@ -95,7 +95,7 @@ public class RateUserDialogFragment extends DialogFragment implements View.OnCli
                 alertDialog.dismiss();
             }
             else {
-                Toast.makeText(dialogView.getContext(), "Please choose rating", Toast.LENGTH_SHORT).show();
+                Toast.makeText(dialogView.getContext(), getResources().getString(R.string.please_choose_rating), Toast.LENGTH_SHORT).show();
             }
         }
         else {

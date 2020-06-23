@@ -20,7 +20,7 @@
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/profileLayoutImage"
         android:gravity="start"
-        android:text="Tell us about yourself"
+        android:text="@string/about_yourself_title"
         android:layout_marginTop="110dp"
         android:textSize="30sp"
         android:layout_marginStart="20dp"
@@ -61,7 +61,7 @@
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="whats your profession"
+            android:hint="@string/ask_profession"
             android:gravity="center"
             android:textColor="@color/red"
             android:id="@+id/ProfileProfessionEt"
@@ -99,7 +99,7 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="whats your qualifications"
+                android:hint="@string/ask_qualifications"
                 android:gravity="center"
                 android:textColor="@color/red"
                 android:id="@+id/ProfileQualificationEt"
@@ -134,7 +134,7 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Tell us about your Experience"
+                android:hint="@string/ask_experience"
                 android:gravity="center"
                 android:textColor="@color/red"
                 android:id="@+id/ProfileExperienceEt"
@@ -169,7 +169,7 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Tell us about yourself"
+                android:hint="@string/about_yourself_title"
                 android:gravity="center"
                 android:textColor="@color/red"
                 android:id="@+id/ProfileAboutYourSelfEt"
@@ -186,7 +186,7 @@
         android:layout_centerInParent="true"
         android:background="@drawable/round_btn"
         android:layout_marginTop="20dp"
-        android:text="NEXT">
+        android:text="@string/next">
 
     </Button>
         </RelativeLayout>

@@ -10,9 +10,13 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
+import android.location.Location;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -24,6 +28,11 @@ import com.barlis.chat.Fragments.ProfileFragment;
 import com.barlis.chat.Fragments.UsersFragment;
 import com.barlis.chat.Model.Chat;
 import com.barlis.chat.Model.User;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
@@ -43,6 +52,9 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends AppCompatActivity {
 
+    final int LOCATION_PERMISSION_REQUEST = 1;
+    final int NEW_JOB_REQUEST_CODE = 2;
+
     CircleImageView profileImage;
     TextView username;
 
@@ -53,6 +65,9 @@ public class MainActivity extends AppCompatActivity {
    // String userProfession,userQualification,userExperience,userPersonal;
     private Uri imageUri = null;
     //End Hanan part
+    Location userLocation;
+    int maxDistance;
+    TabLayout tabLayout;
     FirebaseUser firebaseUser;
     DatabaseReference reference;
     private UsersFragment usersFragment;
@@ -69,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
 
         //else {
             setContentView(R.layout.activity_main);
-
+            userLocation = new Location("");
             usersFragment = new UsersFragment();
 
             Toolbar toolbar = findViewById(R.id.toolbar);
@@ -81,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     Intent popUpIntent = new Intent(getApplicationContext(), PopUpActivity.class);
-                    startActivity(popUpIntent);
+                    startActivityForResult(popUpIntent, NEW_JOB_REQUEST_CODE);
                 }
             });
         /*if(getIntent().hasExtra("userProfession"))
@@ -118,6 +133,11 @@ public class MainActivity extends AppCompatActivity {
                     } else {
                         Picasso.get().load(user.getImageURL()).into(profileImage);
                     }
+                    // Tom
+                    if (dataSnapshot.hasChild("latitude")) {
+                        userLocation.setLatitude(dataSnapshot.child("latitude").getValue(double.class));
+                        userLocation.setLongitude(dataSnapshot.child("longitude").getValue(double.class));
+                    }
                 }
 
                 @Override
@@ -126,7 +146,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
 
-            TabLayout tabLayout = findViewById(R.id.tab_layout);
+            tabLayout = findViewById(R.id.tab_layout);
             ViewPager viewPager = findViewById(R.id.view_pager);
 
             reference = FirebaseDatabase.getInstance().getReference("Chats");
@@ -164,9 +184,54 @@ public class MainActivity extends AppCompatActivity {
                 public void onCancelled(@NonNull DatabaseError databaseError) {
                 }
             });
+
+            if (Build.VERSION.SDK_INT >= 23) {
+                int hasLocationPermission = checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION);
+                if (hasLocationPermission != PackageManager.PERMISSION_GRANTED) {
+                    requestPermissions(new String[] {Manifest.permission.ACCESS_FINE_LOCATION},LOCATION_PERMISSION_REQUEST);
+                }
+                else getLocation();
+            }
+            else getLocation();
+
         }
     //}
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if(requestCode==LOCATION_PERMISSION_REQUEST) {
+            if(grantResults[0]!=PackageManager.PERMISSION_GRANTED) {
+                // User denied permission
+            }
+            else getLocation();
+        }
+    }
+
+    private void getLocation() {
+        FusedLocationProviderClient client = LocationServices.getFusedLocationProviderClient(this);
+
+        LocationRequest request =LocationRequest.create();
+        request.setInterval(5000);
+        request.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
+        LocationCallback callback = new LocationCallback() {
+            @Override
+            public void onLocationResult(LocationResult locationResult) {
+                super.onLocationResult(locationResult);
+                Location location = locationResult.getLastLocation();
+                userLocation.setLatitude(location.getLatitude());
+                userLocation.setLongitude(location.getLongitude());
+                HashMap<String, Object> map = new HashMap<>();
+                map.put("latitude", location.getLatitude());
+                map.put("longitude", location.getLongitude());
+                reference.updateChildren(map);
+            }
+        };
+
+        if(Build.VERSION.SDK_INT>=23 && checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION)==PackageManager.PERMISSION_GRANTED) {
+            client.requestLocationUpdates(request, callback, null);
+        }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -231,30 +296,34 @@ public class MainActivity extends AppCompatActivity {
         reference.updateChildren(hashMap);
     }
 
+    // Tom
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // Getting information back from popUp activity
+        if (requestCode == NEW_JOB_REQUEST_CODE) {
+            if (resultCode == 2) {
+                if (data.hasExtra("profession")) {
+                    profession = data.getStringExtra("profession");
+                }
+                if (data.hasExtra("distance")) {
+                    maxDistance = data.getIntExtra("distance", 0) * 1000;
+                }
+                tabLayout.getTabAt(1).select();
+                usersFragment.setNewSearchQuery(profession, data.getBooleanExtra("searchByDistance", false), userLocation, maxDistance);
+            }
+            else if (resultCode == 3) {
+                // Open new Request
+            }
+        }
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
         //if(!getIntent().getBooleanExtra("employer",true))
             userStatus("online");
-        //getting information back from popUp activity
-        if(getIntent().hasExtra("Profession")) {
-            profession = getIntent().getStringExtra("Profession");
-        }
-        if(getIntent().hasExtra("Job Description")) {
-            job_description = getIntent().getStringExtra("Job Description");
-        }
-        if(getIntent().hasExtra("note")) {
-            note = getIntent().getStringExtra("note");
-        }
-        if(getIntent().hasExtra("qualifications")){
-            qualifications = getIntent().getStringExtra("qualifications");
-        }
-        //call for fragment update
-        if(getIntent().hasExtra("distance"))
-            usersFragment.setNewSearchQuery(profession,qualifications);
-
-        //opens job ticket page
-
     }
 
     @Override

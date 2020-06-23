@@ -27,7 +27,7 @@
                 android:layout_height="150dp"
                 android:id="@+id/professionEt"
                 android:layout_marginTop="20dp"
-                android:hint="profession"
+                android:hint="@string/profession"
                 android:gravity="center"
                 android:inputType="textMultiLine"
                 android:layout_below="@id/LookingForTextView"
@@ -38,7 +38,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
                 android:layout_below="@+id/professionEt"
-                android:hint="job description"
+                android:hint="@string/job_description"
                 android:gravity="center"
                 android:id="@+id/jobDesc"
                 android:inputType="textMultiLine"
@@ -52,7 +52,7 @@
                 android:layout_height="150dp"
                 android:id="@+id/qualificationsEt"
                 android:layout_below="@+id/jobDesc"
-                android:hint="qualifications"
+                android:hint="@string/qualifications"
                 android:gravity="center"
                 android:inputType="textMultiLine"
                 >
@@ -64,7 +64,7 @@
                 android:layout_height="150dp"
                 android:layout_below="@+id/qualificationsEt"
                 android:gravity="center"
-                android:hint="add note"
+                android:hint="@string/add_note"
                 android:id="@+id/note"
                 >
 
@@ -74,7 +74,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/note"
                 android:id="@+id/locationSwitch"
-                android:text="Search AnyWhere      "
+                android:text="@string/search_anywhere"
                 android:layout_marginBottom="20dp"
                 android:layout_centerInParent="true"
                 android:checked="true"
@@ -87,7 +87,7 @@
                 android:id="@+id/distanceEt"
                 android:layout_below="@+id/locationSwitch"
                 android:visibility="invisible"
-                android:hint="distance in KM"
+                android:hint="@string/distance_in_km_hint"
                 android:gravity="center"
                 >
 
@@ -96,7 +96,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/distanceEt"
-                android:text="done"
+                android:text="@string/open_request"
                 android:id="@+id/doneBtn"
                 android:layout_centerInParent="true"
                 >

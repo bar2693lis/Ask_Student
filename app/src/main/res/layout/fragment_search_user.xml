@@ -16,7 +16,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Looking for"
+                android:text="@string/looking_for"
                 android:gravity="center"
                 android:layout_marginTop="20dp"
                 android:textSize="30sp"
@@ -26,7 +26,7 @@
                 android:layout_height="150dp"
                 android:id="@+id/professionEt"
                 android:layout_marginTop="20dp"
-                android:hint="profession"
+                android:hint="@string/profession"
                 android:gravity="center"
                 android:inputType="textMultiLine"
                 android:layout_below="@id/LookingForTextView" />
@@ -36,7 +36,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/professionEt"
                 android:id="@+id/locationSwitch"
-                android:text="Search AnyWhere      "
+                android:text="@string/search_anywhere"
                 android:layout_marginBottom="20dp"
                 android:layout_centerInParent="true"
                 android:checked="true" />
@@ -47,13 +47,13 @@
                 android:layout_below="@+id/locationSwitch"
                 android:visibility="invisible"
                 android:inputType="number"
-                android:hint="distance in KM"
+                android:hint="@string/distance_in_km_hint"
                 android:gravity="center" />
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/distanceEt"
-                android:text="done"
+                android:text="@string/search_users"
                 android:id="@+id/doneBtn"
                 android:layout_centerInParent="true" />
         </RelativeLayout>

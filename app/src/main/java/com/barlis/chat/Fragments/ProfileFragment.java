@@ -127,7 +127,7 @@ public class ProfileFragment extends Fragment {
                     Picasso.get().load(user.getImageURL()).into(image_profile);
                 }
 
-                reviewerCount.setText(user.getNumberOfReviews() + " reviews");
+                reviewerCount.setText(user.getNumberOfReviews() + " " + getResources().getString(R.string.reviews));
                 fillStarRating(user.getRating());
             }
 
@@ -151,7 +151,7 @@ public class ProfileFragment extends Fragment {
                     openWebsite(facebookUrl);
                 }
                 else {
-                    Toast.makeText(getContext(), "No Facebook account found", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), getResources().getString(R.string.no_facebook_account_found), Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -163,7 +163,7 @@ public class ProfileFragment extends Fragment {
                     openWebsite(instagramUrl);
                 }
                 else {
-                    Toast.makeText(getContext(), "No Instagram account found", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), getResources().getString(R.string.no_instagram_account_found), Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -175,7 +175,7 @@ public class ProfileFragment extends Fragment {
                     openWebsite(githubUrl);
                 }
                 else {
-                    Toast.makeText(getContext(), "No GitHub account found", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), getResources().getString(R.string.no_github_account_found), Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -187,7 +187,7 @@ public class ProfileFragment extends Fragment {
                     openWebsite(linkedinUrl);
                 }
                 else {
-                    Toast.makeText(getContext(), "No Linkedin account found", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), getResources().getString(R.string.no_linkedin_account_found), Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -197,7 +197,6 @@ public class ProfileFragment extends Fragment {
             public void onClick(View v) {
                 accounts.setVisibility(View.GONE);
                 edit_accounts.setVisibility(View.VISIBLE);
-
             }
         });
 
@@ -207,7 +206,7 @@ public class ProfileFragment extends Fragment {
                 mDatabaseReference = FirebaseDatabase.getInstance().getReference("Users").child(mFirebaseUser.getUid());
 
                 if(edit_facebook_account.getText().toString().equals("") && edit_instagram_account.getText().toString().equals("") && edit_github_account.getText().toString().equals("") && edit_linkedin_account.getText().toString().equals("")){
-                    Toast.makeText(getContext(), "You haven't added any accounts", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), getResources().getString(R.string.no_accounts_added), Toast.LENGTH_SHORT).show();
                 }
                 else {
                     HashMap<String, Object> hashMap = new HashMap<>();
@@ -234,7 +233,7 @@ public class ProfileFragment extends Fragment {
                     accounts.setVisibility(View.VISIBLE);
                     edit_accounts.setVisibility(View.GONE);
 
-                    Toast.makeText(getContext(), "Accounts saved", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), getResources().getString(R.string.accounts_saved), Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -244,8 +243,6 @@ public class ProfileFragment extends Fragment {
             public void onClick(View v) {
                 accounts.setVisibility(View.VISIBLE);
                 edit_accounts.setVisibility(View.GONE);
-
-                Toast.makeText(getContext(), "Accounts didn't saved", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -321,7 +318,7 @@ public class ProfileFragment extends Fragment {
                         pd.dismiss();
                     }
                     else{
-                        Toast.makeText(getContext(), "Failed!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), getResources().getString(R.string.upload_failed), Toast.LENGTH_SHORT).show();
                         pd.dismiss();
                     }
                 }
@@ -334,7 +331,7 @@ public class ProfileFragment extends Fragment {
             });
         }
         else{
-            Toast.makeText(getContext(), "No image selected", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), getResources().getString(R.string.no_image_selected), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -346,7 +343,7 @@ public class ProfileFragment extends Fragment {
             imageURI = data.getData();
 
             if(uploadTask != null && uploadTask.isInProgress()){
-                Toast.makeText(getContext(), "Upload in progress", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), getResources().getString(R.string.upload_in_progress), Toast.LENGTH_SHORT).show();
             }
             else{
                 uploadImage();

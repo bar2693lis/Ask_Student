@@ -99,7 +99,7 @@ public class ViewUserProfileActivity extends AppCompatActivity implements RateUs
                     Picasso.get().load(user.getImageURL()).into(image_profile);
                 }
 
-                reviewerCount.setText(user.getNumberOfReviews() + " reviews");
+                reviewerCount.setText(user.getNumberOfReviews() + " " + getResources().getString(R.string.reviews));
                 fillStarRating(user.getRating());
             }
 

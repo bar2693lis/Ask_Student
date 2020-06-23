@@ -140,6 +140,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:id="@+id/star_layout"
+                        android:layoutDirection="ltr"
                         android:orientation="horizontal">
                         <ImageView
                             android:layout_width="30dp"
@@ -175,6 +176,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layoutDirection="ltr"
                         android:text="1 reviews"
                         android:textSize="15sp"
                         android:id="@+id/reviewer_count_text"
@@ -190,7 +192,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="edit accounts"
+                        android:text="@string/edit_accounts"
                         android:layout_gravity="center_horizontal"/>
 
                 </LinearLayout>
@@ -219,7 +221,7 @@
                             android:id="@+id/edit_facebook_account"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:hint="Facebook username account here"/>
+                            android:hint="@string/facebook_hint"/>
 
                     </LinearLayout>
 
@@ -239,7 +241,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_toLeftOf="@+id/bla"
-                            android:hint="Instagram username account here"/>
+                            android:hint="@string/instagram_link"/>
 
                     </LinearLayout>
 
@@ -259,7 +261,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_toLeftOf="@+id/bla"
-                            android:hint="GitHub username account here"/>
+                            android:hint="@string/github_link"/>
 
                     </LinearLayout>
 
@@ -279,7 +281,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_toLeftOf="@+id/bla"
-                            android:hint="Linkedin username account here"/>
+                            android:hint="@string/linkedin_link"/>
 
                     </LinearLayout>
 
@@ -306,7 +308,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Save"
+                                android:text="@string/save"
                                 android:layout_gravity="center"/>
 
                         </LinearLayout>
@@ -328,7 +330,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Cancel"
+                                android:text="@string/cancel"
                                 android:layout_gravity="center"/>
 
                         </LinearLayout>

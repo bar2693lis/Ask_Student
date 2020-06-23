@@ -1,6 +1,54 @@
 <resources>
-    <string name="app_name">Chat</string>
+    <string name="app_name">Chat App</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="login_title">Login</string>
+    <string name="email_hint">Email</string>
+    <string name="password_hint">Password</string>
+    <string name="forgot_password">Forgot your password?</string>
+    <string name="type_message_hint">Type a message...</string>
+    <string name="create_acount_title">Create a new account</string>
+    <string name="user_name_hint">Username</string>
+    <string name="register">Register</string>
+    <string name="reset_password">Reset</string>
+    <string name="reset_password_instructions">By clicking RESET,  you will receive an email to reset your password</string>
+    <string name="looking_for">Looking for</string>
+    <string name="profession">Profession</string>
+    <string name="job_description">Job Description</string>
+    <string name="qualifications">Qualifications</string>
+    <string name="add_note">Add Note</string>
+    <string name="search_anywhere">Search Anywhere</string>
+    <string name="search_at_maximum_distance">Search at maximum distance</string>
+    <string name="distance_in_km_hint">Distance in KM</string>
+    <string name="edit_accounts">Edit accounts</string>
+    <string name="facebook_hint">Add Facebook link</string>
+    <string name="instagram_link">Add Instagram link</string>
+    <string name="github_link">Add GitHub link</string>
+    <string name="linkedin_link">Add Linkedin Link</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
+    <string name="sumbit">Submit</string>
+    <string name="search_users">Search Users</string>
+    <string name="open_request">Open Request</string>
+    <string name="search_hint">Search...</string>
+    <string name="pick_a_picture">Pick a picture</string>
+    <string name="skip">Skip</string>
+    <string name="about_yourself_title">Tell us about yourself</string>
+    <string name="ask_profession">What\'s your profession</string>
+    <string name="ask_qualifications">What\'s your qualifications</string>
+    <string name="ask_experience">Tell us about your experience</string>
+    <string name="next">Next</string>
+    <string name="no_facebook_account_found">No Facebook acount was found</string>
+    <string name="no_instagram_account_found">No Instagram account was found</string>
+    <string name="no_github_account_found">No GitHub account was found</string>
+    <string name="no_linkedin_account_found">No Linkedin account was found</string>
+    <string name="no_accounts_added">You haven\'t added any accounts</string>
+    <string name="accounts_saved">Accounts saved</string>
+    <string name="upload_failed">Upload Failed!</string>
+    <string name="no_image_selected">No image selected</string>
+    <string name="upload_in_progress">Upload in progress</string>
+    <string name="reviews">Reviews</string>
+    <string name="please_choose_rating">Please choose rating</string>
+    <string name="rate">Rate</string>
 </resources>

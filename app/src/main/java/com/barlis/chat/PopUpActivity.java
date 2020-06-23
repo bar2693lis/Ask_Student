@@ -60,8 +60,8 @@ public class PopUpActivity extends AppCompatActivity {
         ViewPager viewPager = findViewById(R.id.view_pager);
 
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
-        viewPagerAdapter.addFragment(new OpenRequestFragment(), "Open Request");
-        viewPagerAdapter.addFragment(new SearchUserFragment(), "Search Users");
+        viewPagerAdapter.addFragment(new OpenRequestFragment(), getResources().getString(R.string.open_request));
+        viewPagerAdapter.addFragment(new SearchUserFragment(), getResources().getString(R.string.search_users));
         viewPager.setAdapter(viewPagerAdapter);
         tabLayout.setupWithViewPager(viewPager);
     }

@@ -25,6 +25,7 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:layout_below="@id/title"
+        android:layoutDirection="ltr"
         android:id="@+id/star_layout"
         android:orientation="horizontal">
         <ImageView
@@ -63,7 +64,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/star_layout"
-        android:text="Submit"
+        android:text="@string/sumbit"
         android:background="@color/colorPrimaryDark"
         android:textColor="#fff"
         android:layout_margin="15dp"/>

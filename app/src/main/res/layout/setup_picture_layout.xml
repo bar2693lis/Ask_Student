@@ -23,7 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/setup_Picture_image"
         android:layout_marginTop="20dp"
-        android:text="Pick a picture"
+        android:text="@string/pick_a_picture"
         android:gravity="center"
         android:id="@+id/setup_Picture_takePicBtn"
         android:background="@color/colorAccent"
@@ -35,7 +35,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/setup_Picture_takePicBtn"
         android:layout_marginTop="20dp"
-        android:text="skip"
+        android:text="@string/skip"
         android:id="@+id/setup_Picture_skipBtn"
         android:background="@color/colorAccent"
         >
