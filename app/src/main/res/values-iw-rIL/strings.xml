@@ -49,4 +49,6 @@
     <string name="reviews">דירגו</string>
     <string name="please_choose_rating">בבקשה תבחרו בדירוג</string>
     <string name="rate">דרגו את</string>
+    <string name="request_title">כותרת הבקשה</string>
+    <string name="missing_fields">בבקשה מלאו את כל השדות הנדרשים</string>
 </resources>

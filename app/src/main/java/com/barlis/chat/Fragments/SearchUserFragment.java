@@ -15,6 +15,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.barlis.chat.MainActivity;
+import com.barlis.chat.Model.EResultCodes;
 import com.barlis.chat.R;
 
 public class SearchUserFragment extends Fragment {
@@ -59,7 +60,7 @@ public class SearchUserFragment extends Fragment {
                             intent.putExtra("distance", Integer.parseInt(distance.getText().toString()));
                         }
                         intent.putExtra("searchByDistance", searchByDistance);
-                        getActivity().setResult(2, intent);
+                        getActivity().setResult(EResultCodes.SEARCH_USER.getValue(), intent);
                         getActivity().finish();
                     }
                 }

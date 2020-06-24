@@ -31,20 +31,27 @@
                 android:gravity="center"
                 android:inputType="textMultiLine"
                 android:layout_below="@id/LookingForTextView"
-                >
-
-            </EditText>
+                />
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
-                android:layout_below="@+id/professionEt"
+                android:id="@+id/requestTitleEt"
+                android:layout_marginTop="20dp"
+                android:hint="@string/request_title"
+                android:gravity="center"
+                android:inputType="textMultiLine"
+                android:layout_below="@id/professionEt"
+                />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:layout_below="@+id/requestTitleEt"
                 android:hint="@string/job_description"
                 android:gravity="center"
                 android:id="@+id/jobDesc"
                 android:inputType="textMultiLine"
-                >
-
-            </EditText>
+                />
 
 
             <EditText
@@ -55,9 +62,7 @@
                 android:hint="@string/qualifications"
                 android:gravity="center"
                 android:inputType="textMultiLine"
-                >
-
-            </EditText>
+                />
 
             <EditText
                 android:layout_width="match_parent"
@@ -66,42 +71,15 @@
                 android:gravity="center"
                 android:hint="@string/add_note"
                 android:id="@+id/note"
-                >
-
-            </EditText>
-            <Switch
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/note"
-                android:id="@+id/locationSwitch"
-                android:text="@string/search_anywhere"
-                android:layout_marginBottom="20dp"
-                android:layout_centerInParent="true"
-                android:checked="true"
-                >
-
-            </Switch>
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="150dp"
-                android:id="@+id/distanceEt"
-                android:layout_below="@+id/locationSwitch"
-                android:visibility="invisible"
-                android:hint="@string/distance_in_km_hint"
-                android:gravity="center"
-                >
-
-            </EditText>
+                />
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/distanceEt"
+                android:layout_below="@+id/note"
                 android:text="@string/open_request"
                 android:id="@+id/doneBtn"
                 android:layout_centerInParent="true"
-                >
-
-            </Button>
+                />
         </RelativeLayout>
 
     </ScrollView>

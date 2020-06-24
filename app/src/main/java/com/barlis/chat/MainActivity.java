@@ -25,8 +25,12 @@ import android.widget.TextView;
 
 import com.barlis.chat.Fragments.ChatsFragment;
 import com.barlis.chat.Fragments.ProfileFragment;
+import com.barlis.chat.Fragments.RequestsFragment;
 import com.barlis.chat.Fragments.UsersFragment;
 import com.barlis.chat.Model.Chat;
+import com.barlis.chat.Model.ERequestCodes;
+import com.barlis.chat.Model.EResultCodes;
+import com.barlis.chat.Model.Request;
 import com.barlis.chat.Model.User;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
@@ -52,8 +56,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends AppCompatActivity {
 
-    final int LOCATION_PERMISSION_REQUEST = 1;
-    final int NEW_JOB_REQUEST_CODE = 2;
+    final int LOCATION_PERMISSION_REQUEST = ERequestCodes.LOCATION_PERMISSION.getValue();
 
     CircleImageView profileImage;
     TextView username;
@@ -66,11 +69,13 @@ public class MainActivity extends AppCompatActivity {
     private Uri imageUri = null;
     //End Hanan part
     Location userLocation;
+    boolean gotUserLocation = false;
     int maxDistance;
     TabLayout tabLayout;
     FirebaseUser firebaseUser;
     DatabaseReference reference;
     private UsersFragment usersFragment;
+    private RequestsFragment requestsFragment;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,6 +91,7 @@ public class MainActivity extends AppCompatActivity {
             setContentView(R.layout.activity_main);
             userLocation = new Location("");
             usersFragment = new UsersFragment();
+            requestsFragment = new RequestsFragment();
 
             Toolbar toolbar = findViewById(R.id.toolbar);
             setSupportActionBar(toolbar);
@@ -96,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     Intent popUpIntent = new Intent(getApplicationContext(), PopUpActivity.class);
-                    startActivityForResult(popUpIntent, NEW_JOB_REQUEST_CODE);
+                    startActivityForResult(popUpIntent, ERequestCodes.NEW_REQUEST.getValue());
                 }
             });
         /*if(getIntent().hasExtra("userProfession"))
@@ -173,6 +179,7 @@ public class MainActivity extends AppCompatActivity {
 
                     //viewPagerAdapter.addFragment(new UsersFragment(), "Users");
                     viewPagerAdapter.addFragment(usersFragment, "Users");
+                    viewPagerAdapter.addFragment(requestsFragment, "Requests");
                     viewPagerAdapter.addFragment(new ProfileFragment(), "Profile");
 
                     viewPager.setAdapter(viewPagerAdapter);
@@ -211,20 +218,34 @@ public class MainActivity extends AppCompatActivity {
     private void getLocation() {
         FusedLocationProviderClient client = LocationServices.getFusedLocationProviderClient(this);
 
+        // Get location every 30 seconds
         LocationRequest request =LocationRequest.create();
-        request.setInterval(5000);
+        request.setInterval(30 * 1000);
         request.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
         LocationCallback callback = new LocationCallback() {
             @Override
             public void onLocationResult(LocationResult locationResult) {
                 super.onLocationResult(locationResult);
                 Location location = locationResult.getLastLocation();
-                userLocation.setLatitude(location.getLatitude());
-                userLocation.setLongitude(location.getLongitude());
-                HashMap<String, Object> map = new HashMap<>();
-                map.put("latitude", location.getLatitude());
-                map.put("longitude", location.getLongitude());
-                reference.updateChildren(map);
+                // Get first time location
+                if (!gotUserLocation) {
+                    userLocation.setLatitude(location.getLatitude());
+                    userLocation.setLongitude(location.getLongitude());
+                    HashMap<String, Object> map = new HashMap<>();
+                    map.put("latitude", location.getLatitude());
+                    map.put("longitude", location.getLongitude());
+                    reference.updateChildren(map);
+                    gotUserLocation = true;
+                }
+                // Only update db when user traveled more than 5 meters
+                if (userLocation.distanceTo(location) > 5) {
+                    userLocation.setLatitude(location.getLatitude());
+                    userLocation.setLongitude(location.getLongitude());
+                    HashMap<String, Object> map = new HashMap<>();
+                    map.put("latitude", location.getLatitude());
+                    map.put("longitude", location.getLongitude());
+                    reference.updateChildren(map);
+                }
             }
         };
 
@@ -302,8 +323,8 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         // Getting information back from popUp activity
-        if (requestCode == NEW_JOB_REQUEST_CODE) {
-            if (resultCode == 2) {
+        if (requestCode == ERequestCodes.NEW_REQUEST.getValue()) {
+            if (resultCode == EResultCodes.SEARCH_USER.getValue()) {
                 if (data.hasExtra("profession")) {
                     profession = data.getStringExtra("profession");
                 }
@@ -313,9 +334,16 @@ public class MainActivity extends AppCompatActivity {
                 tabLayout.getTabAt(1).select();
                 usersFragment.setNewSearchQuery(profession, data.getBooleanExtra("searchByDistance", false), userLocation, maxDistance);
             }
-            else if (resultCode == 3) {
+            else if (resultCode == EResultCodes.OPEN_REQUEST.getValue()) {
                 // Open new Request
+                Request request = (Request) data.getSerializableExtra("request");
+                request.setCreatorId(firebaseUser.getUid());
+                request.setCreatorName(username.getText().toString());
+                requestsFragment.addRequest(request);
             }
+        }
+        else if (requestCode == ERequestCodes.UPDATE_REQUEST.getValue() && resultCode == EResultCodes.UPDATE_REQUEST.getValue()) {
+            requestsFragment.updateRequest(data.getIntExtra("request_position", 0 ), username.getAccessibilityClassName().toString(), firebaseUser.getUid());
         }
     }
 
