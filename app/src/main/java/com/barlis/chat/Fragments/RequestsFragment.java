@@ -4,6 +4,10 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -29,8 +33,11 @@ public class RequestsFragment extends Fragment {
     private RecyclerView recyclerView;
     private RequestAdapter requestAdapter;
     private List<Request> requests;
-
-    DatabaseReference requestReference;
+    private Spinner statusFilter, professionFilter;
+    private ArrayAdapter<String> statusAdapter, professionAdapter;
+    private DatabaseReference requestReference;
+    private boolean statusFilterFirstRun = true;
+    private boolean professionFilterFirstRun = true;
 
     @Nullable
     @Override
@@ -39,6 +46,11 @@ public class RequestsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_requests, container, false);
 
         recyclerView = view.findViewById(R.id.recycler_view);
+        professionFilter = view.findViewById(R.id.profession_filter);
+        statusFilter = view.findViewById(R.id.status_filter);
+        statusFilter.setPrompt("title");
+        String[] statusArr = new String[] {"All Statuses", "Available", "Taken", "Done"};
+        statusAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_dropdown_item, statusArr);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
@@ -47,13 +59,21 @@ public class RequestsFragment extends Fragment {
         requestReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                List<String> professions = new ArrayList<>();
+                professions.add("All Professions");
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Request request = snapshot.getValue(Request.class);
                     request.setRequestId(snapshot.getKey());
+                    if (!professions.contains(request.getRequiredProfession().toLowerCase())) {
+                        professions.add(request.getRequiredProfession().toLowerCase());
+                    }
                     requests.add(request);
                 }
+                professionAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_dropdown_item, professions.toArray(new String[professions.size()]));
                 requestAdapter = new RequestAdapter(getContext(), requests);
                 recyclerView.setAdapter(requestAdapter);
+                statusFilter.setAdapter(statusAdapter);
+                professionFilter.setAdapter(professionAdapter);
             }
 
             @Override
@@ -61,8 +81,88 @@ public class RequestsFragment extends Fragment {
 
             }
         });
+        statusFilter.setSelection(0, false);
+        statusFilter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (!statusFilterFirstRun) {
+                    filterRequests();
+                }
+                else {
+                    statusFilterFirstRun = false;
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        professionFilter.setSelection(0, false);
+        professionFilter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (!professionFilterFirstRun) {
+                    filterRequests();
+                }
+                else {
+                    professionFilterFirstRun = false;
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         return view;
+    }
+
+    private void filterRequests() {
+        final boolean isFilterStatus = statusFilter.getSelectedItemPosition() != 0;
+        final boolean isFilterProfession = professionFilter.getSelectedItemPosition() != 0;
+
+        requestReference = FirebaseDatabase.getInstance().getReference("Requests");
+        requests.clear();
+        requestReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot: dataSnapshot.getChildren()) {
+                    Request request = snapshot.getValue(Request.class);
+                    int passedFilters = 0;
+                    if (isFilterStatus) {
+                        if (request.getStatus().getValue() == statusFilter.getSelectedItemPosition()) {
+                            passedFilters++;
+                        }
+                    }
+                    else {
+                        passedFilters++;
+                    }
+
+                    if (isFilterProfession) {
+                        if (request.getRequiredProfession().toLowerCase().equals(professionFilter.getSelectedItem().toString().toLowerCase())) {
+                            passedFilters++;
+                        }
+                    }
+                    else {
+                        passedFilters++;
+                    }
+
+                    if (passedFilters == 2) {
+                        request.setRequestId(snapshot.getKey());
+                        requests.add(request);
+                    }
+                }
+                requestAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     public void addRequest(Request request) {

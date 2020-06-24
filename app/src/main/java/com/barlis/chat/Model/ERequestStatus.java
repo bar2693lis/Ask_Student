@@ -1,5 +1,12 @@
 package com.barlis.chat.Model;
 
 public enum ERequestStatus {
-    REQUEST_AVAILABLE, REQUEST_TAKEN, REQUEST_DONE
+    REQUEST_AVAILABLE(1), REQUEST_TAKEN(2), REQUEST_DONE(3);
+
+    private int value;
+    ERequestStatus(int value) {
+        this.value = value;
+    }
+
+    public int getValue() {return value;}
 }
