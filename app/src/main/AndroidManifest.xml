@@ -50,6 +50,7 @@
             android:theme="@style/AppTheme.Pop"/>
         <activity android:name=".SetupProfileActivity" />
         <activity android:name=".SetupPictureActivity" />
+        <activity android:name=".UserSpecificRequestsActivity"/>
 
         <service
             android:name=".Notification.MyFirebaseMessaging"

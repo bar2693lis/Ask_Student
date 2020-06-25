@@ -46,8 +46,15 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHold
         holder.requestTitle.setText(request.getRequestTitle());
         switch (request.getStatus()) {
             case REQUEST_AVAILABLE:
-                holder.requestStatus.setText("available");
+                holder.requestStatus.setText(context.getResources().getString(R.string.status_available));
                 break;
+            case REQUEST_TAKEN:
+                holder.requestStatus.setText(context.getResources().getString(R.string.status_taken));
+                break;
+            case REQUEST_DONE:
+                holder.requestStatus.setText(context.getResources().getString(R.string.status_done));
+                break;
+
             default:
                 holder.requestStatus.setText(request.getStatus() + "");
                 break;

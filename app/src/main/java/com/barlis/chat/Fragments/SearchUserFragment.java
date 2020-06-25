@@ -34,11 +34,11 @@ public class SearchUserFragment extends Fragment {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(isChecked) {
                     distance.setVisibility(View.INVISIBLE);
-                    buttonView.setText("Search AnyWhere");
+                    buttonView.setText(getResources().getString(R.string.search_anywhere));
                 }
                 else {
                     distance.setVisibility(View.VISIBLE);
-                    buttonView.setText("Search at maximum distance");
+                    buttonView.setText(getResources().getString(R.string.search_at_maximum_distance));
                 }
             }
         });

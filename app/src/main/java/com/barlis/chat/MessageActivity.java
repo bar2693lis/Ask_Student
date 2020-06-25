@@ -116,7 +116,7 @@ public class MessageActivity extends AppCompatActivity {
                     sendMessage(fuser.getUid(), userId, msg);
                 }
                 else{
-                    Toast.makeText(MessageActivity.this, "You can't send empty message", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MessageActivity.this, getResources().getString(R.string.empty_message_alert), Toast.LENGTH_SHORT).show();
                 }
 
                 txt_send.setText("");
@@ -244,7 +244,7 @@ public class MessageActivity extends AppCompatActivity {
                 for(DataSnapshot snapshot : dataSnapshot.getChildren()){
                     Token token = snapshot.getValue(Token.class);
 
-                    Data data = new Data(fuser.getUid(), message, "New Message from " + sentFrom , userId);
+                    Data data = new Data(fuser.getUid(), message,  getResources().getString(R.string.new_message_alert)+ " " + sentFrom , userId);
 
                     Sender sender = new Sender(data, token.getToken());
 

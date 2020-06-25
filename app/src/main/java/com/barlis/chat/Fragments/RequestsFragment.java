@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -36,8 +35,8 @@ public class RequestsFragment extends Fragment {
     private Spinner statusFilter, professionFilter;
     private ArrayAdapter<String> statusAdapter, professionAdapter;
     private DatabaseReference requestReference;
-    private boolean statusFilterFirstRun = true;
-    private boolean professionFilterFirstRun = true;
+    private int statusFilterLastPosition = 0;
+    private int professionFilterLastPosition = 0;
 
     @Nullable
     @Override
@@ -49,18 +48,19 @@ public class RequestsFragment extends Fragment {
         professionFilter = view.findViewById(R.id.profession_filter);
         statusFilter = view.findViewById(R.id.status_filter);
         statusFilter.setPrompt("title");
-        String[] statusArr = new String[] {"All Statuses", "Available", "Taken", "Done"};
+        String[] statusArr = new String[] {getResources().getString(R.string.any_status), getResources().getString(R.string.status_available), getResources().getString(R.string.status_taken), getResources().getString(R.string.status_done)};
         statusAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_dropdown_item, statusArr);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         requests = new ArrayList<>();
         requestReference = FirebaseDatabase.getInstance().getReference("Requests");
-        requestReference.addListenerForSingleValueEvent(new ValueEventListener() {
+        requestReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                requests.clear();
                 List<String> professions = new ArrayList<>();
-                professions.add("All Professions");
+                professions.add(getResources().getString(R.string.any_profession));
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Request request = snapshot.getValue(Request.class);
                     request.setRequestId(snapshot.getKey());
@@ -85,11 +85,9 @@ public class RequestsFragment extends Fragment {
         statusFilter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (!statusFilterFirstRun) {
+                if (statusFilterLastPosition != position) {
+                    statusFilterLastPosition = position;
                     filterRequests();
-                }
-                else {
-                    statusFilterFirstRun = false;
                 }
             }
 
@@ -103,11 +101,9 @@ public class RequestsFragment extends Fragment {
         professionFilter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (!professionFilterFirstRun) {
+                if (professionFilterLastPosition != position) {
+                    professionFilterLastPosition = position;
                     filterRequests();
-                }
-                else {
-                    professionFilterFirstRun = false;
                 }
             }
 
@@ -185,7 +181,7 @@ public class RequestsFragment extends Fragment {
         }
     }
 
-    public void updateRequest(int position, String workerName, String workerId) {
+    public void updateRequestWorker(int position, String workerName, String workerId) {
         requests.get(position).setStatus(ERequestStatus.REQUEST_TAKEN);
         requests.get(position).setWorkerName(workerName);
         requests.get(position).setWorkerId(workerId);
@@ -194,6 +190,17 @@ public class RequestsFragment extends Fragment {
         hashMap.put("workerId", workerId);
         hashMap.put("workerName", workerName);
         FirebaseDatabase.getInstance().getReference("Requests").child(requests.get(position).getRequestId()).updateChildren(hashMap);
+        requestAdapter.notifyItemChanged(position);
+    }
+
+    public void removeWorkerFromRequest(int position, String workerId) {
+        DatabaseReference requestReference = FirebaseDatabase.getInstance().getReference("Requests").child(requests.get(position).getRequestId());
+        requestReference.child("workerId").removeValue();
+        requestReference.child("workerName").removeValue();
+        requestReference.child("status").setValue(ERequestStatus.REQUEST_AVAILABLE);
+        requests.get(position).setStatus(ERequestStatus.REQUEST_AVAILABLE);
+        requests.get(position).setWorkerName("");
+        requests.get(position).setWorkerId("");
         requestAdapter.notifyItemChanged(position);
     }
 }

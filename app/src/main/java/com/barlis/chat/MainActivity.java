@@ -22,7 +22,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.barlis.chat.Fragments.APIService;
 import com.barlis.chat.Fragments.ChatsFragment;
 import com.barlis.chat.Fragments.ProfileFragment;
 import com.barlis.chat.Fragments.RequestsFragment;
@@ -32,6 +34,11 @@ import com.barlis.chat.Model.ERequestCodes;
 import com.barlis.chat.Model.EResultCodes;
 import com.barlis.chat.Model.Request;
 import com.barlis.chat.Model.User;
+import com.barlis.chat.Notification.Client;
+import com.barlis.chat.Notification.Data;
+import com.barlis.chat.Notification.MyResponse;
+import com.barlis.chat.Notification.Sender;
+import com.barlis.chat.Notification.Token;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -45,6 +52,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
@@ -53,6 +61,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -172,15 +183,15 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                     if (unreadMessages == 0) {
-                        viewPagerAdapter.addFragment(new ChatsFragment(), "Chats");
+                        viewPagerAdapter.addFragment(new ChatsFragment(), getResources().getString(R.string.chats_tab));
                     } else {
-                        viewPagerAdapter.addFragment(new ChatsFragment(), "(" + unreadMessages + ") Chats");
+                        viewPagerAdapter.addFragment(new ChatsFragment(), "(" + unreadMessages + ") " + getResources().getString(R.string.chats_tab));
                     }
 
                     //viewPagerAdapter.addFragment(new UsersFragment(), "Users");
-                    viewPagerAdapter.addFragment(usersFragment, "Users");
-                    viewPagerAdapter.addFragment(requestsFragment, "Requests");
-                    viewPagerAdapter.addFragment(new ProfileFragment(), "Profile");
+                    viewPagerAdapter.addFragment(usersFragment, getResources().getString(R.string.users_tab));
+                    viewPagerAdapter.addFragment(requestsFragment, getResources().getString(R.string.requests_tab));
+                    viewPagerAdapter.addFragment(new ProfileFragment(), getResources().getString(R.string.profile_tab));
 
                     viewPager.setAdapter(viewPagerAdapter);
 
@@ -263,7 +274,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()){
-
+            case R.id.my_requests:
+                startActivity(new Intent(MainActivity.this, UserSpecificRequestsActivity.class).putExtra("user_name", username.getText().toString()));
+                return true;
             case R.id.logout:
                 FirebaseAuth.getInstance().signOut();
                 startActivity(new Intent(MainActivity.this, StartActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
@@ -342,8 +355,22 @@ public class MainActivity extends AppCompatActivity {
                 requestsFragment.addRequest(request);
             }
         }
-        else if (requestCode == ERequestCodes.UPDATE_REQUEST.getValue() && resultCode == EResultCodes.UPDATE_REQUEST.getValue()) {
-            requestsFragment.updateRequest(data.getIntExtra("request_position", 0 ), username.getAccessibilityClassName().toString(), firebaseUser.getUid());
+        else if (requestCode == ERequestCodes.UPDATE_REQUEST.getValue()) {
+            if (resultCode == EResultCodes.UPDATE_REQUEST_WORKER.getValue()) {
+                requestsFragment.updateRequestWorker(data.getIntExtra("request_position", 0), username.getText().toString(), firebaseUser.getUid());
+                Intent intent = new Intent(MainActivity.this, MessageActivity.class);
+                intent.putExtra("userId", data.getStringExtra("creatorId"));
+                startActivity(intent);
+                sendNotification(data.getStringExtra("creatorId"), getResources().getString(R.string.job_taken_message_body), username.getText().toString() + " " + getResources().getString(R.string.job_taken_notification));
+            }
+            else if (resultCode == EResultCodes.REMOVE_WORKER.getValue()) {
+                requestsFragment.removeWorkerFromRequest(data.getIntExtra("request_position", 0), data.getStringExtra("workerId"));
+                sendNotification(data.getStringExtra("workerId"), username.getText().toString() + " " + getResources().getString(R.string.removed_from_request_alert), getResources().getString(R.string.request_update_alert));
+            }
+            else if (resultCode == EResultCodes.QUIT_REQUEST.getValue()) {
+                requestsFragment.removeWorkerFromRequest(data.getIntExtra("request_position", 0), firebaseUser.getUid());
+                sendNotification(data.getStringExtra("creatorId"), username.getText().toString() + " " + getResources().getString(R.string.worker_quit_alert), getResources().getString(R.string.request_update_alert));
+            }
         }
     }
 
@@ -358,5 +385,45 @@ public class MainActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         userStatus("offline");
+    }
+
+    private void sendNotification(String receiver, String body, String title){
+        DatabaseReference token = FirebaseDatabase.getInstance().getReference("Tokens");
+
+        Query query = token.orderByKey().equalTo(receiver);
+
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    Token token = snapshot.getValue(Token.class);
+
+                    Data data = new Data(firebaseUser.getUid(), body, title, receiver);
+
+                    Sender sender = new Sender(data, token.getToken());
+                    APIService apiService = Client.getClient("https://fcm.googleapis.com/").create(APIService.class);
+                    apiService.sendNotification(sender).enqueue(new Callback<MyResponse>() {
+                        @Override
+                        public void onResponse(Call<MyResponse> call, Response<MyResponse> response) {
+                            if(response.code() == 200){
+                                if(response.body().success != 1){
+                                    Toast.makeText(MainActivity.this, "Failed!", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<MyResponse> call, Throwable t) {
+
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 }
