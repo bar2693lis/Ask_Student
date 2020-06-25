@@ -64,8 +64,8 @@
     <string name="taken_by">נתפס על ידי:</string>
     <string name="back">חזרה</string>
     <string name="accept">אישור</string>
-    <string name="quit_request">ותרו על הבקשה</string>
-    <string name="remove_worker">ותרו על העובד</string>
+    <string name="quit_request">ותר על הבקשה</string>
+    <string name="remove_worker">ותר על העובד</string>
     <string name="required_profession">מקצוע נדרש</string>
     <string name="removed_from_request_alert">הוציאו אתכם מהבקשה</string>
     <string name="worker_quit_alert">הפסיקו לעבוד על הבקשה שלכם</string>
@@ -78,4 +78,6 @@
     <string name="profile_tab">פרופיל</string>
     <string name="show_opened_requests">בקשות שפתחת</string>
     <string name="show_taken_requests">בקשות שלקחת</string>
+    <string name="close_request">סגור בקשה</string>
+    <string name="request_closed_alert">סגרו את הבקשה שעבדתם עליה</string>
 </resources>

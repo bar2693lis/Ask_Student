@@ -31,6 +31,7 @@ import com.barlis.chat.Fragments.RequestsFragment;
 import com.barlis.chat.Fragments.UsersFragment;
 import com.barlis.chat.Model.Chat;
 import com.barlis.chat.Model.ERequestCodes;
+import com.barlis.chat.Model.ERequestStatus;
 import com.barlis.chat.Model.EResultCodes;
 import com.barlis.chat.Model.Request;
 import com.barlis.chat.Model.User;
@@ -370,6 +371,10 @@ public class MainActivity extends AppCompatActivity {
             else if (resultCode == EResultCodes.QUIT_REQUEST.getValue()) {
                 requestsFragment.removeWorkerFromRequest(data.getIntExtra("request_position", 0), firebaseUser.getUid());
                 sendNotification(data.getStringExtra("creatorId"), username.getText().toString() + " " + getResources().getString(R.string.worker_quit_alert), getResources().getString(R.string.request_update_alert));
+            }
+            else if (resultCode == EResultCodes.CLOSE_REQUEST.getValue()) {
+                requestsFragment.closeRequest(data.getIntExtra("request_position",0));
+                sendNotification(data.getStringExtra("workerId"), username.getText().toString() + " " + getResources().getString(R.string.request_closed_alert), getResources().getString(R.string.request_update_alert));
             }
         }
     }

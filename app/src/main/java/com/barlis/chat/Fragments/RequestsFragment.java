@@ -193,6 +193,11 @@ public class RequestsFragment extends Fragment {
         requestAdapter.notifyItemChanged(position);
     }
 
+    public void closeRequest(int position) {
+        requests.get(position).setStatus(ERequestStatus.REQUEST_DONE);
+        FirebaseDatabase.getInstance().getReference("Requests").child(requests.get(position).getRequestId()).child("status").setValue(ERequestStatus.REQUEST_DONE);
+    }
+
     public void removeWorkerFromRequest(int position, String workerId) {
         DatabaseReference requestReference = FirebaseDatabase.getInstance().getReference("Requests").child(requests.get(position).getRequestId());
         requestReference.child("workerId").removeValue();

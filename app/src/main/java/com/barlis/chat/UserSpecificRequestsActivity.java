@@ -168,6 +168,10 @@ public class UserSpecificRequestsActivity extends AppCompatActivity {
                 removeWorkerFromRequest(data.getIntExtra("request_position", 0), currentUser.getUid());
                 sendNotification(data.getStringExtra("creatorId"), getIntent().getStringExtra("user_name") + " " + getResources().getString(R.string.worker_quit_alert), getResources().getString(R.string.request_update_alert));
             }
+            else if (resultCode == EResultCodes.CLOSE_REQUEST.getValue()) {
+                closeRequest(data.getIntExtra("request_position",0));
+                sendNotification(data.getStringExtra("workerId"), getIntent().getStringExtra("user_name") + " " + getResources().getString(R.string.request_closed_alert), getResources().getString(R.string.request_update_alert));
+            }
         }
     }
 
@@ -221,6 +225,11 @@ public class UserSpecificRequestsActivity extends AppCompatActivity {
         hashMap.put("workerName", workerName);
         FirebaseDatabase.getInstance().getReference("Requests").child(requests.get(position).getRequestId()).updateChildren(hashMap);
         requestAdapter.notifyItemChanged(position);
+    }
+
+    public void closeRequest(int position) {
+        requests.get(position).setStatus(ERequestStatus.REQUEST_DONE);
+        FirebaseDatabase.getInstance().getReference("Requests").child(requests.get(position).getRequestId()).child("status").setValue(ERequestStatus.REQUEST_DONE);
     }
 
     public void removeWorkerFromRequest(int position, String workerId) {

@@ -19,7 +19,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 public class ViewRequestActivity extends AppCompatActivity {
-    Button acceptBtn, backBtn, removeWorkerBtn, quitRequestBtn;
+    Button acceptBtn, backBtn, removeWorkerBtn, quitRequestBtn, closeRequest;
     TextView requestTitle, profession, requestDescription, qualifications, notes, requestStatus, workerName;
 
     @Override
@@ -47,7 +47,7 @@ public class ViewRequestActivity extends AppCompatActivity {
         backBtn = findViewById(R.id.back_btn);
         removeWorkerBtn = findViewById(R.id.remove_worker);
         quitRequestBtn = findViewById(R.id.quit_request);
-
+        closeRequest = findViewById(R.id.close_request);
 
         Request request = (Request)getIntent().getSerializableExtra("request");
         requestTitle.setText(request.getRequestTitle());
@@ -81,6 +81,7 @@ public class ViewRequestActivity extends AppCompatActivity {
             if (request.getCreatorId().equals(firebaseUser.getUid())) {
                 acceptBtn.setVisibility(View.GONE);
                 removeWorkerBtn.setVisibility(View.VISIBLE);
+                closeRequest.setVisibility(View.VISIBLE);
                 removeWorkerBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -88,6 +89,16 @@ public class ViewRequestActivity extends AppCompatActivity {
                         intent.putExtra("request_position", getIntent().getIntExtra("request_position", 0 ));
                         intent.putExtra("workerId", request.getWorkerId());
                         setResult(EResultCodes.REMOVE_WORKER.getValue(), intent);
+                        finish();
+                    }
+                });
+                closeRequest.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent();
+                        intent.putExtra("request_position", getIntent().getIntExtra("request_position", 0 ));
+                        intent.putExtra("workerId", request.getWorkerId());
+                        setResult(EResultCodes.CLOSE_REQUEST.getValue(), intent);
                         finish();
                     }
                 });

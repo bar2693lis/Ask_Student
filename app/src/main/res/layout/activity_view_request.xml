@@ -67,7 +67,7 @@
                 android:visibility="gone"
                 android:textSize="20sp"
                 android:layout_margin="20dp"/>
-            <RelativeLayout
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -83,7 +83,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="15dp"
-                    android:layout_toEndOf="@id/back_btn"
                     android:text="@string/accept"
                     android:id="@+id/accept_btn"/>
                 <Button
@@ -91,7 +90,6 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="15dp"
                     android:visibility="gone"
-                    android:layout_toEndOf="@id/back_btn"
                     android:text="@string/remove_worker"
                     android:id="@+id/remove_worker"/>
                 <Button
@@ -99,11 +97,17 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="15dp"
                     android:visibility="gone"
-                    android:layout_toEndOf="@id/back_btn"
                     android:text="@string/quit_request"
                     android:id="@+id/quit_request"/>
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="15dp"
+                    android:visibility="gone"
+                    android:text="@string/close_request"
+                    android:id="@+id/close_request"/>
 
-            </RelativeLayout>
+            </LinearLayout>
         </LinearLayout>
     </ScrollView>
 

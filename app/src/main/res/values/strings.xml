@@ -79,4 +79,6 @@
     <string name="profile_tab">Profile</string>
     <string name="show_opened_requests">Show Opened Requests</string>
     <string name="show_taken_requests">Show Taken Requests</string>
+    <string name="close_request">Close Request</string>
+    <string name="request_closed_alert">Closed the request you were working on</string>
 </resources>
