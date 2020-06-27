@@ -10,13 +10,9 @@
         android:layout_width="150dp"
         android:layout_height="150dp"
         android:id="@+id/setup_Picture_image"
-        android:src="@mipmap/ic_launcher"
+        android:src="@drawable/user"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
-
-        >
-
-    </de.hdodenhof.circleimageview.CircleImageView>
+        android:layout_marginTop="20dp"/>
 
     <Button
         android:layout_width="match_parent"

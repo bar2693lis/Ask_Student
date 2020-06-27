@@ -3,7 +3,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimary">
+    android:background="@drawable/popup_background">
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -13,14 +14,17 @@
         android:textStyle="bold"
         android:layout_margin="10dp"
         android:layout_centerHorizontal="true"/>
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/request_title">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -28,6 +32,7 @@
                 android:text="Needed profession : Programmer"
                 android:textSize="20sp"
                 android:layout_margin="20dp"/>
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -59,6 +64,7 @@
                 android:text="Status : Available"
                 android:textSize="20sp"
                 android:layout_margin="20dp"/>
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -67,48 +73,71 @@
                 android:visibility="gone"
                 android:textSize="20sp"
                 android:layout_margin="20dp"/>
+
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_below="@id/request_status">
+
                 <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="15dp"
                     android:text="@string/back"
-                    android:id="@+id/back_btn"/>
+                    android:id="@+id/back_btn"
+                    android:background="@drawable/button_background"/>
 
                 <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="15dp"
                     android:text="@string/accept"
-                    android:id="@+id/accept_btn"/>
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="15dp"
-                    android:visibility="gone"
-                    android:text="@string/remove_worker"
-                    android:id="@+id/remove_worker"/>
+                    android:id="@+id/accept_btn"
+                    android:background="@drawable/button_background"/>
+
                 <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="15dp"
                     android:visibility="gone"
                     android:text="@string/quit_request"
-                    android:id="@+id/quit_request"/>
+                    android:id="@+id/quit_request"
+                    android:background="@drawable/button_background"
+                    android:padding="8dp"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_gravity="center">
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="15dp"
+                    android:visibility="gone"
+                    android:text="@string/remove_worker"
+                    android:id="@+id/remove_worker"
+                    android:background="@drawable/button_background"
+                    android:padding="8dp"/>
+
                 <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="15dp"
                     android:visibility="gone"
                     android:text="@string/close_request"
-                    android:id="@+id/close_request"/>
+                    android:id="@+id/close_request"
+                    android:background="@drawable/button_background"
+                    android:padding="8dp"/>
 
             </LinearLayout>
+
         </LinearLayout>
+
     </ScrollView>
 
 </RelativeLayout>

@@ -2,16 +2,18 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
+
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
-        <RelativeLayout android:layout_height="match_parent"
-            android:layout_width="match_parent"
+        <RelativeLayout
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
             xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/popUpLayout"
-            android:background="@color/colorPrimary">
+            android:background="@drawable/popup_background">
 
             <TextView
                 android:layout_width="match_parent"
@@ -21,7 +23,8 @@
                 android:layout_marginTop="20dp"
                 android:textSize="30sp"
                 android:id="@+id/LookingForTextView"
-                />
+                android:background="@drawable/rating_background"/>
+
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
@@ -30,8 +33,8 @@
                 android:hint="@string/profession"
                 android:gravity="center"
                 android:inputType="textMultiLine"
-                android:layout_below="@id/LookingForTextView"
-                />
+                android:layout_below="@id/LookingForTextView"/>
+
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
@@ -40,8 +43,7 @@
                 android:hint="@string/request_title"
                 android:gravity="center"
                 android:inputType="textMultiLine"
-                android:layout_below="@id/professionEt"
-                />
+                android:layout_below="@id/professionEt"/>
 
             <EditText
                 android:layout_width="match_parent"
@@ -50,9 +52,7 @@
                 android:hint="@string/job_description"
                 android:gravity="center"
                 android:id="@+id/jobDesc"
-                android:inputType="textMultiLine"
-                />
-
+                android:inputType="textMultiLine"/>
 
             <EditText
                 android:layout_width="match_parent"
@@ -61,8 +61,7 @@
                 android:layout_below="@+id/jobDesc"
                 android:hint="@string/qualifications"
                 android:gravity="center"
-                android:inputType="textMultiLine"
-                />
+                android:inputType="textMultiLine"/>
 
             <EditText
                 android:layout_width="match_parent"
@@ -70,8 +69,8 @@
                 android:layout_below="@+id/qualificationsEt"
                 android:gravity="center"
                 android:hint="@string/add_note"
-                android:id="@+id/note"
-                />
+                android:id="@+id/note"/>
+
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -79,8 +78,11 @@
                 android:text="@string/open_request"
                 android:id="@+id/doneBtn"
                 android:layout_centerInParent="true"
-                />
+                android:background="@drawable/button_background"
+                android:padding="6dp"/>
+
         </RelativeLayout>
 
     </ScrollView>
+
 </RelativeLayout>

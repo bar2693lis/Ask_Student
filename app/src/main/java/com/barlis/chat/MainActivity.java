@@ -147,7 +147,7 @@ public class MainActivity extends AppCompatActivity {
                     username.setText(user.getUsername());
 
                     if (user.getImageURL().equals("default")) {
-                        profileImage.setImageResource(R.mipmap.ic_launcher);
+                        profileImage.setImageResource(R.drawable.unethical_icon);
                     } else {
                         Picasso.get().load(user.getImageURL()).into(profileImage);
                     }
@@ -197,11 +197,17 @@ public class MainActivity extends AppCompatActivity {
                     viewPager.setAdapter(viewPagerAdapter);
 
                     tabLayout.setupWithViewPager(viewPager);
+
+                    tabLayout.getTabAt(0).setIcon(R.drawable.chat);
+                    tabLayout.getTabAt(1).setIcon(R.drawable.group);
+                    tabLayout.getTabAt(2).setIcon(R.drawable.requests);
+                    tabLayout.getTabAt(3).setIcon(R.drawable.profile);
                 }
 
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {
                 }
+
             });
 
             if (Build.VERSION.SDK_INT >= 23) {

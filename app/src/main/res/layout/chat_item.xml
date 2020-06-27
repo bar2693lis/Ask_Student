@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="7dp"
+    android:orientation="vertical">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardElevation="4dp"
+        app:cardCornerRadius="6dp">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/user_cell_gradient"/>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/user_cell_background"/>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/profile_image"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/user"/>
+
+            <TextView
+                android:id="@+id/username"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="17dp"
+                android:layout_toEndOf="@id/profile_image"
+                android:gravity="top"
+                android:text="Username"
+                android:textSize="15sp"
+                android:textColor="#BCFFFFFF"/>
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/img_on"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                app:civ_border_width="10dp"
+                app:civ_border_color="#05df29"
+                android:visibility="gone"
+                android:src="@mipmap/ic_launcher"
+                android:layout_below="@id/username"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="-12dp"
+                android:layout_toEndOf="@id/profile_image"/>
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/img_off"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                app:civ_border_width="10dp"
+                app:civ_border_color="#bfbfbf"
+                android:visibility="gone"
+                android:src="@mipmap/ic_launcher"
+                android:layout_below="@id/username"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="-12dp"
+                android:layout_toEndOf="@id/profile_image"/>
+
+            <TextView
+                android:id="@+id/last_message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/profile_image"
+                android:layout_marginStart="31dp"
+                android:layout_marginTop="-28dp"
+                android:layout_toEndOf="@id/profile_image"
+                android:maxLines="1"
+                android:paddingTop="5dp"
+                android:text="message"
+                android:textAllCaps="false"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="#BCFFFFFF"/>
+
+        </RelativeLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</LinearLayout>

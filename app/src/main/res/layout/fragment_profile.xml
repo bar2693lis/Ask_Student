@@ -5,11 +5,13 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".Fragments.ProfileFragment"
-    android:padding="8dp">
+    android:background="@drawable/user_profile_background">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        app:cardBackgroundColor="@android:color/transparent"
+        android:padding="8dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -21,7 +23,7 @@
                 android:layout_height="120dp"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="15dp"
-                android:src="@mipmap/ic_launcher"/>
+                android:src="@drawable/user"/>
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/choose_image"
@@ -61,8 +63,9 @@
                         android:layout_height="wrap_content"
                         android:text="Username"
                         android:textStyle="bold"
-                        android:textSize="15sp"
-                        android:layout_gravity="center_vertical" />
+                        android:textSize="20sp"
+                        android:layout_gravity="center_vertical"
+                        android:textColor="#BCFFFFFF"/>
 
                 </LinearLayout>
 
@@ -76,7 +79,7 @@
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/ic_email"
+                        android:src="@drawable/profile_mail_logo"
                         android:layout_gravity="center_vertical"
                         android:paddingRight="10dp"/>
 
@@ -86,8 +89,9 @@
                         android:layout_height="wrap_content"
                         android:text="Email"
                         android:textStyle="bold"
-                        android:textSize="15sp"
-                        android:layout_gravity="center_vertical" />
+                        android:textSize="20sp"
+                        android:layout_gravity="center_vertical"
+                        android:textColor="#BCFFFFFF"/>
 
                 </LinearLayout>
 
@@ -104,7 +108,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:background="@drawable/rating_background"
+                        android:layout_margin="5dp">
 
                         <ImageView
                             android:id="@+id/facebook_account"
@@ -135,43 +141,53 @@
                             android:layout_margin="10dp"/>
 
                     </LinearLayout>
+
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:id="@+id/star_layout"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:background="@drawable/rating_background"
+                        android:layout_margin="5dp">
+
                         <ImageView
                             android:layout_width="30dp"
                             android:layout_height="30dp"
                             android:id="@+id/star_one"
                             android:src="@drawable/empty_star"
                             android:layout_margin="10dp"/>
+
                         <ImageView
                             android:layout_width="30dp"
                             android:layout_height="30dp"
                             android:id="@+id/star_two"
                             android:src="@drawable/empty_star"
                             android:layout_margin="10dp"/>
+
                         <ImageView
                             android:layout_width="30dp"
                             android:layout_height="30dp"
                             android:id="@+id/star_three"
                             android:src="@drawable/empty_star"
                             android:layout_margin="10dp"/>
+
                         <ImageView
                             android:layout_width="30dp"
                             android:layout_height="30dp"
                             android:id="@+id/star_four"
                             android:src="@drawable/empty_star"
                             android:layout_margin="10dp"/>
+
                         <ImageView
                             android:layout_width="30dp"
                             android:layout_height="30dp"
                             android:id="@+id/star_five"
                             android:src="@drawable/empty_star"
                             android:layout_margin="10dp"/>
+
                     </LinearLayout>
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -180,10 +196,11 @@
                         android:textSize="15sp"
                         android:id="@+id/reviewer_count_text"
                         android:layout_marginStart="10dp"/>
+
                     <ImageView
                         android:id="@+id/edit_accounts_btn"
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
                         android:src="@drawable/edit"
                         android:layout_gravity="center_horizontal"
                         android:paddingTop="10dp"/>

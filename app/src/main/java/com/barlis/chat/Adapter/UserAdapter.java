@@ -33,18 +33,31 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
     private boolean isChat;
 
+    private boolean isChatLayout;
+
     String theLastMessage;
 
-    public UserAdapter(Context mContext, List<User> mUsers, boolean isChat){
+    public UserAdapter(Context mContext, List<User> mUsers, boolean isChat, boolean isChatLayout){
         this.mContext = mContext;
         this.mUsers = mUsers;
         this.isChat = isChat;
+        this.isChatLayout = isChatLayout;
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(mContext).inflate(R.layout.user_item, parent, false);
+        View view;
+        if( isChatLayout == true)
+        {
+            view = LayoutInflater.from(mContext).inflate(R.layout.chat_item, parent, false);
+
+        }
+        else
+        {
+            view = LayoutInflater.from(mContext).inflate(R.layout.user_cell, parent, false);
+
+        }
         return new UserAdapter.ViewHolder(view);
     }
 
@@ -59,27 +72,30 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
             Picasso.get().load(user.getImageURL()).into(holder.profile_image);
         }
 
-        if(isChat){
-            lastMessage(user.getId(), holder.last_message);
-        }
-        else{
-            holder.last_message.setVisibility(View.GONE);
-        }
+        if(isChatLayout){
+            if(isChat){
+                lastMessage(user.getId(), holder.last_message);
+            }
+            else{
+                holder.last_message.setVisibility(View.GONE);
+            }
 
-        if(isChat){
-            if(user.getStatus().equals("online")){
-                holder.img_on.setVisibility(View.VISIBLE);
-                holder.img_off.setVisibility(View.GONE);
+            if(isChat){
+                if(user.getStatus().equals("online")){
+                    holder.img_on.setVisibility(View.VISIBLE);
+                    holder.img_off.setVisibility(View.GONE);
+                }
+                else{
+                    holder.img_on.setVisibility(View.GONE);
+                    holder.img_off.setVisibility(View.VISIBLE);
+                }
             }
             else{
                 holder.img_on.setVisibility(View.GONE);
-                holder.img_off.setVisibility(View.VISIBLE);
+                holder.img_off.setVisibility(View.GONE);
             }
         }
-        else{
-            holder.img_on.setVisibility(View.GONE);
-            holder.img_off.setVisibility(View.GONE);
-        }
+
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

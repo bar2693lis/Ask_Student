@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Fragments.ChatsFragment">
+    tools:context=".Fragments.ChatsFragment"
+    android:background="@drawable/user_profile_background">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"

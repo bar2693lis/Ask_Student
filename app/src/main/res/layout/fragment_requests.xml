@@ -3,21 +3,28 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Fragments.UsersFragment">
+    tools:context=".Fragments.UsersFragment"
+    android:background="@drawable/user_profile_background">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/filters_layout">
+        android:id="@+id/filters_layout"
+        android:background="@drawable/filter_background">
+
         <Spinner
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:id="@+id/status_filter"
-            android:layout_margin="10dp"/>
+            android:layout_gravity="center_vertical"/>
+
         <Spinner
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:id="@+id/profession_filter"
-            android:layout_margin="10dp"/>
+            android:layout_gravity="center_vertical"/>
 
     </LinearLayout>
     <androidx.recyclerview.widget.RecyclerView
