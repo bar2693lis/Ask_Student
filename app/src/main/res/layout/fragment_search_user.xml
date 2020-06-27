@@ -56,7 +56,9 @@
                 android:layout_below="@+id/distanceEt"
                 android:text="@string/search_users"
                 android:id="@+id/doneBtn"
-                android:layout_centerInParent="true" />
+                android:layout_centerInParent="true"
+                android:background="@drawable/button_background"
+                android:padding="6dp"/>
         </RelativeLayout>
 
     </ScrollView>
