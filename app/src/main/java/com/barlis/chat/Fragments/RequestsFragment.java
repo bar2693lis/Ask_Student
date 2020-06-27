@@ -47,7 +47,7 @@ public class RequestsFragment extends Fragment {
         recyclerView = view.findViewById(R.id.recycler_view);
         professionFilter = view.findViewById(R.id.profession_filter);
         statusFilter = view.findViewById(R.id.status_filter);
-        statusFilter.setPrompt("title");
+        // Status array for filter
         String[] statusArr = new String[] {getResources().getString(R.string.any_status), getResources().getString(R.string.status_available), getResources().getString(R.string.status_taken), getResources().getString(R.string.status_done)};
         statusAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_dropdown_item, statusArr);
         recyclerView.setHasFixedSize(true);
@@ -59,11 +59,13 @@ public class RequestsFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 requests.clear();
+                // Collect all professions for filter
                 List<String> professions = new ArrayList<>();
                 professions.add(getResources().getString(R.string.any_profession));
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Request request = snapshot.getValue(Request.class);
                     request.setRequestId(snapshot.getKey());
+                    // Add only if not duplicate
                     if (!professions.contains(request.getRequiredProfession().toLowerCase())) {
                         professions.add(request.getRequiredProfession().toLowerCase());
                     }
@@ -85,6 +87,7 @@ public class RequestsFragment extends Fragment {
         statusFilter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                // Prevent activation on create
                 if (statusFilterLastPosition != position) {
                     statusFilterLastPosition = position;
                     filterRequests();
@@ -101,6 +104,7 @@ public class RequestsFragment extends Fragment {
         professionFilter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                // Prevent activation on create
                 if (professionFilterLastPosition != position) {
                     professionFilterLastPosition = position;
                     filterRequests();
@@ -117,6 +121,7 @@ public class RequestsFragment extends Fragment {
     }
 
     private void filterRequests() {
+        // Check if status or profession filters were selected
         final boolean isFilterStatus = statusFilter.getSelectedItemPosition() != 0;
         final boolean isFilterProfession = professionFilter.getSelectedItemPosition() != 0;
 
@@ -146,6 +151,7 @@ public class RequestsFragment extends Fragment {
                         passedFilters++;
                     }
 
+                    // Add request if passed both filters
                     if (passedFilters == 2) {
                         request.setRequestId(snapshot.getKey());
                         requests.add(request);
@@ -161,6 +167,7 @@ public class RequestsFragment extends Fragment {
         });
     }
 
+    // Add request to list, update DB and recycler
     public void addRequest(Request request) {
         requestReference = FirebaseDatabase.getInstance().getReference("Requests");
         String key = requestReference.push().getKey();
@@ -181,6 +188,7 @@ public class RequestsFragment extends Fragment {
         }
     }
 
+    // Add a worker to request at specific position, change state to taken and update recycler
     public void updateRequestWorker(int position, String workerName, String workerId) {
         requests.get(position).setStatus(ERequestStatus.REQUEST_TAKEN);
         requests.get(position).setWorkerName(workerName);
@@ -193,11 +201,13 @@ public class RequestsFragment extends Fragment {
         requestAdapter.notifyItemChanged(position);
     }
 
+    // Change request at specific position to done and update recycler
     public void closeRequest(int position) {
         requests.get(position).setStatus(ERequestStatus.REQUEST_DONE);
         FirebaseDatabase.getInstance().getReference("Requests").child(requests.get(position).getRequestId()).child("status").setValue(ERequestStatus.REQUEST_DONE);
     }
 
+    // Remove a worker from request at specific position, change state to available and update recycler
     public void removeWorkerFromRequest(int position, String workerId) {
         DatabaseReference requestReference = FirebaseDatabase.getInstance().getReference("Requests").child(requests.get(position).getRequestId());
         requestReference.child("workerId").removeValue();

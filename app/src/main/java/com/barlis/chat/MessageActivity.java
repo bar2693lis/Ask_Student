@@ -23,6 +23,7 @@ import com.barlis.chat.Model.User;
 import com.barlis.chat.Notification.Client;
 import com.barlis.chat.Notification.Data;
 import com.barlis.chat.Notification.MyResponse;
+import com.barlis.chat.Notification.NotificationBuilder;
 import com.barlis.chat.Notification.Sender;
 import com.barlis.chat.Notification.Token;
 import com.google.firebase.auth.FirebaseAuth;
@@ -138,7 +139,6 @@ public class MessageActivity extends AppCompatActivity {
                     Picasso.get().load(user.getImageURL()).into(profile_image);
 
                 }
-                //Tom
                 toolbar.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -147,7 +147,6 @@ public class MessageActivity extends AppCompatActivity {
                         startActivity(viewProfileIntent);
                     }
                 });
-                //End Tom
                 readMessage(fuser.getUid(), userId, user.getImageURL());
             }
 

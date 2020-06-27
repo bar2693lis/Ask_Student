@@ -43,12 +43,12 @@ public class PopUpActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.popup_layout);
+        // Create a smaller window that will pop up above the main activity
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         int width = displayMetrics.widthPixels;
         int height = displayMetrics.heightPixels;
         CardView cardView = findViewById(R.id.popUpCardView);
-        //getWindow().setLayout((int)(width*0.8),cardView.getHeight()*2);
         getWindow().setLayout((int)(width*0.8),(int)(height*0.9));
         WindowManager.LayoutParams params = getWindow().getAttributes();
         params.gravity = Gravity.CENTER;

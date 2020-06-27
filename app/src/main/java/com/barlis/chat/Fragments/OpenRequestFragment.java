@@ -60,6 +60,7 @@ public class OpenRequestFragment extends Fragment {
         return view;
     }
 
+    // Mark empty fields in red
     private void markMissingFields() {
         if (requestTitle.getText().toString().isEmpty()) {
             requestTitle.setHintTextColor(Color.RED);

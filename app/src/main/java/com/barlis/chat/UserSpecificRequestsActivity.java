@@ -26,6 +26,7 @@ import com.barlis.chat.Model.Request;
 import com.barlis.chat.Notification.Client;
 import com.barlis.chat.Notification.Data;
 import com.barlis.chat.Notification.MyResponse;
+import com.barlis.chat.Notification.NotificationBuilder;
 import com.barlis.chat.Notification.Sender;
 import com.barlis.chat.Notification.Token;
 import com.google.firebase.auth.FirebaseAuth;
@@ -66,7 +67,7 @@ public class UserSpecificRequestsActivity extends AppCompatActivity {
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(UserSpecificRequestsActivity.this, MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                finish();
             }
         });
 
@@ -81,17 +82,8 @@ public class UserSpecificRequestsActivity extends AppCompatActivity {
         requestReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                // Put all requests in recyclerView
                 readRequests();
-//                requests.clear();
-//                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-//                    Request request = snapshot.getValue(Request.class);
-//                    if (request.getCreatorId().equals(currentUser.getUid())) {
-//                        request.setRequestId(snapshot.getKey());
-//                        requests.add(request);
-//                    }
-//                }
-//                requestAdapter = new RequestAdapter(UserSpecificRequestsActivity.this, requests);
-//                recyclerView.setAdapter(requestAdapter);
             }
 
             @Override
@@ -116,6 +108,7 @@ public class UserSpecificRequestsActivity extends AppCompatActivity {
     }
 
     private void readRequests() {
+        // Take checkbox state
         final boolean isFilterOpenedRequests = getOpenedRequests.isChecked();
         final boolean isFilterTakenRequests = getTakenRequests.isChecked();
 
@@ -126,11 +119,13 @@ public class UserSpecificRequestsActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot snapshot: dataSnapshot.getChildren()) {
                     Request request = snapshot.getValue(Request.class);
+                    // Filter opened requests or taken requests by checkboxes state
                     if (isFilterOpenedRequests && request.getCreatorId().equals(currentUser.getUid())) {
                         request.setRequestId(snapshot.getKey());
                         requests.add(request);
                     }
 
+                    // Worker id will be null if request is still open
                     if (isFilterTakenRequests && request.getWorkerId() != null) {
                         if (request.getWorkerId().equals(currentUser.getUid())) {
                             request.setRequestId(snapshot.getKey());
@@ -154,67 +149,32 @@ public class UserSpecificRequestsActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == ERequestCodes.UPDATE_REQUEST.getValue()) {
             if (resultCode == EResultCodes.UPDATE_REQUEST_WORKER.getValue()) {
+                // Add worker to request and send that user a notification
                 updateRequestWorker(data.getIntExtra("request_position", 0), getIntent().getStringExtra("user_name"), currentUser.getUid());
                 Intent intent = new Intent(UserSpecificRequestsActivity.this, MessageActivity.class);
                 intent.putExtra("userId", data.getStringExtra("creatorId"));
                 startActivity(intent);
-                sendNotification(data.getStringExtra("creatorId"), getResources().getString(R.string.job_taken_message_body), getIntent().getStringExtra("user_name") + " " + getResources().getString(R.string.job_taken_notification));
+                NotificationBuilder.sendNotification(this, currentUser.getUid(), data.getStringExtra("creatorId"), getResources().getString(R.string.job_taken_message_body), getIntent().getStringExtra("user_name") + " " + getResources().getString(R.string.job_taken_notification));
             }
             else if (resultCode == EResultCodes.REMOVE_WORKER.getValue()) {
+                // Remove worker from request and send that user a notification
                 removeWorkerFromRequest(data.getIntExtra("request_position", 0), data.getStringExtra("workerId"));
-                sendNotification(data.getStringExtra("workerId"), getIntent().getStringExtra("user_name") + " " + getResources().getString(R.string.removed_from_request_alert), getResources().getString(R.string.request_update_alert));
+                NotificationBuilder.sendNotification(this, currentUser.getUid(), data.getStringExtra("workerId"), getIntent().getStringExtra("user_name") + " " + getResources().getString(R.string.removed_from_request_alert), getResources().getString(R.string.request_update_alert));
             }
             else if (resultCode == EResultCodes.QUIT_REQUEST.getValue()) {
+                // Remove worker from request and send the creator a notification
                 removeWorkerFromRequest(data.getIntExtra("request_position", 0), currentUser.getUid());
-                sendNotification(data.getStringExtra("creatorId"), getIntent().getStringExtra("user_name") + " " + getResources().getString(R.string.worker_quit_alert), getResources().getString(R.string.request_update_alert));
+                NotificationBuilder.sendNotification(this, currentUser.getUid(), data.getStringExtra("creatorId"), getIntent().getStringExtra("user_name") + " " + getResources().getString(R.string.worker_quit_alert), getResources().getString(R.string.request_update_alert));
             }
             else if (resultCode == EResultCodes.CLOSE_REQUEST.getValue()) {
+                // Close request and send the worker a notification
                 closeRequest(data.getIntExtra("request_position",0));
-                sendNotification(data.getStringExtra("workerId"), getIntent().getStringExtra("user_name") + " " + getResources().getString(R.string.request_closed_alert), getResources().getString(R.string.request_update_alert));
+                NotificationBuilder.sendNotification(this, currentUser.getUid(), data.getStringExtra("workerId"), getIntent().getStringExtra("user_name") + " " + getResources().getString(R.string.request_closed_alert), getResources().getString(R.string.request_update_alert));
             }
         }
     }
 
-    private void sendNotification(String receiver, String body, String title){
-        DatabaseReference token = FirebaseDatabase.getInstance().getReference("Tokens");
-
-        Query query = token.orderByKey().equalTo(receiver);
-
-        query.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for(DataSnapshot snapshot : dataSnapshot.getChildren()){
-                    Token token = snapshot.getValue(Token.class);
-
-                    Data data = new Data(currentUser.getUid(), body, title, receiver);
-
-                    Sender sender = new Sender(data, token.getToken());
-                    APIService apiService = Client.getClient("https://fcm.googleapis.com/").create(APIService.class);
-                    apiService.sendNotification(sender).enqueue(new Callback<MyResponse>() {
-                        @Override
-                        public void onResponse(Call<MyResponse> call, Response<MyResponse> response) {
-                            if(response.code() == 200){
-                                if(response.body().success != 1){
-                                    Toast.makeText(UserSpecificRequestsActivity.this, "Failed!", Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(Call<MyResponse> call, Throwable t) {
-
-                        }
-                    });
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-    }
-
+    // Add a worker to request at specific position, change state to taken and update recycler
     public void updateRequestWorker(int position, String workerName, String workerId) {
         requests.get(position).setStatus(ERequestStatus.REQUEST_TAKEN);
         requests.get(position).setWorkerName(workerName);
@@ -227,11 +187,13 @@ public class UserSpecificRequestsActivity extends AppCompatActivity {
         requestAdapter.notifyItemChanged(position);
     }
 
+    // Change request at specific position to done and update recycler
     public void closeRequest(int position) {
         requests.get(position).setStatus(ERequestStatus.REQUEST_DONE);
         FirebaseDatabase.getInstance().getReference("Requests").child(requests.get(position).getRequestId()).child("status").setValue(ERequestStatus.REQUEST_DONE);
     }
 
+    // Remove a worker from request at specific position, change state to available and update recycler
     public void removeWorkerFromRequest(int position, String workerId) {
         DatabaseReference requestReference = FirebaseDatabase.getInstance().getReference("Requests").child(requests.get(position).getRequestId());
         requestReference.child("workerId").removeValue();

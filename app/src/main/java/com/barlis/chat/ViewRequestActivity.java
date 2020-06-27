@@ -26,6 +26,7 @@ public class ViewRequestActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_request);
+        // Create a smaller window that will pop up above the main activity
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         int width = displayMetrics.widthPixels;
@@ -49,6 +50,7 @@ public class ViewRequestActivity extends AppCompatActivity {
         quitRequestBtn = findViewById(R.id.quit_request);
         closeRequest = findViewById(R.id.close_request);
 
+        // Take request from intent and fill the textViews
         Request request = (Request)getIntent().getSerializableExtra("request");
         requestTitle.setText(request.getRequestTitle());
         profession.setText(getResources().getString(R.string.required_profession) + ": " + request.getRequiredProfession());
@@ -60,24 +62,29 @@ public class ViewRequestActivity extends AppCompatActivity {
                 requestStatus.setText(getResources().getString(R.string.status_available));
                 break;
             case REQUEST_TAKEN:
-                requestStatus.setText(getResources().getString(R.string.status_taken));
+                // If taken, the worker name will be displayed
+                requestStatus.setVisibility(View.GONE);
                 break;
             case REQUEST_DONE:
                 requestStatus.setText(getResources().getString(R.string.status_done));
                 break;
         }
 
+        // If request is not available, add worker name
         if (request.getStatus() != ERequestStatus.REQUEST_AVAILABLE) {
             workerName.setVisibility(View.VISIBLE);
             workerName.setText(getResources().getString(R.string.taken_by) + " " + request.getWorkerName());
         }
+        // Change all empty fields visibility to GONE
         removeEmptyFields(request);
 
+        // If request is not available or created by current user, disable accept button
         if (firebaseUser.getUid().equals(request.getCreatorId()) || !request.getStatus().equals(ERequestStatus.REQUEST_AVAILABLE)) {
             acceptBtn.setEnabled(false);
         }
 
         if (request.getStatus().equals(ERequestStatus.REQUEST_TAKEN)) {
+            // If taken request was created by current user, replace accept button with remove worker and close request
             if (request.getCreatorId().equals(firebaseUser.getUid())) {
                 acceptBtn.setVisibility(View.GONE);
                 removeWorkerBtn.setVisibility(View.VISIBLE);
@@ -103,6 +110,7 @@ public class ViewRequestActivity extends AppCompatActivity {
                     }
                 });
             }
+            // If taken request was taken by current user, replace accept button with quit request
             else if (request.getWorkerId().equals(firebaseUser.getUid())) {
                 acceptBtn.setVisibility(View.GONE);
                 quitRequestBtn.setVisibility(View.VISIBLE);
@@ -138,6 +146,7 @@ public class ViewRequestActivity extends AppCompatActivity {
         });
     }
 
+    // Change all empty fields visibility to GONE
     private void removeEmptyFields(Request request) {
         if (request.getQualifications() == null) {
             qualifications.setVisibility(View.GONE);

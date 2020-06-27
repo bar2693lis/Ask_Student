@@ -1,9 +1,5 @@
 package com.barlis.chat.Model;
 
-import android.os.Parcelable;
-
-import com.google.firebase.database.Exclude;
-
 import java.io.Serializable;
 
 public class Request implements Serializable {
@@ -45,10 +41,6 @@ public class Request implements Serializable {
         return requestTitle;
     }
 
-    public void setRequestTitle(String requestTitle) {
-        this.requestTitle = requestTitle;
-    }
-
     public String getQualifications() {
         return qualifications;
     }
@@ -59,10 +51,6 @@ public class Request implements Serializable {
 
     public String getNotes() {
         return notes;
-    }
-
-    public void setNotes(String notes) {
-        this.notes = notes;
     }
 
     public String getCreatorName() {
@@ -93,10 +81,6 @@ public class Request implements Serializable {
         return requestDetails;
     }
 
-    public void setRequestDetails(String requestDetails) {
-        this.requestDetails = requestDetails;
-    }
-
     public String getCreatorId() {
         return creatorId;
     }
@@ -107,10 +91,6 @@ public class Request implements Serializable {
 
     public String getRequiredProfession() {
         return requiredProfession;
-    }
-
-    public void setRequiredProfession(String requiredProfession) {
-        this.requiredProfession = requiredProfession;
     }
 
     public ERequestStatus getStatus() {

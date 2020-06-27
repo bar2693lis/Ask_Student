@@ -209,14 +209,17 @@ public class ViewUserProfileActivity extends AppCompatActivity implements RateUs
         }
     }
 
+    // Update user rating
     @Override
     public void onReturn(int rating, int oldRating) {
         float newRating;
         HashMap<String, Object> hashMap = new HashMap<>();
+        // If user never rated
         if (oldRating == 0) {
             newRating = ((user.getRating() * user.getNumberOfReviews()) + rating) / (user.getNumberOfReviews() + 1);
             hashMap.put("numberOfReviews", user.getNumberOfReviews() + 1);
         }
+        // Update only if user changed his rating
         else if (oldRating != rating) {
             newRating = ((user.getRating() * user.getNumberOfReviews()) - (oldRating - rating)) / user.getNumberOfReviews();
         }

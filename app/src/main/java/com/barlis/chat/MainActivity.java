@@ -38,6 +38,7 @@ import com.barlis.chat.Model.User;
 import com.barlis.chat.Notification.Client;
 import com.barlis.chat.Notification.Data;
 import com.barlis.chat.Notification.MyResponse;
+import com.barlis.chat.Notification.NotificationBuilder;
 import com.barlis.chat.Notification.Sender;
 import com.barlis.chat.Notification.Token;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -96,11 +97,9 @@ public class MainActivity extends AppCompatActivity {
             setContentView(R.layout.employer_layout);
         }*/
 
-
-
-
         //else {
             setContentView(R.layout.activity_main);
+            // Set empty user location
             userLocation = new Location("");
             usersFragment = new UsersFragment();
             requestsFragment = new RequestsFragment();
@@ -151,7 +150,7 @@ public class MainActivity extends AppCompatActivity {
                     } else {
                         Picasso.get().load(user.getImageURL()).into(profileImage);
                     }
-                    // Tom
+                    // Set last known location if it exists
                     if (dataSnapshot.hasChild("latitude")) {
                         userLocation.setLatitude(dataSnapshot.child("latitude").getValue(double.class));
                         userLocation.setLongitude(dataSnapshot.child("longitude").getValue(double.class));
@@ -210,6 +209,7 @@ public class MainActivity extends AppCompatActivity {
 
             });
 
+            // Check for location permission
             if (Build.VERSION.SDK_INT >= 23) {
                 int hasLocationPermission = checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION);
                 if (hasLocationPermission != PackageManager.PERMISSION_GRANTED) {
@@ -226,10 +226,10 @@ public class MainActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if(requestCode==LOCATION_PERMISSION_REQUEST) {
-            if(grantResults[0]!=PackageManager.PERMISSION_GRANTED) {
-                // User denied permission
+            // If user approved then get location data
+            if(grantResults[0]==PackageManager.PERMISSION_GRANTED) {
+                getLocation();
             }
-            else getLocation();
         }
     }
 
@@ -351,6 +351,7 @@ public class MainActivity extends AppCompatActivity {
                 if (data.hasExtra("distance")) {
                     maxDistance = data.getIntExtra("distance", 0) * 1000;
                 }
+                // Search for users and move to the users tab
                 tabLayout.getTabAt(1).select();
                 usersFragment.setNewSearchQuery(profession, data.getBooleanExtra("searchByDistance", false), userLocation, maxDistance);
             }
@@ -364,23 +365,27 @@ public class MainActivity extends AppCompatActivity {
         }
         else if (requestCode == ERequestCodes.UPDATE_REQUEST.getValue()) {
             if (resultCode == EResultCodes.UPDATE_REQUEST_WORKER.getValue()) {
+                // Add worker to request and send that user a notification
                 requestsFragment.updateRequestWorker(data.getIntExtra("request_position", 0), username.getText().toString(), firebaseUser.getUid());
                 Intent intent = new Intent(MainActivity.this, MessageActivity.class);
                 intent.putExtra("userId", data.getStringExtra("creatorId"));
                 startActivity(intent);
-                sendNotification(data.getStringExtra("creatorId"), getResources().getString(R.string.job_taken_message_body), username.getText().toString() + " " + getResources().getString(R.string.job_taken_notification));
+                NotificationBuilder.sendNotification(this, firebaseUser.getUid(),data.getStringExtra("creatorId"), getResources().getString(R.string.job_taken_message_body), username.getText().toString() + " " + getResources().getString(R.string.job_taken_notification));
             }
             else if (resultCode == EResultCodes.REMOVE_WORKER.getValue()) {
+                // Remove worker from request and send that user a notification
                 requestsFragment.removeWorkerFromRequest(data.getIntExtra("request_position", 0), data.getStringExtra("workerId"));
-                sendNotification(data.getStringExtra("workerId"), username.getText().toString() + " " + getResources().getString(R.string.removed_from_request_alert), getResources().getString(R.string.request_update_alert));
+                NotificationBuilder.sendNotification(this, firebaseUser.getUid(), data.getStringExtra("workerId"), username.getText().toString() + " " + getResources().getString(R.string.removed_from_request_alert), getResources().getString(R.string.request_update_alert));
             }
             else if (resultCode == EResultCodes.QUIT_REQUEST.getValue()) {
+                // Remove worker from request and send the creator a notification
                 requestsFragment.removeWorkerFromRequest(data.getIntExtra("request_position", 0), firebaseUser.getUid());
-                sendNotification(data.getStringExtra("creatorId"), username.getText().toString() + " " + getResources().getString(R.string.worker_quit_alert), getResources().getString(R.string.request_update_alert));
+                NotificationBuilder.sendNotification(this, firebaseUser.getUid(), data.getStringExtra("creatorId"), username.getText().toString() + " " + getResources().getString(R.string.worker_quit_alert), getResources().getString(R.string.request_update_alert));
             }
             else if (resultCode == EResultCodes.CLOSE_REQUEST.getValue()) {
+                // Close request and send the worker a notification
                 requestsFragment.closeRequest(data.getIntExtra("request_position",0));
-                sendNotification(data.getStringExtra("workerId"), username.getText().toString() + " " + getResources().getString(R.string.request_closed_alert), getResources().getString(R.string.request_update_alert));
+                NotificationBuilder.sendNotification(this, firebaseUser.getUid(), data.getStringExtra("workerId"), username.getText().toString() + " " + getResources().getString(R.string.request_closed_alert), getResources().getString(R.string.request_update_alert));
             }
         }
     }
@@ -396,45 +401,5 @@ public class MainActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         userStatus("offline");
-    }
-
-    private void sendNotification(String receiver, String body, String title){
-        DatabaseReference token = FirebaseDatabase.getInstance().getReference("Tokens");
-
-        Query query = token.orderByKey().equalTo(receiver);
-
-        query.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for(DataSnapshot snapshot : dataSnapshot.getChildren()){
-                    Token token = snapshot.getValue(Token.class);
-
-                    Data data = new Data(firebaseUser.getUid(), body, title, receiver);
-
-                    Sender sender = new Sender(data, token.getToken());
-                    APIService apiService = Client.getClient("https://fcm.googleapis.com/").create(APIService.class);
-                    apiService.sendNotification(sender).enqueue(new Callback<MyResponse>() {
-                        @Override
-                        public void onResponse(Call<MyResponse> call, Response<MyResponse> response) {
-                            if(response.code() == 200){
-                                if(response.body().success != 1){
-                                    Toast.makeText(MainActivity.this, "Failed!", Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(Call<MyResponse> call, Throwable t) {
-
-                        }
-                    });
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
     }
 }

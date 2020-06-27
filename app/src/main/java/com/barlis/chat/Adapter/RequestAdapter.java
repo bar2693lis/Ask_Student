@@ -17,8 +17,6 @@ import com.barlis.chat.Model.Request;
 import com.barlis.chat.R;
 import com.barlis.chat.ViewRequestActivity;
 
-import org.w3c.dom.Text;
-
 import java.util.List;
 
 public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHolder> {
