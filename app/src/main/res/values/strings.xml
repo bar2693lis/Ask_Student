@@ -81,4 +81,5 @@
     <string name="show_taken_requests">Show Taken Requests</string>
     <string name="close_request">Close Request</string>
     <string name="request_closed_alert">Closed the request you were working on</string>
+    <string name="app_explanation">In this app, students and alumni can request other students for help in different projects.</string>
 </resources>

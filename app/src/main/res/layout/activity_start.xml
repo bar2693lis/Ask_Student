@@ -48,7 +48,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="In this app, students and alumni can request and share their assignments in different courses."
+        android:text="@string/app_explanation"
         android:textColor="#fff"
         android:gravity="center"
         android:textSize="20sp"/>

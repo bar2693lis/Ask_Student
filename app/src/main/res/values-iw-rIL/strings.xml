@@ -80,4 +80,5 @@
     <string name="show_taken_requests">בקשות שלקחת</string>
     <string name="close_request">סגור בקשה</string>
     <string name="request_closed_alert">סגרו את הבקשה שעבדתם עליה</string>
+    <string name="app_explanation">באפליקציה זו, סטודנטים יכולים להיעזר בסטודנטים אחרים עבודות שונות</string>
 </resources>
