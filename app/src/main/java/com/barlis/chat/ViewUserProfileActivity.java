@@ -37,7 +37,7 @@ public class ViewUserProfileActivity extends AppCompatActivity implements RateUs
 
     final String RATE_FRAGMENT_TAG = "RATE_FRAGMENT_TAG";
     CircleImageView image_profile;
-    TextView username, email, reviewerCount;
+    TextView username, email, reviewerCount, profession, qualifications, experience, personal;
     ImageView facebook_account, instagram_account, github_account, linkedin_account;
     ImageView stars[];
     LinearLayout starLayout;
@@ -64,6 +64,10 @@ public class ViewUserProfileActivity extends AppCompatActivity implements RateUs
 
         image_profile = findViewById(R.id.profile_image);
         username = findViewById(R.id.username);
+        profession= findViewById(R.id.profession);
+        qualifications = findViewById(R.id.qualifications);
+        experience = findViewById(R.id.experience);
+        personal = findViewById(R.id.personal);
         email = findViewById(R.id.email);
         facebook_account = findViewById(R.id.facebook_account);
         instagram_account = findViewById(R.id.instagram_account);
@@ -91,6 +95,24 @@ public class ViewUserProfileActivity extends AppCompatActivity implements RateUs
                 instagramUrl = user.getInstagram();
                 githubUrl = user.getGithub();
                 linkedinUrl = user.getLinkedin();
+                profession.setText(user.getProfession());
+                qualifications.setText(user.getQualifications());
+                experience.setText(user.getExperience());
+                personal.setText(user.getPersonal());
+
+                if (user.getProfession() == null) {
+                    profession.setVisibility(View.GONE);
+                    findViewById(R.id.profession_layout).setVisibility(View.GONE);
+                }
+                if (user.getQualifications() == null) {
+                    qualifications.setVisibility(View.GONE);
+                }
+                if (user.getExperience() == null) {
+                    experience.setVisibility(View.GONE);
+                }
+                if (user.getPersonal() == null) {
+                    personal.setVisibility(View.GONE);
+                }
 
                 if(user.getImageURL().equals("default")){
                     image_profile.setImageResource(R.mipmap.ic_launcher);

@@ -83,4 +83,12 @@
     <string name="request_closed_alert">Closed the request you were working on</string>
     <string name="app_explanation">In this app, students and alumni can request other students for help in different projects.</string>
     <string name="app_welcome">Welcome to AskStudent</string>
+    <string name="menu">Menu</string>
+    <string name="home_screen">Home Screen</string>
+    <string name="no_users_found_alert">No Users Found</string>
+    <string name="experience">Experience</string>
+    <string name="personal_summary">Personal Summary</string>
+    <string name="edit_details">Edit Details</string>
+    <string name="no_new_details">You haven\'t added any detail</string>
+    <string name="details_saved">Details Saved</string>
 </resources>

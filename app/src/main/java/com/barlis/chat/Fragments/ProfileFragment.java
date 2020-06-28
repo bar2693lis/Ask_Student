@@ -49,10 +49,10 @@ import static android.app.Activity.RESULT_OK;
 public class ProfileFragment extends Fragment {
 
     private CircleImageView image_profile_civ, cancel_btn, save_btn;
-    private TextView username_tv, email_tv, reviewerCount;
+    private TextView username_tv, email_tv, reviewerCount, profession_tv;
     private ImageView choose_image_btn, edit_accounts_btn, facebook_account_btn, instagram_account_btn, github_account_btn, linkedin_account_btn, stars[];
-    private EditText edit_facebook_account, edit_instagram_account, edit_github_account, edit_linkedin_account;
-    private LinearLayout accounts, edit_accounts;
+    private EditText edit_facebook_account, edit_instagram_account, edit_github_account, edit_linkedin_account, edit_profession, edit_qualifications ,edit_experience, edit_personal;
+    private LinearLayout accounts, edit_accounts, edit_details;
     private String facebook_url, instagram_url, github_url, linkedin_url;
     private static final int IMAGE_REQUEST = 1;
     private Uri image_uri;
@@ -74,15 +74,22 @@ public class ProfileFragment extends Fragment {
 
         image_profile_civ = view.findViewById(R.id.profile_image);
         username_tv = view.findViewById(R.id.username);
+        profession_tv = view.findViewById(R.id.profession);
         email_tv = view.findViewById(R.id.email);
 
         accounts = view.findViewById(R.id.accounts);
         edit_accounts = view.findViewById(R.id.edit_accounts);
+        edit_details = view.findViewById(R.id.edit_details);
 
         edit_facebook_account = view.findViewById(R.id.edit_facebook_account);
         edit_instagram_account = view.findViewById(R.id.edit_instagram_account);
         edit_github_account = view.findViewById(R.id.edit_github_account);
         edit_linkedin_account = view.findViewById(R.id.edit_linkedin_account);
+
+        edit_profession = view.findViewById(R.id.edit_profession);
+        edit_qualifications = view.findViewById(R.id.edit_qualifications);
+        edit_experience = view.findViewById(R.id.edit_experience);
+        edit_personal = view.findViewById(R.id.edit_personal);
 
         stars = new ImageView[5];
         stars[0] = view.findViewById(R.id.star_one);
@@ -103,6 +110,7 @@ public class ProfileFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
                 username_tv.setText(user.getUsername());
+                profession_tv.setText(user.getProfession());
                 email_tv.setText(user.getEmail());
                 facebook_url = user.getFacebook();
                 instagram_url = user.getInstagram();
@@ -186,12 +194,20 @@ public class ProfileFragment extends Fragment {
             }
         });
 
-        edit_accounts_btn = view.findViewById(R.id.edit_accounts_btn);
-        edit_accounts_btn.setOnClickListener(new View.OnClickListener() { // Edit button for all accounts
+        LinearLayout edit_accounts_layout = view.findViewById(R.id.edit_accounts_layout);
+        edit_accounts_layout.setOnClickListener(new View.OnClickListener() { // Edit button for all accounts
             @Override
             public void onClick(View v) {
                 accounts.setVisibility(View.GONE);
                 edit_accounts.setVisibility(View.VISIBLE); // Account edit lines appear
+            }
+        });
+        LinearLayout edit_details_layout = view.findViewById(R.id.edit_details_layout);
+        edit_details_layout.setOnClickListener(new View.OnClickListener() { // Edit button for all details
+            @Override
+            public void onClick(View v) {
+                accounts.setVisibility(View.GONE);
+                edit_details.setVisibility(View.VISIBLE); // Details edit lines appear
             }
         });
 
@@ -240,6 +256,54 @@ public class ProfileFragment extends Fragment {
             public void onClick(View v) {
                 accounts.setVisibility(View.VISIBLE);
                 edit_accounts.setVisibility(View.GONE);
+            }
+        });
+
+        ImageView save_details_btn = view.findViewById(R.id.save_details_btn);
+        save_details_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                databaseReference = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid());
+
+                if(edit_profession.getText().toString().equals("") && edit_qualifications.getText().toString().equals("") && edit_experience.getText().toString().equals("") && edit_personal.getText().toString().equals("")){ // When no details has been added and the user wants to save
+                    Toast.makeText(getContext(), getResources().getString(R.string.no_new_details), Toast.LENGTH_SHORT).show();
+                }
+                else { // When at least one detail was updated
+                    HashMap<String, Object> hashMap = new HashMap<>();
+
+                    if(!edit_profession.getText().toString().equals("")){
+                        hashMap.put("profession", edit_profession.getText().toString());
+                        edit_profession.setText("");
+                    }
+                    if(!edit_qualifications.getText().toString().equals("")){
+                        hashMap.put("qualifications", edit_qualifications.getText().toString());
+                        edit_qualifications.setText("");
+                    }
+                    if(!edit_experience.getText().toString().equals("")){
+                        hashMap.put("experience", edit_experience.getText().toString());
+                        edit_experience.setText("");
+                    }
+                    if(!edit_personal.getText().toString().equals("")){
+                        hashMap.put("personal", edit_personal.getText().toString());
+                        edit_personal.setText("");
+                    }
+
+                    databaseReference.updateChildren(hashMap);
+
+                    accounts.setVisibility(View.VISIBLE);
+                    edit_details_layout.setVisibility(View.GONE);
+
+                    Toast.makeText(getContext(), getResources().getString(R.string.accounts_saved), Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        ImageView cancel_details_btn = view.findViewById(R.id.cancel_details_btn);
+        cancel_details_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                accounts.setVisibility(View.VISIBLE);
+                edit_details.setVisibility(View.GONE);
             }
         });
 

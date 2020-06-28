@@ -2,51 +2,38 @@ package com.barlis.chat;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ArrayAdapter;
+import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.Spinner;
-import android.widget.Switch;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.barlis.chat.Adapter.RequestAdapter;
-import com.barlis.chat.Fragments.APIService;
 import com.barlis.chat.Model.ERequestCodes;
 import com.barlis.chat.Model.ERequestStatus;
 import com.barlis.chat.Model.EResultCodes;
 import com.barlis.chat.Model.Request;
-import com.barlis.chat.Notification.Client;
-import com.barlis.chat.Notification.Data;
-import com.barlis.chat.Notification.MyResponse;
 import com.barlis.chat.Notification.NotificationBuilder;
-import com.barlis.chat.Notification.Sender;
-import com.barlis.chat.Notification.Token;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
-public class UserSpecificRequestsActivity extends AppCompatActivity {
+public class UserSpecificRequestsFragment extends Fragment {
 
     private RecyclerView recyclerView;
     private RequestAdapter requestAdapter;
@@ -54,29 +41,24 @@ public class UserSpecificRequestsActivity extends AppCompatActivity {
     private CheckBox getOpenedRequests, getTakenRequests;
     private DatabaseReference requestReference;
     private FirebaseUser currentUser;
+    private String userName;
+    public UserSpecificRequestsFragment() {
+    }
 
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    @Nullable
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_user_specific_requests);
-
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("");
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_user_specific_requests, container, false);
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
-        recyclerView = findViewById(R.id.recycler_view);
-        getOpenedRequests = findViewById(R.id.opened_requests_cb);
-        getTakenRequests = findViewById(R.id.taken_requests_cb);
+        recyclerView = view.findViewById(R.id.recycler_view);
+        getOpenedRequests = view.findViewById(R.id.opened_requests_cb);
+        getTakenRequests = view.findViewById(R.id.taken_requests_cb);
         recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         requests = new ArrayList<>();
         requestReference = FirebaseDatabase.getInstance().getReference("Requests");
         requestReference.addValueEventListener(new ValueEventListener() {
@@ -105,6 +87,7 @@ public class UserSpecificRequestsActivity extends AppCompatActivity {
                 readRequests();
             }
         });
+        return view;
     }
 
     private void readRequests() {
@@ -133,7 +116,7 @@ public class UserSpecificRequestsActivity extends AppCompatActivity {
                         }
                     }
                 }
-                requestAdapter = new RequestAdapter(UserSpecificRequestsActivity.this, requests);
+                requestAdapter = new RequestAdapter(getContext(), requests);
                 recyclerView.setAdapter(requestAdapter);
             }
 
@@ -144,53 +127,12 @@ public class UserSpecificRequestsActivity extends AppCompatActivity {
         });
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == ERequestCodes.UPDATE_REQUEST.getValue()) {
-            if (resultCode == EResultCodes.UPDATE_REQUEST_WORKER.getValue()) {
-                // Add worker to request and send that user a notification
-                updateRequestWorker(data.getIntExtra("request_position", 0), getIntent().getStringExtra("user_name"), currentUser.getUid());
-                Intent intent = new Intent(UserSpecificRequestsActivity.this, MessageActivity.class);
-                intent.putExtra("userId", data.getStringExtra("creatorId"));
-                startActivity(intent);
-                NotificationBuilder.sendNotification(this, currentUser.getUid(), data.getStringExtra("creatorId"), getResources().getString(R.string.job_taken_message_body), getIntent().getStringExtra("user_name") + " " + getResources().getString(R.string.job_taken_notification));
-            }
-            else if (resultCode == EResultCodes.REMOVE_WORKER.getValue()) {
-                // Remove worker from request and send that user a notification
-                removeWorkerFromRequest(data.getIntExtra("request_position", 0), data.getStringExtra("workerId"));
-                NotificationBuilder.sendNotification(this, currentUser.getUid(), data.getStringExtra("workerId"), getIntent().getStringExtra("user_name") + " " + getResources().getString(R.string.removed_from_request_alert), getResources().getString(R.string.request_update_alert));
-            }
-            else if (resultCode == EResultCodes.QUIT_REQUEST.getValue()) {
-                // Remove worker from request and send the creator a notification
-                removeWorkerFromRequest(data.getIntExtra("request_position", 0), currentUser.getUid());
-                NotificationBuilder.sendNotification(this, currentUser.getUid(), data.getStringExtra("creatorId"), getIntent().getStringExtra("user_name") + " " + getResources().getString(R.string.worker_quit_alert), getResources().getString(R.string.request_update_alert));
-            }
-            else if (resultCode == EResultCodes.CLOSE_REQUEST.getValue()) {
-                // Close request and send the worker a notification
-                closeRequest(data.getIntExtra("request_position",0));
-                NotificationBuilder.sendNotification(this, currentUser.getUid(), data.getStringExtra("workerId"), getIntent().getStringExtra("user_name") + " " + getResources().getString(R.string.request_closed_alert), getResources().getString(R.string.request_update_alert));
-            }
-        }
-    }
-
-    // Add a worker to request at specific position, change state to taken and update recycler
-    public void updateRequestWorker(int position, String workerName, String workerId) {
-        requests.get(position).setStatus(ERequestStatus.REQUEST_TAKEN);
-        requests.get(position).setWorkerName(workerName);
-        requests.get(position).setWorkerId(workerId);
-        HashMap<String, Object> hashMap = new HashMap<>();
-        hashMap.put("status", ERequestStatus.REQUEST_TAKEN);
-        hashMap.put("workerId", workerId);
-        hashMap.put("workerName", workerName);
-        FirebaseDatabase.getInstance().getReference("Requests").child(requests.get(position).getRequestId()).updateChildren(hashMap);
-        requestAdapter.notifyItemChanged(position);
-    }
 
     // Change request at specific position to done and update recycler
-    public void closeRequest(int position) {
+    public void closeRequest(int position, String workerId) {
         requests.get(position).setStatus(ERequestStatus.REQUEST_DONE);
         FirebaseDatabase.getInstance().getReference("Requests").child(requests.get(position).getRequestId()).child("status").setValue(ERequestStatus.REQUEST_DONE);
+        NotificationBuilder.sendNotification(getContext(), currentUser.getUid(), workerId, userName + " " + getResources().getString(R.string.request_closed_alert), getResources().getString(R.string.request_update_alert));
     }
 
     // Remove a worker from request at specific position, change state to available and update recycler
@@ -203,5 +145,13 @@ public class UserSpecificRequestsActivity extends AppCompatActivity {
         requests.get(position).setWorkerName("");
         requests.get(position).setWorkerId("");
         requestAdapter.notifyItemChanged(position);
+        NotificationBuilder.sendNotification(getContext(), currentUser.getUid(), workerId, userName + " " + getResources().getString(R.string.removed_from_request_alert), getResources().getString(R.string.request_update_alert));
+    }
+
+    // Remove worker from request and send the creator a notification
+    public void quitFromRequest(int position, String creatorId) {
+        removeWorkerFromRequest(position, currentUser.getUid());
+        NotificationBuilder.sendNotification(getContext(), currentUser.getUid(), creatorId, userName + " " + getResources().getString(R.string.worker_quit_alert), getResources().getString(R.string.request_update_alert));
+
     }
 }

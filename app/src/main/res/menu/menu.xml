@@ -2,10 +2,14 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item
-        android:id="@+id/my_requests"
-        android:title="@string/my_requests"
-        app:showAsAction="never"/>
+    <group android:checkableBehavior="single">
+        <item android:id="@+id/home_screen"
+            android:title="@string/home_screen"
+            android:checked="true"/>
+        <item
+            android:id="@+id/my_requests"
+            android:title="@string/my_requests" />
+    </group>
     <item
         android:id="@+id/logout"
         android:title="@string/logout"

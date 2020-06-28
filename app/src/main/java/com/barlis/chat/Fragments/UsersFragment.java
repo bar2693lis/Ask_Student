@@ -169,7 +169,12 @@ public class UsersFragment extends Fragment {
                         }
                     }
                 }
-                userAdapter.notifyDataSetChanged();
+                if (mUsers.isEmpty()) {
+                    Toast.makeText(getContext(), "No Users Found", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    userAdapter.notifyDataSetChanged();
+                }
             }
 
             @Override

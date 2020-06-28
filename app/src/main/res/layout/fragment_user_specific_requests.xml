@@ -7,32 +7,7 @@
     tools:context=".Fragments.UsersFragment"
     android:background="@drawable/user_profile_background">
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/bar_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#9C266E6E"
-            android:theme="@style/Base.ThemeOverlay.AppCompat.Dark.ActionBar"
-            app:popupTheme="@style/MenuStyle">
-
-            <TextView
-                android:id="@+id/title_text_view"
-                android:text="@string/my_requests"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="25dp"
-                android:textColor="#fff"
-                android:textStyle="bold"
-                android:textSize="18sp"/>
-
-        </androidx.appcompat.widget.Toolbar>
-
-    </com.google.android.material.appbar.AppBarLayout>
 
     <LinearLayout
         android:layout_width="match_parent"

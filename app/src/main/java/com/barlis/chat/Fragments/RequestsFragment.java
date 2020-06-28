@@ -72,7 +72,7 @@ public class RequestsFragment extends Fragment {
                     requests.add(request);
                 }
                 professionAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_dropdown_item, professions.toArray(new String[professions.size()]));
-                requestAdapter = new RequestAdapter(getContext(), requests);
+                requestAdapter = new RequestAdapter(getActivity(), requests);
                 recyclerView.setAdapter(requestAdapter);
                 statusFilter.setAdapter(statusAdapter);
                 professionFilter.setAdapter(professionAdapter);

@@ -81,4 +81,12 @@
     <string name="request_closed_alert">סגרו את הבקשה שעבדתם עליה</string>
     <string name="app_explanation">באפליקציה זו, סטודנטים יכולים להיעזר בסטודנטים אחרים עבודות שונות</string>
     <string name="app_welcome">ברוכים הבאים לAskStudent</string>
+    <string name="menu">תפריט</string>
+    <string name="home_screen">מסך הבית</string>
+    <string name="no_users_found_alert">לא נמצאו משתמשים</string>
+    <string name="experience">ניסיון</string>
+    <string name="personal_summary">תיאור אישי</string>
+    <string name="edit_details">ערוך פרטים</string>
+    <string name="no_new_details">לא הוספת שום פרט</string>
+    <string name="details_saved">פרטים נשמרו</string>
 </resources>
