@@ -65,7 +65,7 @@
                         android:textStyle="bold"
                         android:textSize="20sp"
                         android:layout_gravity="center_vertical"
-                        android:textColor="#BCFFFFFF"/>
+                        android:textColor="@color/textWhite"/>
 
                 </LinearLayout>
 
@@ -91,7 +91,7 @@
                         android:textStyle="bold"
                         android:textSize="20sp"
                         android:layout_gravity="center_vertical"
-                        android:textColor="#BCFFFFFF"/>
+                        android:textColor="@color/textWhite"/>
 
                 </LinearLayout>
 
@@ -117,7 +117,7 @@
                         android:textStyle="bold"
                         android:textSize="20sp"
                         android:layout_gravity="center_vertical"
-                        android:textColor="#BCFFFFFF"/>
+                        android:textColor="@color/textWhite"/>
 
                 </LinearLayout>
                 <LinearLayout
@@ -217,7 +217,7 @@
                         android:layoutDirection="ltr"
                         android:text="1 reviews"
                         android:textSize="15sp"
-                        android:textColor="#BCFFFFFF"
+                        android:textColor="@color/textWhite"
                         android:id="@+id/reviewer_count_text"
                         android:layout_marginStart="10dp"/>
 
@@ -244,7 +244,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/edit_accounts"
-                                android:textColor="#BCFFFFFF"
+                                android:textColor="@color/textWhite"
                                 android:layout_gravity="center_horizontal"/>
 
                         </LinearLayout>
@@ -266,7 +266,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/edit_details"
-                                android:textColor="#BCFFFFFF"
+                                android:textColor="@color/textWhite"
                                 android:layout_gravity="center_horizontal"/>
                         </LinearLayout>
                     </LinearLayout>
@@ -296,6 +296,7 @@
                             android:id="@+id/edit_facebook_account"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:textColor="@color/textWhite"
                             android:hint="@string/facebook_hint"/>
 
                     </LinearLayout>
@@ -315,6 +316,7 @@
                             android:id="@+id/edit_instagram_account"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:textColor="@color/textWhite"
                             android:hint="@string/instagram_link"/>
 
                     </LinearLayout>
@@ -334,6 +336,7 @@
                             android:id="@+id/edit_github_account"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:textColor="@color/textWhite"
                             android:hint="@string/github_link"/>
 
                     </LinearLayout>
@@ -353,6 +356,7 @@
                             android:id="@+id/edit_linkedin_account"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:textColor="@color/textWhite"
                             android:hint="@string/linkedin_link"/>
 
                     </LinearLayout>
@@ -381,6 +385,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/save"
+                                android:textColor="@color/textWhite"
                                 android:layout_gravity="center"/>
 
                         </LinearLayout>
@@ -403,6 +408,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/cancel"
+                                android:textColor="@color/textWhite"
                                 android:layout_gravity="center"/>
 
                         </LinearLayout>
@@ -426,13 +432,14 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="20sp"
-                            android:textColor="#BCFFFFFF"
+                            android:textColor="@color/textWhite"
                             android:text="@string/profession"
                             android:layout_margin="10dp"/>
 
                         <EditText
                             android:id="@+id/edit_profession"
                             android:layout_width="match_parent"
+                            android:textColor="@color/textWhite"
                             android:layout_height="wrap_content"
                             />
 
@@ -447,13 +454,14 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="20sp"
-                            android:textColor="#BCFFFFFF"
+                            android:textColor="@color/textWhite"
                             android:text="@string/qualifications"
                             android:layout_margin="10dp"/>
 
                         <EditText
                             android:id="@+id/edit_qualifications"
                             android:layout_width="match_parent"
+                            android:textColor="@color/textWhite"
                             android:layout_height="wrap_content" />
 
                     </LinearLayout>
@@ -467,7 +475,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="20sp"
-                            android:textColor="#BCFFFFFF"
+                            android:textColor="@color/textWhite"
                             android:text="@string/experience"
                             android:layout_margin="10dp"/>
 
@@ -475,7 +483,7 @@
                             android:id="@+id/edit_experience"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_toLeftOf="@+id/bla" />
+                            android:textColor="@color/textWhite" />
 
                     </LinearLayout>
 
@@ -488,14 +496,15 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="20sp"
-                            android:textColor="#BCFFFFFF"
+                            android:textColor="@color/textWhite"
                             android:text="@string/personal_summary"
                             android:layout_margin="10dp"/>
 
                         <EditText
                             android:id="@+id/edit_personal"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content" />
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/textWhite"/>
 
                     </LinearLayout>
 
@@ -523,6 +532,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/save"
+                                android:textColor="@color/textWhite"
                                 android:layout_gravity="center"/>
 
                         </LinearLayout>
@@ -545,6 +555,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/cancel"
+                                android:textColor="@color/textWhite"
                                 android:layout_gravity="center"/>
 
                         </LinearLayout>

@@ -1,9 +1,11 @@
 package com.barlis.chat;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -24,7 +26,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText email_et, password_et;
     private Button login_btn;
     private TextView forgot_password_tv;
-
+    private ProgressDialog dialog;
     FirebaseAuth firebaseAuth;
 
     @Override
@@ -58,9 +60,12 @@ public class LoginActivity extends AppCompatActivity {
                 String txt_password = password_et.getText().toString();
 
                 if(TextUtils.isEmpty(txt_email) || TextUtils.isEmpty(txt_password)) { // Checks if the email or password is empty
-                    Toast.makeText(LoginActivity.this, "All fields are required", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, getResources().getString(R.string.missing_fields), Toast.LENGTH_SHORT).show();
                 }
                 else{ // If the email and password are not empty
+                    dialog = new ProgressDialog(LoginActivity.this);
+                    dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                    dialog.show();
                     firebaseAuth.signInWithEmailAndPassword(txt_email, txt_password).addOnCompleteListener(new OnCompleteListener<AuthResult>() { // Connects with the data email and password
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) { // If the email and password are correct
@@ -68,10 +73,11 @@ public class LoginActivity extends AppCompatActivity {
                                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                                 startActivity(intent);
+                                dialog.dismiss();
                                 finish();
                             }
                             else{ // If the email or password is incorrect
-                                Toast.makeText(LoginActivity.this, "Authentication failed!", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(LoginActivity.this, getResources().getString(R.string.authentication_failed), Toast.LENGTH_SHORT).show();
                             }
                         }
                     });

@@ -91,4 +91,5 @@
     <string name="edit_details">Edit Details</string>
     <string name="no_new_details">You haven\'t added any detail</string>
     <string name="details_saved">Details Saved</string>
+    <string name="authentication_failed">Authentication Failed</string>
 </resources>

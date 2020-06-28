@@ -22,14 +22,14 @@
             android:layout_height="wrap_content"
             android:id="@+id/opened_requests_cb"
             android:checked="true"
-            android:textColor="#BCFFFFFF"
+            android:textColor="@color/textWhite"
             android:text="@string/show_opened_requests"/>
 
         <CheckBox
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/taken_requests_cb"
-            android:textColor="#BCFFFFFF"
+            android:textColor="@color/textWhite"
             android:text="@string/show_taken_requests"/>
 
     </LinearLayout>

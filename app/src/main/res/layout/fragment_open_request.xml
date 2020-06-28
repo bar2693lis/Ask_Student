@@ -77,7 +77,8 @@
                 android:text="@string/open_request"
                 android:id="@+id/doneBtn"
                 android:layout_centerInParent="true"
-                android:background="@drawable/button_background"
+                android:layout_margin="10dp"
+                android:background="@drawable/button_design"
                 android:padding="6dp"/>
 
         </RelativeLayout>

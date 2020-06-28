@@ -86,7 +86,7 @@
                     android:layout_margin="15dp"
                     android:text="@string/back"
                     android:id="@+id/back_btn"
-                    android:background="@drawable/button_background"/>
+                    android:background="@drawable/button_design"/>
 
                 <Button
                     android:layout_width="wrap_content"
@@ -94,7 +94,7 @@
                     android:layout_margin="15dp"
                     android:text="@string/accept"
                     android:id="@+id/accept_btn"
-                    android:background="@drawable/button_background"/>
+                    android:background="@drawable/button_design"/>
 
                 <Button
                     android:layout_width="wrap_content"
@@ -103,7 +103,7 @@
                     android:visibility="gone"
                     android:text="@string/quit_request"
                     android:id="@+id/quit_request"
-                    android:background="@drawable/button_background"
+                    android:background="@drawable/button_design"
                     android:padding="8dp"/>
 
             </LinearLayout>
@@ -121,7 +121,7 @@
                     android:visibility="gone"
                     android:text="@string/remove_worker"
                     android:id="@+id/remove_worker"
-                    android:background="@drawable/button_background"
+                    android:background="@drawable/button_design"
                     android:padding="8dp"/>
 
                 <Button
@@ -131,7 +131,7 @@
                     android:visibility="gone"
                     android:text="@string/close_request"
                     android:id="@+id/close_request"
-                    android:background="@drawable/button_background"
+                    android:background="@drawable/button_design"
                     android:padding="8dp"/>
 
             </LinearLayout>

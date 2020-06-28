@@ -89,4 +89,5 @@
     <string name="edit_details">ערוך פרטים</string>
     <string name="no_new_details">לא הוספת שום פרט</string>
     <string name="details_saved">פרטים נשמרו</string>
+    <string name="authentication_failed">הזדהות נכשלה</string>
 </resources>

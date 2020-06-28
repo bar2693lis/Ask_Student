@@ -42,7 +42,7 @@
                 android:gravity="top"
                 android:text="Username"
                 android:textSize="15sp"
-                android:textColor="#BCFFFFFF"/>
+                android:textColor="@color/textWhite"/>
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/img_on"
@@ -84,7 +84,7 @@
                 android:textAllCaps="false"
                 android:textSize="20sp"
                 android:textStyle="bold"
-                android:textColor="#BCFFFFFF"/>
+                android:textColor="@color/textWhite"/>
 
         </RelativeLayout>
 

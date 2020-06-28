@@ -57,7 +57,7 @@
                 android:text="@string/search_users"
                 android:id="@+id/doneBtn"
                 android:layout_centerInParent="true"
-                android:background="@drawable/button_background"
+                android:background="@drawable/button_design"
                 android:padding="6dp"/>
         </RelativeLayout>
 

@@ -233,11 +233,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) { // Creates the menu
-        getMenuInflater().inflate(R.menu.menu, menu);
-        return true;
-    }
+
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {

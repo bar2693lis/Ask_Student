@@ -71,7 +71,6 @@ public class HomeScreenFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home_screen, container, false);
 
-        Log.d("TTT", "OnCreate");
         usersFragment = new UsersFragment();
         requestsFragment = new RequestsFragment();
 
@@ -205,23 +204,5 @@ public class HomeScreenFragment extends Fragment {
         requestsFragment.removeWorkerFromRequest(position, firebaseUser.getUid());
         NotificationBuilder.sendNotification(getContext(), firebaseUser.getUid(), creatorId, userName + " " + getResources().getString(R.string.worker_quit_alert), getResources().getString(R.string.request_update_alert));
 
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        Log.d("TTT", "onResume");
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        Log.d("TTT", "onDestroy");
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        Log.d("TTT", "onDetach");
     }
 }
