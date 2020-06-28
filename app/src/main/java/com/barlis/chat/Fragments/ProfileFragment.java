@@ -48,25 +48,22 @@ import static android.app.Activity.RESULT_OK;
 
 public class ProfileFragment extends Fragment {
 
-    CircleImageView image_profile, cancel_btn, save_btn;
-    TextView username, email, reviewerCount;
-    ImageView choose_image, edit_accounts_btn, facebook_account, instagram_account, github_account, linkedin_account, stars[];
-    EditText edit_facebook_account, edit_instagram_account, edit_github_account, edit_linkedin_account;
-    LinearLayout accounts, edit_accounts;
-
-    private String facebookUrl, instagramUrl, githubUrl, linkedinUrl;
-
-    DatabaseReference mDatabaseReference;
-    FirebaseUser mFirebaseUser;
-    StorageReference mStorageReference;
-
+    private CircleImageView image_profile_civ, cancel_btn, save_btn;
+    private TextView username_tv, email_tv, reviewerCount;
+    private ImageView choose_image_btn, edit_accounts_btn, facebook_account_btn, instagram_account_btn, github_account_btn, linkedin_account_btn, stars[];
+    private EditText edit_facebook_account, edit_instagram_account, edit_github_account, edit_linkedin_account;
+    private LinearLayout accounts, edit_accounts;
+    private String facebook_url, instagram_url, github_url, linkedin_url;
     private static final int IMAGE_REQUEST = 1;
-
-    private Uri imageURI;
+    private Uri image_uri;
 
     private StorageTask<UploadTask.TaskSnapshot> uploadTask;
 
-    public ProfileFragment() {
+    DatabaseReference databaseReference;
+    FirebaseUser firebaseUser;
+    StorageReference storageReference;
+
+    public ProfileFragment() { // Default constructor
         // Required empty public constructor
     }
 
@@ -75,16 +72,9 @@ public class ProfileFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
-        image_profile = view.findViewById(R.id.profile_image);
-        username = view.findViewById(R.id.username);
-        email = view.findViewById(R.id.email);
-        facebook_account = view.findViewById(R.id.facebook_account);
-        instagram_account = view.findViewById(R.id.instagram_account);
-        github_account = view.findViewById(R.id.github_account);
-        linkedin_account = view.findViewById(R.id.linkedin_account);
-
-        choose_image = view.findViewById(R.id.choose_image);
-        edit_accounts_btn = view.findViewById(R.id.edit_accounts_btn);
+        image_profile_civ = view.findViewById(R.id.profile_image);
+        username_tv = view.findViewById(R.id.username);
+        email_tv = view.findViewById(R.id.email);
 
         accounts = view.findViewById(R.id.accounts);
         edit_accounts = view.findViewById(R.id.edit_accounts);
@@ -94,37 +84,36 @@ public class ProfileFragment extends Fragment {
         edit_github_account = view.findViewById(R.id.edit_github_account);
         edit_linkedin_account = view.findViewById(R.id.edit_linkedin_account);
 
-        save_btn = view.findViewById(R.id.save_btn);
-        cancel_btn = view.findViewById(R.id.cancel_btn);
         stars = new ImageView[5];
         stars[0] = view.findViewById(R.id.star_one);
         stars[1] = view.findViewById(R.id.star_two);
         stars[2] = view.findViewById(R.id.star_three);
         stars[3] = view.findViewById(R.id.star_four);
         stars[4] = view.findViewById(R.id.star_five);
+
         reviewerCount = view.findViewById(R.id.reviewer_count_text);
 
-        mStorageReference = FirebaseStorage.getInstance().getReference("Uploads");
+        storageReference = FirebaseStorage.getInstance().getReference("Uploads");
 
-        mFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        mDatabaseReference = FirebaseDatabase.getInstance().getReference("Users").child(mFirebaseUser.getUid());
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
-        mDatabaseReference.addValueEventListener(new ValueEventListener() {
+        databaseReference = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid());
+        databaseReference.addValueEventListener(new ValueEventListener() { // Retrieves user information
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
-                username.setText(user.getUsername());
-                email.setText(user.getEmail());
-                facebookUrl = user.getFacebook();
-                instagramUrl = user.getInstagram();
-                githubUrl = user.getGithub();
-                linkedinUrl = user.getLinkedin();
+                username_tv.setText(user.getUsername());
+                email_tv.setText(user.getEmail());
+                facebook_url = user.getFacebook();
+                instagram_url = user.getInstagram();
+                github_url = user.getGithub();
+                linkedin_url = user.getLinkedin();
 
-                if(user.getImageURL().equals("default")){
-                    image_profile.setImageResource(R.mipmap.ic_launcher);
+                if(user.getImageURL().equals("default")){  // When there is no link to the image use the default
+                    image_profile_civ.setImageResource(R.mipmap.ic_launcher);
                 }
                 else{
-                    Picasso.get().load(user.getImageURL()).into(image_profile);
+                    Picasso.get().load(user.getImageURL()).into(image_profile_civ);
                 }
 
                 reviewerCount.setText(user.getNumberOfReviews() + " " + getResources().getString(R.string.reviews));
@@ -137,78 +126,85 @@ public class ProfileFragment extends Fragment {
             }
         });
 
-        choose_image.setOnClickListener(new View.OnClickListener() {
+        choose_image_btn = view.findViewById(R.id.choose_image);
+        choose_image_btn.setOnClickListener(new View.OnClickListener() { // Picture Selection Button
             @Override
             public void onClick(View v) {
                 openImage();
             }
         });
 
-        facebook_account.setOnClickListener(new View.OnClickListener() {
+        facebook_account_btn = view.findViewById(R.id.facebook_account);
+        facebook_account_btn.setOnClickListener(new View.OnClickListener() { // Facebook account button
             @Override
             public void onClick(View v) {
-                if(!facebookUrl.equals("")){
-                    openWebsite(facebookUrl);
+                if(!facebook_url.equals("")){
+                    openWebsite(facebook_url);
                 }
-                else {
+                else { // If there is no account then it displays a message
                     Toast.makeText(getContext(), getResources().getString(R.string.no_facebook_account_found), Toast.LENGTH_SHORT).show();
                 }
             }
         });
 
-        instagram_account.setOnClickListener(new View.OnClickListener() {
+        instagram_account_btn = view.findViewById(R.id.instagram_account);
+        instagram_account_btn.setOnClickListener(new View.OnClickListener() { // Instagram account button
             @Override
             public void onClick(View v) {
-                if(!instagramUrl.equals("")){
-                    openWebsite(instagramUrl);
+                if(!instagram_url.equals("")){
+                    openWebsite(instagram_url);
                 }
-                else {
+                else { // If there is no account then it displays a message
                     Toast.makeText(getContext(), getResources().getString(R.string.no_instagram_account_found), Toast.LENGTH_SHORT).show();
                 }
             }
         });
 
-        github_account.setOnClickListener(new View.OnClickListener() {
+        github_account_btn = view.findViewById(R.id.github_account);
+        github_account_btn.setOnClickListener(new View.OnClickListener() { // GitHub account button
             @Override
             public void onClick(View v) {
-                if(!githubUrl.equals("")){
-                    openWebsite(githubUrl);
+                if(!github_url.equals("")){
+                    openWebsite(github_url);
                 }
-                else {
+                else { // If there is no account then it displays a message
                     Toast.makeText(getContext(), getResources().getString(R.string.no_github_account_found), Toast.LENGTH_SHORT).show();
                 }
             }
         });
 
-        linkedin_account.setOnClickListener(new View.OnClickListener() {
+        linkedin_account_btn = view.findViewById(R.id.linkedin_account);
+        linkedin_account_btn.setOnClickListener(new View.OnClickListener() { // Linkedin account button
             @Override
             public void onClick(View v) {
-                if(!linkedinUrl.equals("")){
-                    openWebsite(linkedinUrl);
+                if(!linkedin_url.equals("")){
+                    openWebsite(linkedin_url);
                 }
-                else {
+                else { // If there is no account then it displays a message
                     Toast.makeText(getContext(), getResources().getString(R.string.no_linkedin_account_found), Toast.LENGTH_SHORT).show();
                 }
             }
         });
 
-        edit_accounts_btn.setOnClickListener(new View.OnClickListener() {
+        edit_accounts_btn = view.findViewById(R.id.edit_accounts_btn);
+        edit_accounts_btn.setOnClickListener(new View.OnClickListener() { // Edit button for all accounts
             @Override
             public void onClick(View v) {
                 accounts.setVisibility(View.GONE);
-                edit_accounts.setVisibility(View.VISIBLE);
+                edit_accounts.setVisibility(View.VISIBLE); // Account edit lines appear
             }
         });
 
-        save_btn.setOnClickListener(new View.OnClickListener() {
+        save_btn = view.findViewById(R.id.save_btn);
+        save_btn.setOnClickListener(new View.OnClickListener() { // Accounts Save Button
             @Override
             public void onClick(View v) {
-                mDatabaseReference = FirebaseDatabase.getInstance().getReference("Users").child(mFirebaseUser.getUid());
+                databaseReference = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid());
 
-                if(edit_facebook_account.getText().toString().equals("") && edit_instagram_account.getText().toString().equals("") && edit_github_account.getText().toString().equals("") && edit_linkedin_account.getText().toString().equals("")){
+                if(edit_facebook_account.getText().toString().equals("") && edit_instagram_account.getText().toString().equals("") && edit_github_account.getText().toString().equals("") && edit_linkedin_account.getText().toString().equals("")){ // When no account has been added and the user wants to save
                     Toast.makeText(getContext(), getResources().getString(R.string.no_accounts_added), Toast.LENGTH_SHORT).show();
                 }
-                else {
+                else { // When one of the accounts was updated
                     HashMap<String, Object> hashMap = new HashMap<>();
 
                     if(!edit_facebook_account.getText().toString().equals("")){
@@ -228,7 +224,7 @@ public class ProfileFragment extends Fragment {
                         edit_linkedin_account.setText("");
                     }
 
-                    mDatabaseReference.updateChildren(hashMap);
+                    databaseReference.updateChildren(hashMap);
 
                     accounts.setVisibility(View.VISIBLE);
                     edit_accounts.setVisibility(View.GONE);
@@ -238,7 +234,8 @@ public class ProfileFragment extends Fragment {
             }
         });
 
-        cancel_btn.setOnClickListener(new View.OnClickListener() {
+        cancel_btn = view.findViewById(R.id.cancel_btn);
+        cancel_btn.setOnClickListener(new View.OnClickListener() { // Accounts Cancel Button
             @Override
             public void onClick(View v) {
                 accounts.setVisibility(View.VISIBLE);
@@ -265,13 +262,13 @@ public class ProfileFragment extends Fragment {
         }
     }
 
-    private void openWebsite(String url) {
+    private void openWebsite(String url) { // When one of the accounts buttons is clicked, the website opens
         Uri uri = Uri.parse(url);
         Intent launchWebsite = new Intent(Intent.ACTION_VIEW, uri);
         startActivity(launchWebsite);
     }
 
-    private void openImage() {
+    private void openImage() { // When you click the Picture Selection button, the Pictures window opens
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
@@ -284,45 +281,45 @@ public class ProfileFragment extends Fragment {
         return mimeTypeMap.getExtensionFromMimeType(contentResolver.getType(uri));
     }
 
-    private void uploadImage(){
+    private void uploadImage(){ // When the user uploads a new image
         final ProgressDialog pd = new ProgressDialog(getContext());
         pd.setMessage("Uploading");
         pd.show();
 
-        if(imageURI != null){
-            final StorageReference fileReference = mStorageReference.child(System.currentTimeMillis() + "." + getFileExtension(imageURI));
+        if(image_uri != null){ // If the uri is not empty
+            final StorageReference fileReference = storageReference.child(System.currentTimeMillis() + "." + getFileExtension(image_uri)); // Image name contains current time and extension
 
-            uploadTask = fileReference.putFile(imageURI);
-            uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+            uploadTask = fileReference.putFile(image_uri); // To upload a file to Cloud Storage, you first create a reference to the full path of the file, including the file name
+            uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() { // Returns a new Task that will be completed with the result of applying the specified Continuation to this Task (The Continuation will be called on the main application thread)
                 @Override
                 public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
-                    if(!task.isSuccessful()){
+                    if(!task.isSuccessful()){ // If the task fails
                         throw Objects.requireNonNull(task.getException());
                     }
 
                     return fileReference.getDownloadUrl();
                 }
-            }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+            }).addOnCompleteListener(new OnCompleteListener<Uri>() { // To handle success and failure in the same listener
                 @Override
                 public void onComplete(@NonNull Task<Uri> task) {
-                    if(task.isSuccessful()){
+                    if(task.isSuccessful()){ // If the task was successful
                         Uri downloadUri = task.getResult();
                         assert downloadUri != null;
-                        String mUri = downloadUri.toString();
+                        String strUri = downloadUri.toString();
 
-                        mDatabaseReference = FirebaseDatabase.getInstance().getReference("Users").child(mFirebaseUser.getUid());
+                        databaseReference = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid());
                         HashMap<String, Object> map = new HashMap<>();
-                        map.put("imageURL", mUri);
-                        mDatabaseReference.updateChildren(map);
+                        map.put("imageURL", strUri);
+                        databaseReference.updateChildren(map);
 
                         pd.dismiss();
                     }
-                    else{
+                    else{ // If image upload failed
                         Toast.makeText(getContext(), getResources().getString(R.string.upload_failed), Toast.LENGTH_SHORT).show();
                         pd.dismiss();
                     }
                 }
-            }).addOnFailureListener(new OnFailureListener() {
+            }).addOnFailureListener(new OnFailureListener() { // To be notified when the task fails
                 @Override
                 public void onFailure(@NonNull Exception e) {
                     Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -330,19 +327,19 @@ public class ProfileFragment extends Fragment {
                 }
             });
         }
-        else{
+        else{ // If no image is selected
             Toast.makeText(getContext(), getResources().getString(R.string.no_image_selected), Toast.LENGTH_SHORT).show();
         }
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) { // Start another activity and receive a result back
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(requestCode == IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null){
-            imageURI = data.getData();
+        if(requestCode == IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null){ // When all requests are valid and the information is not empty
+            image_uri = data.getData();
 
-            if(uploadTask != null && uploadTask.isInProgress()){
+            if(uploadTask != null && uploadTask.isInProgress()){ // When the image is still uploading
                 Toast.makeText(getContext(), getResources().getString(R.string.upload_in_progress), Toast.LENGTH_SHORT).show();
             }
             else{

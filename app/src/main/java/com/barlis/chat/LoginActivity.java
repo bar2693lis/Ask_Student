@@ -21,11 +21,11 @@ import com.rengwuxian.materialedittext.MaterialEditText;
 
 public class LoginActivity extends AppCompatActivity {
 
-    EditText email, password;
-    Button btn_login;
+    private EditText email_et, password_et;
+    private Button login_btn;
+    private TextView forgot_password_tv;
 
-    FirebaseAuth auth;
-    TextView forgot_password;
+    FirebaseAuth firebaseAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,42 +37,40 @@ public class LoginActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("Login");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        auth = FirebaseAuth.getInstance();
+        firebaseAuth = FirebaseAuth.getInstance();
 
-        email = findViewById(R.id.email);
-        password = findViewById(R.id.password);
+        email_et = findViewById(R.id.email);
+        password_et = findViewById(R.id.password);
 
-        forgot_password = findViewById(R.id.forgot_password);
-
-        forgot_password.setOnClickListener(new View.OnClickListener() {
+        forgot_password_tv = findViewById(R.id.forgot_password);
+        forgot_password_tv.setOnClickListener(new View.OnClickListener() { // Password reset button
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(LoginActivity.this, ResetPasswordActivity.class));
             }
         });
 
-        btn_login = findViewById(R.id.btn_login);
-
-        btn_login.setOnClickListener(new View.OnClickListener() {
+        login_btn = findViewById(R.id.btn_login);
+        login_btn.setOnClickListener(new View.OnClickListener() { // Login button
             @Override
             public void onClick(View v) {
-                String txt_email = email.getText().toString();
-                String txt_password = password.getText().toString();
+                String txt_email = email_et.getText().toString();
+                String txt_password = password_et.getText().toString();
 
-                if(TextUtils.isEmpty(txt_email) || TextUtils.isEmpty(txt_password)) {
+                if(TextUtils.isEmpty(txt_email) || TextUtils.isEmpty(txt_password)) { // Checks if the email or password is empty
                     Toast.makeText(LoginActivity.this, "All fields are required", Toast.LENGTH_SHORT).show();
                 }
-                else{
-                    auth.signInWithEmailAndPassword(txt_email, txt_password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                else{ // If the email and password are not empty
+                    firebaseAuth.signInWithEmailAndPassword(txt_email, txt_password).addOnCompleteListener(new OnCompleteListener<AuthResult>() { // Connects with the data email and password
                         @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
+                        public void onComplete(@NonNull Task<AuthResult> task) { // If the email and password are correct
                             if(task.isSuccessful()){
                                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                                 startActivity(intent);
                                 finish();
                             }
-                            else{
+                            else{ // If the email or password is incorrect
                                 Toast.makeText(LoginActivity.this, "Authentication failed!", Toast.LENGTH_SHORT).show();
                             }
                         }

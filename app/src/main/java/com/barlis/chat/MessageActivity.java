@@ -108,15 +108,15 @@ public class MessageActivity extends AppCompatActivity {
 
         fuser = FirebaseAuth.getInstance().getCurrentUser();
 
-        btn_send.setOnClickListener(new View.OnClickListener() {
+        btn_send.setOnClickListener(new View.OnClickListener() { // Send message button
             @Override
             public void onClick(View v) {
                 notify = true;
                 String msg = txt_send.getText().toString();
-                if(!msg.equals("")){
+                if(!msg.equals("")){ // If the message is not empty
                     sendMessage(fuser.getUid(), userId, msg);
                 }
-                else{
+                else{ // If the message is blank
                     Toast.makeText(MessageActivity.this, getResources().getString(R.string.empty_message_alert), Toast.LENGTH_SHORT).show();
                 }
 
@@ -125,21 +125,20 @@ public class MessageActivity extends AppCompatActivity {
         });
 
         reference = FirebaseDatabase.getInstance().getReference("Users").child(userId);
-
-        reference.addValueEventListener(new ValueEventListener() {
+        reference.addValueEventListener(new ValueEventListener() { // reference to the information of the current user
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
                 username.setText(user.getUsername());
 
-                if(user.getImageURL().equals("default")){
+                if(user.getImageURL().equals("default")){ // When there is no link to the image use the default
                     profile_image.setImageResource(R.mipmap.ic_launcher);
                 }
                 else{
                     Picasso.get().load(user.getImageURL()).into(profile_image);
-
                 }
-                toolbar.setOnClickListener(new View.OnClickListener() {
+
+                toolbar.setOnClickListener(new View.OnClickListener() { // When you click on the other user's image or name in the toolbar
                     @Override
                     public void onClick(View v) {
                         Intent viewProfileIntent = new Intent(getApplicationContext(), ViewUserProfileActivity.class);
@@ -159,7 +158,7 @@ public class MessageActivity extends AppCompatActivity {
         seenMessage(userId);
     }
 
-    private void seenMessage(final String userId){
+    private void seenMessage(final String userId){ // Checks if the other user saw the message
         reference = FirebaseDatabase.getInstance().getReference("Chats");
         seenListener = reference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -167,7 +166,7 @@ public class MessageActivity extends AppCompatActivity {
                 for(DataSnapshot snapshot : dataSnapshot.getChildren()){
                     Chat chat = snapshot.getValue(Chat.class);
 
-                    if(chat.getReceiver().equals(fuser.getUid()) && chat.getSender().equals(userId)){
+                    if(chat.getReceiver().equals(fuser.getUid()) && chat.getSender().equals(userId)){ // Checks whether the current user id and the other user id match the same chat
                         HashMap<String, Object> hasMap = new HashMap<>();
                         hasMap.put("isseen", true);
                         snapshot.getRef().updateChildren(hasMap);

@@ -37,7 +37,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
     String theLastMessage;
 
-    public UserAdapter(Context mContext, List<User> mUsers, boolean isChat, boolean isChatLayout){
+    public UserAdapter(Context mContext, List<User> mUsers, boolean isChat, boolean isChatLayout){ // Constructor
         this.mContext = mContext;
         this.mUsers = mUsers;
         this.isChat = isChat;
@@ -48,15 +48,13 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view;
-        if( isChatLayout == true)
+        if( isChatLayout == true) // If this is the chat fragment then inflate this cell
         {
             view = LayoutInflater.from(mContext).inflate(R.layout.chat_item, parent, false);
-
         }
-        else
+        else // If this is the users fragment then inflate this cell
         {
             view = LayoutInflater.from(mContext).inflate(R.layout.user_cell, parent, false);
-
         }
         return new UserAdapter.ViewHolder(view);
     }
@@ -65,39 +63,40 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         final User user = mUsers.get(position);
         holder.username.setText(user.getUsername());
-        if(user.getImageURL().equals("default")){
+
+        if(user.getImageURL().equals("default")){  // When there is no link to the image use the default
             holder.profile_image.setImageResource(R.mipmap.ic_launcher);
         }
         else{
             Picasso.get().load(user.getImageURL()).into(holder.profile_image);
         }
 
-        if(isChatLayout){
-            if(isChat){
+        if(isChatLayout){  // If this is the chat fragment
+            if(isChat){ // If you have a chat, you will see the last message
                 lastMessage(user.getId(), holder.last_message);
             }
-            else{
+            else{ // If there is no chat then you will not see messages
                 holder.last_message.setVisibility(View.GONE);
             }
 
-            if(isChat){
-                if(user.getStatus().equals("online")){
+            if(isChat){ // If you have a chat
+                if(user.getStatus().equals("online")){ // If the other user is logged in and he saw the last message then the message becomes "seen"
                     holder.img_on.setVisibility(View.VISIBLE);
                     holder.img_off.setVisibility(View.GONE);
                 }
-                else{
+                else{ // If the other user has not seen the last message then the message stay "Delivered"
                     holder.img_on.setVisibility(View.GONE);
                     holder.img_off.setVisibility(View.VISIBLE);
                 }
             }
-            else{
+            else{ // If there is no chat then there is nothing to show
                 holder.img_on.setVisibility(View.GONE);
                 holder.img_off.setVisibility(View.GONE);
             }
         }
 
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
+        holder.itemView.setOnClickListener(new View.OnClickListener() { // When a certain user is clicked
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(mContext, MessageActivity.class);
@@ -134,7 +133,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
     }
 
     // check for last message
-    private void lastMessage(final String userId, final TextView last_message){
+    private void lastMessage(final String userId, final TextView last_message){ // Check for last message from the other user and showing it in the chat fragment
         theLastMessage = "default";
         final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Chats");
@@ -145,17 +144,17 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
                 for(DataSnapshot snapshot : dataSnapshot.getChildren()){
                     Chat chat = snapshot.getValue(Chat.class);
 
-                    if((chat.getReceiver().equals(firebaseUser.getUid()) && chat.getSender().equals(userId)) || (chat.getReceiver().equals(userId) && chat.getSender().equals(firebaseUser.getUid()))){
+                    if((chat.getReceiver().equals(firebaseUser.getUid()) && chat.getSender().equals(userId)) || (chat.getReceiver().equals(userId) && chat.getSender().equals(firebaseUser.getUid()))){ // If I sent the last message then it saves it for viewing, if your other user has the last message then it saves it for viewing
                         theLastMessage = chat.getMessage();
                     }
                 }
 
                 switch (theLastMessage){
-                    case "default":
+                    case "default": // If there is no message
                        last_message.setText("No Messages");
                        break;
 
-                    default:
+                    default: // Displays the last message sent
                         last_message.setText(theLastMessage);
                         break;
                 }

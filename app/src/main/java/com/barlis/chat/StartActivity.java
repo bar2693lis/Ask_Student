@@ -12,7 +12,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class StartActivity extends AppCompatActivity {
 
-    Button login, register;
+    private Button login_btn, register_btn;
 
     FirebaseUser firebaseUser;
 
@@ -23,7 +23,7 @@ public class StartActivity extends AppCompatActivity {
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
         // check if user is null
-        if(firebaseUser != null){
+        if(firebaseUser != null){ // Checks whether the user is logged in and if it is inserted automatically
             Intent intent = new Intent(StartActivity.this, MainActivity.class);
             startActivity(intent);
             finish();
@@ -35,17 +35,16 @@ public class StartActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
 
-        login = findViewById(R.id.login);
-        register = findViewById(R.id.register);
-
-        login.setOnClickListener(new View.OnClickListener() {
+        login_btn = findViewById(R.id.login);
+        login_btn.setOnClickListener(new View.OnClickListener() { // Login button
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(StartActivity.this, LoginActivity.class));
             }
         });
 
-        register.setOnClickListener(new View.OnClickListener() {
+        register_btn = findViewById(R.id.register);
+        register_btn.setOnClickListener(new View.OnClickListener() { // Signup button
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(StartActivity.this, RegisterActivity.class));

@@ -71,156 +71,140 @@ public class MainActivity extends AppCompatActivity {
 
     final int LOCATION_PERMISSION_REQUEST = ERequestCodes.LOCATION_PERMISSION.getValue();
 
-    CircleImageView profileImage;
-    TextView username;
+    private CircleImageView profile_image_civ;
+    private TextView username_tv;
+    private TabLayout tabLayout;
+    private UsersFragment usersFragment;
+    private RequestsFragment requestsFragment;
+    FirebaseUser firebaseUser;
+    DatabaseReference databaseReference;
 
     //Start Hanan part
     CoordinatorLayout coordinatorLayout;
     FloatingActionButton floatingBtn;
     String profession = "",job_description = "",note = "",qualifications = "";//looking for
-   // String userProfession,userQualification,userExperience,userPersonal;
     private Uri imageUri = null;
     //End Hanan part
+
     Location userLocation;
     boolean gotUserLocation = false;
     int maxDistance;
-    TabLayout tabLayout;
-    FirebaseUser firebaseUser;
-    DatabaseReference reference;
-    private UsersFragment usersFragment;
-    private RequestsFragment requestsFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        /*if(getIntent().getBooleanExtra("employer",true))
-        {
-            setContentView(R.layout.employer_layout);
-        }*/
 
-        //else {
-            setContentView(R.layout.activity_main);
-            // Set empty user location
-            userLocation = new Location("");
-            usersFragment = new UsersFragment();
-            requestsFragment = new RequestsFragment();
+        setContentView(R.layout.activity_main);
 
-            Toolbar toolbar = findViewById(R.id.toolbar);
-            setSupportActionBar(toolbar);
-            getSupportActionBar().setTitle("");
-            coordinatorLayout = findViewById(R.id.coordinator);
-            floatingBtn = findViewById(R.id.floatingBtn);
-            floatingBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent popUpIntent = new Intent(getApplicationContext(), PopUpActivity.class);
-                    startActivityForResult(popUpIntent, ERequestCodes.NEW_REQUEST.getValue());
+        // Set empty user location
+        userLocation = new Location("");
+        usersFragment = new UsersFragment();
+        requestsFragment = new RequestsFragment();
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("");
+
+        coordinatorLayout = findViewById(R.id.coordinator);
+
+        floatingBtn = findViewById(R.id.floatingBtn);
+        floatingBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent popUpIntent = new Intent(getApplicationContext(), PopUpActivity.class);
+                startActivityForResult(popUpIntent, ERequestCodes.NEW_REQUEST.getValue());
+            }
+        });
+
+        profile_image_civ = findViewById(R.id.profile_image);
+        username_tv = findViewById(R.id.username);
+
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+
+        databaseReference = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid());
+        databaseReference.addValueEventListener(new ValueEventListener() { // reference to the information of the current user
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                User user = dataSnapshot.getValue(User.class);
+
+                if (user != null) // If the user's information is empty
+                    System.out.println("user profession: " + user.getProfession());
+
+                username_tv.setText(user.getUsername());
+
+                if (user.getImageURL().equals("default")) {  // When there is no link to the image use the default
+                    profile_image_civ.setImageResource(R.drawable.unethical_icon);
                 }
-            });
-        /*if(getIntent().hasExtra("userProfession"))
-        {//from profile activity - after registration with email part
-            userProfession = getIntent().getStringExtra("userProfession");
-            userQualification = getIntent().getStringExtra("userQualification");
-            userPersonal = getIntent().getStringExtra("personal");
-            userExperience = getIntent().getStringExtra("userExperience");
-            if(getIntent().hasExtra("imageUri"))
-                imageUri = getIntent().getParcelableExtra("imageUri");
-        }*/
-
-
-            profileImage = findViewById(R.id.profile_image);
-            username = findViewById(R.id.username);
-
-            firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-            reference = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid());
-
-            reference.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    User user = dataSnapshot.getValue(User.class);
-                    if (user != null)
-                        System.out.println("user profession: " + user.getProfession());
-                /*if(user.getEmployee()==null)
-                    floatingBtn.hide();
-                else
-                    floatingBtn.show();*/
-                    username.setText(user.getUsername());
-
-                    if (user.getImageURL().equals("default")) {
-                        profileImage.setImageResource(R.drawable.unethical_icon);
-                    } else {
-                        Picasso.get().load(user.getImageURL()).into(profileImage);
-                    }
-                    // Set last known location if it exists
-                    if (dataSnapshot.hasChild("latitude")) {
-                        userLocation.setLatitude(dataSnapshot.child("latitude").getValue(double.class));
-                        userLocation.setLongitude(dataSnapshot.child("longitude").getValue(double.class));
-                    }
+                else {
+                    Picasso.get().load(user.getImageURL()).into(profile_image_civ);
                 }
 
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                if (dataSnapshot.hasChild("latitude")) { // Set last known location if it exists
+                    userLocation.setLatitude(dataSnapshot.child("latitude").getValue(double.class));
+                    userLocation.setLongitude(dataSnapshot.child("longitude").getValue(double.class));
                 }
-            });
+            }
 
-            tabLayout = findViewById(R.id.tab_layout);
-            ViewPager viewPager = findViewById(R.id.view_pager);
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
 
-            reference = FirebaseDatabase.getInstance().getReference("Chats");
-            reference.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
+            }
+        });
 
-                    int unreadMessages = 0;
+        tabLayout = findViewById(R.id.tab_layout);
 
-                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                        Chat chat = snapshot.getValue(Chat.class);
+        ViewPager viewPager = findViewById(R.id.view_pager);
 
-                        if (chat.getReceiver().equals(firebaseUser.getUid()) && !chat.isIsseen()) {
+        databaseReference = FirebaseDatabase.getInstance().getReference("Chats");
+        databaseReference.addValueEventListener(new ValueEventListener() { // reference to the chats of the current user
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
+
+                int unreadMessages = 0;
+
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Chat chat = snapshot.getValue(Chat.class);
+
+                    if (chat.getReceiver().equals(firebaseUser.getUid()) && !chat.isIsseen()) { // Counts some unread messages
                             unreadMessages++;
-                        }
                     }
-
-                    if (unreadMessages == 0) {
-                        viewPagerAdapter.addFragment(new ChatsFragment(), getResources().getString(R.string.chats_tab));
-                    } else {
-                        viewPagerAdapter.addFragment(new ChatsFragment(), "(" + unreadMessages + ") " + getResources().getString(R.string.chats_tab));
-                    }
-
-                    //viewPagerAdapter.addFragment(new UsersFragment(), "Users");
-                    viewPagerAdapter.addFragment(usersFragment, getResources().getString(R.string.users_tab));
-                    viewPagerAdapter.addFragment(requestsFragment, getResources().getString(R.string.requests_tab));
-                    viewPagerAdapter.addFragment(new ProfileFragment(), getResources().getString(R.string.profile_tab));
-
-                    viewPager.setAdapter(viewPagerAdapter);
-
-                    tabLayout.setupWithViewPager(viewPager);
-
-                    tabLayout.getTabAt(0).setIcon(R.drawable.chat);
-                    tabLayout.getTabAt(1).setIcon(R.drawable.group);
-                    tabLayout.getTabAt(2).setIcon(R.drawable.requests);
-                    tabLayout.getTabAt(3).setIcon(R.drawable.profile);
                 }
 
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
+                if (unreadMessages == 0) {
+                    viewPagerAdapter.addFragment(new ChatsFragment(), getResources().getString(R.string.chats_tab));
+                }
+                else { // If there are some unread messages then it presents it in the tab
+                    viewPagerAdapter.addFragment(new ChatsFragment(), "(" + unreadMessages + ") " + getResources().getString(R.string.chats_tab));
                 }
 
-            });
+                viewPagerAdapter.addFragment(usersFragment, getResources().getString(R.string.users_tab));
+                viewPagerAdapter.addFragment(requestsFragment, getResources().getString(R.string.requests_tab));
+                viewPagerAdapter.addFragment(new ProfileFragment(), getResources().getString(R.string.profile_tab));
+                viewPager.setAdapter(viewPagerAdapter);
 
-            // Check for location permission
-            if (Build.VERSION.SDK_INT >= 23) {
-                int hasLocationPermission = checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION);
-                if (hasLocationPermission != PackageManager.PERMISSION_GRANTED) {
-                    requestPermissions(new String[] {Manifest.permission.ACCESS_FINE_LOCATION},LOCATION_PERMISSION_REQUEST);
-                }
-                else getLocation();
+                tabLayout.setupWithViewPager(viewPager);
+                tabLayout.getTabAt(0).setIcon(R.drawable.chat);
+                tabLayout.getTabAt(1).setIcon(R.drawable.group);
+                tabLayout.getTabAt(2).setIcon(R.drawable.requests);
+                tabLayout.getTabAt(3).setIcon(R.drawable.profile);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
+
+        if (Build.VERSION.SDK_INT >= 23) { // Check for location permission
+            int hasLocationPermission = checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION);
+            if (hasLocationPermission != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(new String[] {Manifest.permission.ACCESS_FINE_LOCATION},LOCATION_PERMISSION_REQUEST);
             }
             else getLocation();
-
         }
-    //}
+        else getLocation();
+
+    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -252,7 +236,7 @@ public class MainActivity extends AppCompatActivity {
                     HashMap<String, Object> map = new HashMap<>();
                     map.put("latitude", location.getLatitude());
                     map.put("longitude", location.getLongitude());
-                    reference.updateChildren(map);
+                    databaseReference.updateChildren(map);
                     gotUserLocation = true;
                 }
                 // Only update db when user traveled more than 5 meters
@@ -262,34 +246,32 @@ public class MainActivity extends AppCompatActivity {
                     HashMap<String, Object> map = new HashMap<>();
                     map.put("latitude", location.getLatitude());
                     map.put("longitude", location.getLongitude());
-                    reference.updateChildren(map);
+                    databaseReference.updateChildren(map);
                 }
             }
         };
-
         if(Build.VERSION.SDK_INT>=23 && checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION)==PackageManager.PERMISSION_GRANTED) {
             client.requestLocationUpdates(request, callback, null);
         }
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(Menu menu) { // Creates the menu
         getMenuInflater().inflate(R.menu.menu, menu);
         return true;
     }
 
     @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) { // The menu buttons
         switch (item.getItemId()){
             case R.id.my_requests:
-                startActivity(new Intent(MainActivity.this, UserSpecificRequestsActivity.class).putExtra("user_name", username.getText().toString()));
+                startActivity(new Intent(MainActivity.this, UserSpecificRequestsActivity.class).putExtra("user_name", username_tv.getText().toString()));
                 return true;
             case R.id.logout:
                 FirebaseAuth.getInstance().signOut();
                 startActivity(new Intent(MainActivity.this, StartActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                 return true;
         }
-
         return false;
     }
 
@@ -328,13 +310,13 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void userStatus(String status){
-        reference = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid());
+    private void userStatus(String status){ // Changes the user's status to offline or online
+        databaseReference = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid());
 
         HashMap<String, Object> hashMap = new HashMap<>();
         hashMap.put("status", status);
 
-        reference.updateChildren(hashMap);
+        databaseReference.updateChildren(hashMap);
     }
 
     // Tom
@@ -343,7 +325,7 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         // Getting information back from popUp activity
-        if (requestCode == ERequestCodes.NEW_REQUEST.getValue()) {
+        if (requestCode == ERequestCodes.NEW_REQUEST.getValue()) { // Getting information back from popUp activity
             if (resultCode == EResultCodes.SEARCH_USER.getValue()) {
                 if (data.hasExtra("profession")) {
                     profession = data.getStringExtra("profession");
@@ -359,46 +341,45 @@ public class MainActivity extends AppCompatActivity {
                 // Open new Request
                 Request request = (Request) data.getSerializableExtra("request");
                 request.setCreatorId(firebaseUser.getUid());
-                request.setCreatorName(username.getText().toString());
+                request.setCreatorName(username_tv.getText().toString());
                 requestsFragment.addRequest(request);
             }
         }
         else if (requestCode == ERequestCodes.UPDATE_REQUEST.getValue()) {
             if (resultCode == EResultCodes.UPDATE_REQUEST_WORKER.getValue()) {
                 // Add worker to request and send that user a notification
-                requestsFragment.updateRequestWorker(data.getIntExtra("request_position", 0), username.getText().toString(), firebaseUser.getUid());
+                requestsFragment.updateRequestWorker(data.getIntExtra("request_position", 0), username_tv.getText().toString(), firebaseUser.getUid());
                 Intent intent = new Intent(MainActivity.this, MessageActivity.class);
                 intent.putExtra("userId", data.getStringExtra("creatorId"));
                 startActivity(intent);
-                NotificationBuilder.sendNotification(this, firebaseUser.getUid(),data.getStringExtra("creatorId"), getResources().getString(R.string.job_taken_message_body), username.getText().toString() + " " + getResources().getString(R.string.job_taken_notification));
+                NotificationBuilder.sendNotification(this, firebaseUser.getUid(),data.getStringExtra("creatorId"), getResources().getString(R.string.job_taken_message_body), username_tv.getText().toString() + " " + getResources().getString(R.string.job_taken_notification));
             }
             else if (resultCode == EResultCodes.REMOVE_WORKER.getValue()) {
                 // Remove worker from request and send that user a notification
                 requestsFragment.removeWorkerFromRequest(data.getIntExtra("request_position", 0), data.getStringExtra("workerId"));
-                NotificationBuilder.sendNotification(this, firebaseUser.getUid(), data.getStringExtra("workerId"), username.getText().toString() + " " + getResources().getString(R.string.removed_from_request_alert), getResources().getString(R.string.request_update_alert));
+                NotificationBuilder.sendNotification(this, firebaseUser.getUid(), data.getStringExtra("workerId"), username_tv.getText().toString() + " " + getResources().getString(R.string.removed_from_request_alert), getResources().getString(R.string.request_update_alert));
             }
             else if (resultCode == EResultCodes.QUIT_REQUEST.getValue()) {
                 // Remove worker from request and send the creator a notification
                 requestsFragment.removeWorkerFromRequest(data.getIntExtra("request_position", 0), firebaseUser.getUid());
-                NotificationBuilder.sendNotification(this, firebaseUser.getUid(), data.getStringExtra("creatorId"), username.getText().toString() + " " + getResources().getString(R.string.worker_quit_alert), getResources().getString(R.string.request_update_alert));
+                NotificationBuilder.sendNotification(this, firebaseUser.getUid(), data.getStringExtra("creatorId"), username_tv.getText().toString() + " " + getResources().getString(R.string.worker_quit_alert), getResources().getString(R.string.request_update_alert));
             }
             else if (resultCode == EResultCodes.CLOSE_REQUEST.getValue()) {
                 // Close request and send the worker a notification
                 requestsFragment.closeRequest(data.getIntExtra("request_position",0));
-                NotificationBuilder.sendNotification(this, firebaseUser.getUid(), data.getStringExtra("workerId"), username.getText().toString() + " " + getResources().getString(R.string.request_closed_alert), getResources().getString(R.string.request_update_alert));
+                NotificationBuilder.sendNotification(this, firebaseUser.getUid(), data.getStringExtra("workerId"), username_tv.getText().toString() + " " + getResources().getString(R.string.request_closed_alert), getResources().getString(R.string.request_update_alert));
             }
         }
     }
 
     @Override
-    protected void onResume() {
+    protected void onResume() { // When you return to the app then the status changes to online
         super.onResume();
-        //if(!getIntent().getBooleanExtra("employer",true))
-            userStatus("online");
+        userStatus("online");
     }
 
     @Override
-    protected void onPause() {
+    protected void onPause() { // When leaving the app, the status changes to offline
         super.onPause();
         userStatus("offline");
     }
