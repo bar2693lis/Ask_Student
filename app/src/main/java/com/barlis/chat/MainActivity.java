@@ -133,7 +133,7 @@ public class MainActivity extends AppCompatActivity {
                 username_tv.setText(user.getUsername());
 
                 if (user.getImageURL().equals("default")) {  // When there is no link to the image use the default
-                    profile_image_civ.setImageResource(R.drawable.unethical_icon);
+                    profile_image_civ.setImageResource(R.drawable.students_icon);
                 }
                 else {
                     Picasso.get().load(user.getImageURL()).into(profile_image_civ);
