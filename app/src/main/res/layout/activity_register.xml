@@ -75,7 +75,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/register"
-            android:background="@color/colorPrimaryDark"
+            android:layout_marginHorizontal="30dp"
+            android:background="@drawable/button_ripple"
             android:textColor="#fff"
             android:layout_marginTop="10dp"/>
         

@@ -347,7 +347,7 @@ public class ProfileFragment extends Fragment {
 
     private void uploadImage(){ // When the user uploads a new image
         final ProgressDialog pd = new ProgressDialog(getContext());
-        pd.setMessage("Uploading");
+        pd.setMessage(getResources().getString(R.string.upload_in_progress));
         pd.show();
 
         if(image_uri != null){ // If the uri is not empty
@@ -393,6 +393,7 @@ public class ProfileFragment extends Fragment {
         }
         else{ // If no image is selected
             Toast.makeText(getContext(), getResources().getString(R.string.no_image_selected), Toast.LENGTH_SHORT).show();
+            pd.dismiss();
         }
     }
 

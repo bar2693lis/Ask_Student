@@ -2,7 +2,8 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@color/colorPrimary">
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/profile_image"
         android:layout_width="120dp"
@@ -64,7 +65,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/star_layout"
         android:text="@string/sumbit"
-        android:background="@color/colorPrimaryDark"
+        android:background="@drawable/button_ripple"
         android:textColor="#fff"
-        android:layout_margin="15dp"/>
+        android:layout_margin="30dp"/>
 </RelativeLayout>

@@ -1,6 +1,9 @@
 package com.barlis.chat.Adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Paint;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,9 +53,24 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull MessageAdapter.ViewHolder holder, int position) {
-        Chat chat = chat_list.get(position);
-
-        holder.show_message_tv.setText(chat.getMessage());
+        final Chat chat = chat_list.get(position);
+        if (chat.getType().equals("text")) {
+            holder.show_message_tv.setText(chat.getMessage());
+        }
+        else if (chat.getType().equals("file")){
+            if (chat.getMessage().length() > 30) {
+                holder.show_message_tv.setText(chat.getMessage().substring(0,30) + "...");
+            }
+            else {
+                holder.show_message_tv.setText(chat.getMessage());
+            }
+            holder.show_message_tv.setPaintFlags( holder.show_message_tv.getPaintFlags()| Paint.UNDERLINE_TEXT_FLAG);
+        }
+        else if (chat.getType().equals("image")) {
+            holder.show_message_tv.setVisibility(View.GONE);
+            holder.show_picture_tv.setVisibility(View.VISIBLE);
+            Picasso.get().load(chat.getMessage()).fit().centerCrop().into(holder.show_picture_tv);
+        }
 
         if(image_url.equals("default")){ // When there is no link to the image use the default
             holder.profile_image.setImageResource(R.drawable.user);
@@ -73,6 +91,15 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
         else{ // There is no message
             holder.text_seen_tv.setVisibility(View.GONE);
         }
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!chat.getType().equals("text")) {
+                    mContext.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(chat.getMessage())));
+                }
+            }
+        });
     }
 
     @Override
@@ -83,7 +110,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
     public class ViewHolder extends RecyclerView.ViewHolder{
 
         public TextView show_message_tv, text_seen_tv;
-        public ImageView profile_image;
+        public ImageView profile_image, show_picture_tv;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -91,6 +118,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
             show_message_tv = itemView.findViewById(R.id.show_message);
             profile_image = itemView.findViewById(R.id.profile_image);
             text_seen_tv = itemView.findViewById(R.id.txt_seen);
+            show_picture_tv = itemView.findViewById(R.id.show_picture);
         }
     }
 

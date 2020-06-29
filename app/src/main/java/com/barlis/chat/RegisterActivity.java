@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -27,6 +28,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     private EditText username_et, email_et, password_et;
     private Button register_btn;
+    private ProgressDialog dialog;
 
     FirebaseAuth firebaseAuth;
     DatabaseReference databaseReference;
@@ -69,6 +71,10 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void register (final String username, String email, String password){ // Creates a new user with their password and email
+        dialog = new ProgressDialog(RegisterActivity.this);
+        dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        dialog.setMessage(getResources().getString(R.string.connecting));
+        dialog.show();
         firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
@@ -104,8 +110,9 @@ public class RegisterActivity extends AppCompatActivity {
                     });
                 }
                 else{ // When the email or password is incorrect
-                    Toast.makeText(RegisterActivity.this, "You can't register with this email or password", Toast.LENGTH_LONG).show();
+                    Toast.makeText(RegisterActivity.this, getResources().getString(R.string.user_or_password_incorrect), Toast.LENGTH_LONG).show();
                 }
+                dialog.dismiss();
             }
         });
     }

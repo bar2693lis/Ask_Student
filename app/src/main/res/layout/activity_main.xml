@@ -45,6 +45,8 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
+        android:background="@color/colorAccent"
+        app:itemTextColor="#fff"
         android:id="@+id/navigation_view"
         app:menu="@menu/menu"
         app:headerLayout="@layout/header_layout"/>

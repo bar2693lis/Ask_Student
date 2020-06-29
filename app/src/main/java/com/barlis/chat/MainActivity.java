@@ -125,14 +125,14 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
         homeScreenFragment = new HomeScreenFragment();
+        homeScreenFragment.setFirebaseUser(firebaseUser);
         userSpecificRequestsFragment = new UserSpecificRequestsFragment();
 
         profile_image_civ = findViewById(R.id.profile_image);
         username_tv = findViewById(R.id.username);
-
-        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
         databaseReference = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid());
         databaseReference.addValueEventListener(new ValueEventListener() { // reference to the information of the current user
@@ -152,7 +152,7 @@ public class MainActivity extends AppCompatActivity {
                     Picasso.get().load(user.getImageURL()).into(profile_image_civ);
                 }
 
-                homeScreenFragment.setFirebaseUser(firebaseUser);
+
                 homeScreenFragment.setUserName(username_tv.getText().toString());
                 userSpecificRequestsFragment.setUserName(username_tv.getText().toString());
                 if (dataSnapshot.hasChild("latitude")) { // Set last known location if it exists
@@ -174,7 +174,7 @@ public class MainActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= 23) { // Check for location permission
             int hasLocationPermission = checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION);
             if (hasLocationPermission != PackageManager.PERMISSION_GRANTED) {
-                requestPermissions(new String[] {Manifest.permission.ACCESS_FINE_LOCATION},LOCATION_PERMISSION_REQUEST);
+                requestPermissions(new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_REQUEST);
             }
             else getLocation();
         }

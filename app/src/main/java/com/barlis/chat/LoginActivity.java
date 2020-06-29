@@ -65,6 +65,7 @@ public class LoginActivity extends AppCompatActivity {
                 else{ // If the email and password are not empty
                     dialog = new ProgressDialog(LoginActivity.this);
                     dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                    dialog.setMessage(getResources().getString(R.string.connecting));
                     dialog.show();
                     firebaseAuth.signInWithEmailAndPassword(txt_email, txt_password).addOnCompleteListener(new OnCompleteListener<AuthResult>() { // Connects with the data email and password
                         @Override
@@ -73,12 +74,12 @@ public class LoginActivity extends AppCompatActivity {
                                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                                 startActivity(intent);
-                                dialog.dismiss();
                                 finish();
                             }
                             else{ // If the email or password is incorrect
                                 Toast.makeText(LoginActivity.this, getResources().getString(R.string.authentication_failed), Toast.LENGTH_SHORT).show();
                             }
+                            dialog.dismiss();
                         }
                     });
                 }

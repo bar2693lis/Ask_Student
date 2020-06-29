@@ -65,6 +65,13 @@
             android:background="@android:color/transparent"
             android:hint="@string/type_message_hint"
             android:padding="5dp" />
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ic_attach_file"
+            android:layout_toStartOf="@id/btn_send"
+            android:id="@+id/btn_attach"
+            android:layout_margin="7dp"/>
 
         <ImageButton
             android:id="@+id/btn_send"

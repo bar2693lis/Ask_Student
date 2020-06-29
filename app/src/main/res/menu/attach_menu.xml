@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/attach_file"
+        android:icon="@drawable/ic_add"
+        android:title="Attach File"/>
+    <item android:id="@+id/attach_picture"
+        android:icon="@drawable/ic_add"
+        android:title="Attach Picture"/>
+    <item android:id="@+id/take_picture"
+        android:icon="@mipmap/ic_add_image"
+        android:title="Take Picture"/>
+</menu>

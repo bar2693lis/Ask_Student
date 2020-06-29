@@ -36,6 +36,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
     private boolean isChatLayout;
 
     String theLastMessage;
+    String theLastMessageType;
 
     public UserAdapter(Context mContext, List<User> mUsers, boolean isChat, boolean isChatLayout){ // Constructor
         this.mContext = mContext;
@@ -146,6 +147,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
                     if((chat.getReceiver().equals(firebaseUser.getUid()) && chat.getSender().equals(userId)) || (chat.getReceiver().equals(userId) && chat.getSender().equals(firebaseUser.getUid()))){ // If I sent the last message then it saves it for viewing, if your other user has the last message then it saves it for viewing
                         theLastMessage = chat.getMessage();
+                        theLastMessageType = chat.getType();
                     }
                 }
 
@@ -155,7 +157,12 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
                        break;
 
                     default: // Displays the last message sent
-                        last_message.setText(theLastMessage);
+                        if (theLastMessageType.equals("image")) {
+                            last_message.setText(mContext.getResources().getString(R.string.image));
+                        }
+                        else {
+                            last_message.setText(theLastMessage);
+                        }
                         break;
                 }
 

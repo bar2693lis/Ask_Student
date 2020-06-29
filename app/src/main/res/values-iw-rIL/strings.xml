@@ -90,4 +90,10 @@
     <string name="no_new_details">לא הוספת שום פרט</string>
     <string name="details_saved">פרטים נשמרו</string>
     <string name="authentication_failed">הזדהות נכשלה</string>
+    <string name="connecting">מתחבר</string>
+    <string name="image">תמונה</string>
+    <string name="attach_file">צרף קובץ</string>
+    <string name="attach_image">צרף תמונה</string>
+    <string name="take_picture">צלם תמונה</string>
+    <string name="user_or_password_incorrect">שם משתמש או סיסמא לא נכונים</string>
 </resources>
