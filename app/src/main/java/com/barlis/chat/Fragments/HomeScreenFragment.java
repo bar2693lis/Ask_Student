@@ -79,7 +79,7 @@ public class HomeScreenFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent popUpIntent = new Intent(getContext(), PopUpActivity.class);
-                startActivityForResult(popUpIntent, ERequestCodes.NEW_REQUEST.getValue());
+                getActivity().startActivityForResult(popUpIntent, ERequestCodes.NEW_REQUEST.getValue());
             }
         });
 
@@ -120,6 +120,7 @@ public class HomeScreenFragment extends Fragment {
                 tabLayout.getTabAt(1).setIcon(R.drawable.group);
                 tabLayout.getTabAt(2).setIcon(R.drawable.requests);
                 tabLayout.getTabAt(3).setIcon(R.drawable.profile);
+                tabLayout.getTabAt(0).select();
             }
 
             @Override

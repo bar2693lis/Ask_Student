@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -124,7 +125,10 @@ public class ProfileFragment extends Fragment {
                     Picasso.get().load(user.getImageURL()).into(image_profile_civ);
                 }
 
-                reviewerCount.setText(user.getNumberOfReviews() + " " + getResources().getString(R.string.reviews));
+                // Prevent IllegalStateException when reopening the app after closing
+                if (getActivity() != null) {
+                    reviewerCount.setText(user.getNumberOfReviews() + " " + getActivity().getResources().getString(R.string.reviews));
+                }
                 fillStarRating(user.getRating());
             }
 

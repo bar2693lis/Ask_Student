@@ -19,6 +19,7 @@ import android.location.Location;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -82,7 +83,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_main);
 
         // Set empty user location
@@ -270,7 +270,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+
 
         // Getting information back from popUp activity
         if (requestCode == ERequestCodes.NEW_REQUEST.getValue()) { // Getting information back from popUp activity
@@ -308,10 +308,10 @@ public class MainActivity extends AppCompatActivity {
             else if (resultCode == EResultCodes.QUIT_REQUEST.getValue()) {
                 // Remove worker from request and send the creator a notification
                 if (currentFragment == 1) {
-                    homeScreenFragment.removeWorkerFromRequest(data.getIntExtra("request_position", 0), firebaseUser.getUid());
+                    homeScreenFragment.quitFromRequest(data.getIntExtra("request_position", 0), firebaseUser.getUid());
                 }
                 else {
-                    userSpecificRequestsFragment.removeWorkerFromRequest(data.getIntExtra("request_position", 0), firebaseUser.getUid());
+                    userSpecificRequestsFragment.quitFromRequest(data.getIntExtra("request_position", 0), firebaseUser.getUid());
                 }
             }
             else if (resultCode == EResultCodes.CLOSE_REQUEST.getValue()) {
@@ -324,5 +324,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }

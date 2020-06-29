@@ -142,6 +142,12 @@ public class UsersFragment extends Fragment {
     //Hanan
     public void setNewSearchQuery(String profession, final boolean searchByDistance, Location userLocation, int maxDistance)
     {
+        String userSearchText = profession;
+        if (searchByDistance) {
+            userSearchText += " in range of " + maxDistance + " Km";
+        }
+        search_users.setText(userSearchText);
+
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users");
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -151,8 +157,7 @@ public class UsersFragment extends Fragment {
                 for(DataSnapshot snapshot:dataSnapshot.getChildren()) {
                     User user = snapshot.getValue(User.class);
                     if (user!=null && firebaseUser!=null && !user.getId().equals(firebaseUser.getUid())
-                            && user.getProfession() != null && user.getQualifications() != null
-                            && !user.getId().equals(firebaseUser.getUid())
+                            && user.getProfession() != null
                             && profession.equals(user.getProfession().toLowerCase())) {
                         if (searchByDistance) {
                             if (snapshot.hasChild("latitude")) {
@@ -172,9 +177,7 @@ public class UsersFragment extends Fragment {
                 if (mUsers.isEmpty()) {
                     Toast.makeText(getContext(), "No Users Found", Toast.LENGTH_SHORT).show();
                 }
-                else {
-                    userAdapter.notifyDataSetChanged();
-                }
+                userAdapter.notifyDataSetChanged();
             }
 
             @Override
