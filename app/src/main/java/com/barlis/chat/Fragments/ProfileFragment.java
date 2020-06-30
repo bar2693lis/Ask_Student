@@ -52,7 +52,7 @@ public class ProfileFragment extends Fragment {
     private CircleImageView image_profile_civ, cancel_btn, save_btn;
     private TextView username_tv, email_tv, reviewerCount, profession_tv;
     private ImageView choose_image_btn, edit_accounts_btn, facebook_account_btn, instagram_account_btn, github_account_btn, linkedin_account_btn, stars[];
-    private EditText edit_facebook_account, edit_instagram_account, edit_github_account, edit_linkedin_account, edit_profession, edit_qualifications ,edit_experience, edit_personal;
+    private EditText edit_facebook_account, edit_instagram_account, edit_github_account, edit_linkedin_account, edit_profession, edit_qualifications ,edit_experience;
     private LinearLayout accounts, edit_accounts, edit_details;
     private String facebook_url, instagram_url, github_url, linkedin_url;
     private static final int IMAGE_REQUEST = 1;
@@ -90,7 +90,6 @@ public class ProfileFragment extends Fragment {
         edit_profession = view.findViewById(R.id.edit_profession);
         edit_qualifications = view.findViewById(R.id.edit_qualifications);
         edit_experience = view.findViewById(R.id.edit_experience);
-        edit_personal = view.findViewById(R.id.edit_personal);
 
         stars = new ImageView[5];
         stars[0] = view.findViewById(R.id.star_one);
@@ -269,7 +268,7 @@ public class ProfileFragment extends Fragment {
             public void onClick(View v) {
                 databaseReference = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid());
 
-                if(edit_profession.getText().toString().equals("") && edit_qualifications.getText().toString().equals("") && edit_experience.getText().toString().equals("") && edit_personal.getText().toString().equals("")){ // When no details has been added and the user wants to save
+                if(edit_profession.getText().toString().equals("") && edit_qualifications.getText().toString().equals("") && edit_experience.getText().toString().equals("")){ // When no details has been added and the user wants to save
                     Toast.makeText(getContext(), getResources().getString(R.string.no_new_details), Toast.LENGTH_SHORT).show();
                 }
                 else { // When at least one detail was updated
@@ -286,10 +285,6 @@ public class ProfileFragment extends Fragment {
                     if(!edit_experience.getText().toString().equals("")){
                         hashMap.put("experience", edit_experience.getText().toString());
                         edit_experience.setText("");
-                    }
-                    if(!edit_personal.getText().toString().equals("")){
-                        hashMap.put("personal", edit_personal.getText().toString());
-                        edit_personal.setText("");
                     }
 
                     databaseReference.updateChildren(hashMap);

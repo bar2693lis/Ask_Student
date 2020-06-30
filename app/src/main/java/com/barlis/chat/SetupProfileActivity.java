@@ -35,7 +35,6 @@ public class SetupProfileActivity extends AppCompatActivity {
             TextInputEditText profession = findViewById(R.id.ProfileProfessionEt);
             TextInputEditText qualifications = findViewById(R.id.ProfileQualificationEt);
             TextInputEditText experience = findViewById(R.id.ProfileExperienceEt);
-            TextInputEditText personal = findViewById(R.id.ProfileAboutYourSelfEt);
             Button nextBtn = findViewById(R.id.ProfileDoneBtn);
             nextBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -52,10 +51,6 @@ public class SetupProfileActivity extends AppCompatActivity {
                                      hashMap.put("experience", experience.getText().toString());
                                 else
                                     hashMap.put("experience","");
-                                if(personal.getText()!=null)
-                                    hashMap.put("personal", personal.getText().toString());
-                                else
-                                    hashMap.put("personal","");
                                 databaseReference.updateChildren(hashMap);
                                 Intent nextWindow = new Intent(SetupProfileActivity.this, SetupPictureActivity.class);
                                 startActivity(nextWindow);

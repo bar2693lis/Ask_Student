@@ -21,7 +21,6 @@ public class User {
     private String profession;
     private String qualifications;
     private String experience;
-    private String personal;
     private String employee;
     private String employer;
 
@@ -75,10 +74,6 @@ public class User {
         this.experience = experience;
     }
 
-    public void setPersonal(String personal) {
-        this.personal = personal;
-    }
-
     public String getProfession() {
         return profession;
     }
@@ -89,10 +84,6 @@ public class User {
 
     public String getExperience() {
         return experience;
-    }
-
-    public String getPersonal() {
-        return personal;
     }
 
     public String getId() {

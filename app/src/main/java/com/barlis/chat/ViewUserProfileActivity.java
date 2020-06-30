@@ -37,7 +37,7 @@ public class ViewUserProfileActivity extends AppCompatActivity implements RateUs
 
     final String RATE_FRAGMENT_TAG = "RATE_FRAGMENT_TAG";
     CircleImageView image_profile;
-    TextView username, email, reviewerCount, profession, qualifications, experience, personal;
+    TextView username, email, reviewerCount, profession, qualifications, experience;
     ImageView facebook_account, instagram_account, github_account, linkedin_account;
     ImageView stars[];
     LinearLayout starLayout;
@@ -67,7 +67,6 @@ public class ViewUserProfileActivity extends AppCompatActivity implements RateUs
         profession= findViewById(R.id.profession);
         qualifications = findViewById(R.id.qualifications);
         experience = findViewById(R.id.experience);
-        personal = findViewById(R.id.personal);
         email = findViewById(R.id.email);
         facebook_account = findViewById(R.id.facebook_account);
         instagram_account = findViewById(R.id.instagram_account);
@@ -98,7 +97,6 @@ public class ViewUserProfileActivity extends AppCompatActivity implements RateUs
                 profession.setText(user.getProfession());
                 qualifications.setText(user.getQualifications());
                 experience.setText(user.getExperience());
-                personal.setText(user.getPersonal());
 
                 if (user.getProfession() == null) {
                     profession.setVisibility(View.GONE);
@@ -109,9 +107,6 @@ public class ViewUserProfileActivity extends AppCompatActivity implements RateUs
                 }
                 if (user.getExperience() == null) {
                     experience.setVisibility(View.GONE);
-                }
-                if (user.getPersonal() == null) {
-                    personal.setVisibility(View.GONE);
                 }
 
                 if(user.getImageURL().equals("default")){

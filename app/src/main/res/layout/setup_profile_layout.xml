@@ -147,27 +147,6 @@
         app:cardUseCompatPadding="true"
         android:elevation="8dp"
         >
-
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:id="@+id/aboutYourselfLayout"
-            android:textColorHint="@color/black"
-            android:layout_below="@+id/professionLayout"
-            >
-            <com.google.android.material.textfield.TextInputEditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/about_yourself_title"
-                android:gravity="center"
-                android:textColor="@color/red"
-                android:id="@+id/ProfileAboutYourSelfEt"
-                >
-
-            </com.google.android.material.textfield.TextInputEditText>
-        </com.google.android.material.textfield.TextInputLayout>
     </androidx.cardview.widget.CardView>
 
     <Button
