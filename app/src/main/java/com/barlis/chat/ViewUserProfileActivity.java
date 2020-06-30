@@ -57,7 +57,7 @@ public class ViewUserProfileActivity extends AppCompatActivity implements RateUs
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         int width = displayMetrics.widthPixels;
         int height = displayMetrics.heightPixels;
-        getWindow().setLayout((int)(width*0.8), (int)(height*0.55));
+        getWindow().setLayout((int)(width*0.8), (int)(height*0.51));
         WindowManager.LayoutParams params = getWindow().getAttributes();
         params.gravity = Gravity.CENTER;
         getWindow().setAttributes(params);
