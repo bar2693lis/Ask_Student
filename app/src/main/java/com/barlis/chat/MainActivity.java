@@ -119,6 +119,7 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.logout:
                         FirebaseAuth.getInstance().signOut();
                         startActivity(new Intent(MainActivity.this, StartActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        finish();
                         break;
                 }
                 drawerLayout.closeDrawers();

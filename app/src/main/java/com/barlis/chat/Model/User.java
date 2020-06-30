@@ -16,8 +16,6 @@ public class User {
     private String github;
     private String linkedin;
 
-
-    //Hanan
     private String profession;
     private String qualifications;
     private String experience;

@@ -59,12 +59,10 @@ public class HomeScreenFragment extends Fragment {
         this.userLocation = userLocation;
     }
 
-    //Start Hanan part
     CoordinatorLayout coordinatorLayout;
     FloatingActionButton floatingBtn;
     String profession = "",job_description = "",note = "",qualifications = "";//looking for
     private Uri imageUri = null;
-    //End Hanan part
 
     @Nullable
     @Override

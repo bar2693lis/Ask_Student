@@ -101,4 +101,6 @@
     <string name="in_range_of">in range of</string>
     <string name="km">kilometers</string>
     <string name="last_name_hint">Last Name</string>
+    <string name="check_email">Please check your email</string>
+    <string name="reset_password_title">Reset Password</string>
 </resources>

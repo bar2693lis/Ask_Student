@@ -54,7 +54,6 @@
             android:layout_height="wrap_content"
             android:hint="@string/ask_profession"
             android:gravity="center"
-            android:textColor="@color/red"
             android:id="@+id/ProfileProfessionEt"
             >
 
@@ -92,7 +91,6 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/ask_qualifications"
                 android:gravity="center"
-                android:textColor="@color/red"
                 android:id="@+id/ProfileQualificationEt"
                 >
 
@@ -127,7 +125,6 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/ask_experience"
                 android:gravity="center"
-                android:textColor="@color/red"
                 android:id="@+id/ProfileExperienceEt"
                 >
 

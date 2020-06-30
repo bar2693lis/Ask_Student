@@ -147,13 +147,12 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
                 for(DataSnapshot snapshot : dataSnapshot.getChildren()){
                     Chat chat = snapshot.getValue(Chat.class);
 
-                    // If user is no longer connected than go back to start screen
-                    if (firebaseUser == null) {
-                        mContext.startActivity(new Intent(mContext, StartActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
-                    }
-                    if((chat.getReceiver().equals(firebaseUser.getUid()) && chat.getSender().equals(userId)) || (chat.getReceiver().equals(userId) && chat.getSender().equals(firebaseUser.getUid()))){ // If I sent the last message then it saves it for viewing, if your other user has the last message then it saves it for viewing
-                        theLastMessage = chat.getMessage();
-                        theLastMessageType = chat.getType();
+                    // Prevent NullPointerException
+                    if (firebaseUser != null) {
+                        if ((chat.getReceiver().equals(firebaseUser.getUid()) && chat.getSender().equals(userId)) || (chat.getReceiver().equals(userId) && chat.getSender().equals(firebaseUser.getUid()))) { // If I sent the last message then it saves it for viewing, if your other user has the last message then it saves it for viewing
+                            theLastMessage = chat.getMessage();
+                            theLastMessageType = chat.getType();
+                        }
                     }
                 }
 
