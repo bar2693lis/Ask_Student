@@ -68,7 +68,7 @@
     <string name="quit_request">Quit Request</string>
     <string name="remove_worker">Remove Worker</string>
     <string name="required_profession">Required Profession</string>
-    <string name="removed_from_request_alert">You have been removed from a request by</string>
+    <string name="removed_from_request_alert">has removed use from a request</string>
     <string name="worker_quit_alert">Has stopped working on your request</string>
     <string name="request_update_alert">Request Update</string>
     <string name="my_requests">My Requests</string>

@@ -306,10 +306,10 @@ public class MainActivity extends AppCompatActivity {
             else if (resultCode == EResultCodes.QUIT_REQUEST.getValue()) {
                 // Remove worker from request and send the creator a notification
                 if (currentFragment == 1) {
-                    homeScreenFragment.quitFromRequest(data.getIntExtra("request_position", 0), firebaseUser.getUid());
+                    homeScreenFragment.quitFromRequest(data.getIntExtra("request_position", 0), data.getStringExtra("creatorId"));
                 }
                 else {
-                    userSpecificRequestsFragment.quitFromRequest(data.getIntExtra("request_position", 0), firebaseUser.getUid());
+                    userSpecificRequestsFragment.quitFromRequest(data.getIntExtra("request_position", 0), data.getStringExtra("creatorId"));
                 }
             }
             else if (resultCode == EResultCodes.CLOSE_REQUEST.getValue()) {

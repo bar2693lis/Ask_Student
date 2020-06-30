@@ -37,6 +37,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
+            android:textColor="@color/textWhite"
             android:hint="@string/user_name_hint"
             android:textColorHint="#BCFFFFFF"/>
 
@@ -45,6 +46,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
+            android:textColor="@color/textWhite"
             android:hint="@string/last_name_hint"
             android:textColorHint="#BCFFFFFF"/>
 
@@ -53,6 +55,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
+            android:textColor="@color/textWhite"
             android:hint="@string/email_hint"
             android:textColorHint="#BCFFFFFF"
             android:inputType="textEmailAddress"/>
@@ -62,6 +65,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
+            android:textColor="@color/textWhite"
             android:hint="@string/password_hint"
             android:textColorHint="#BCFFFFFF"
             android:inputType="textPassword"/>
