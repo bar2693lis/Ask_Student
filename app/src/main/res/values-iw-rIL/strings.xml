@@ -6,7 +6,7 @@
     <string name="forgot_password">שכחת סיסמא?</string>
     <string name="type_message_hint">הזן הודעה...</string>
     <string name="create_acount_title">צור חשבון חדש</string>
-    <string name="user_name_hint">שם משתמש</string>
+    <string name="user_name_hint">שם פרטי</string>
     <string name="register">הרשם</string>
     <string name="reset_password">אפס</string>
     <string name="reset_password_instructions">לאחר הלחיצה, תקבל מייל לאיפוס הסיסמא שלך</string>
@@ -98,4 +98,5 @@
     <string name="user_or_password_incorrect">שם משתמש או סיסמא לא נכונים</string>
     <string name="in_range_of">במרחק</string>
     <string name="km">קילומטרים</string>
+    <string name="last_name_hint">שם משפחה</string>
 </resources>

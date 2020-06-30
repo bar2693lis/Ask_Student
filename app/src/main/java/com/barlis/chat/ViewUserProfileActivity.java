@@ -89,7 +89,7 @@ public class ViewUserProfileActivity extends AppCompatActivity implements RateUs
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 user = dataSnapshot.getValue(User.class);
-                username.setText(user.getUsername());
+                username.setText(user.getUsername() + " " + user.getLastName());
                 email.setText(user.getEmail());
                 facebookUrl = user.getFacebook();
                 instagramUrl = user.getInstagram();
