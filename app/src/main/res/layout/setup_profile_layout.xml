@@ -5,21 +5,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/profileLayout"
     android:background="@color/colorAccent">
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/title"
         android:layout_alignParentTop="true"
-        android:background="@color/colorPrimary"
+        android:background="@drawable/filter_background"
         android:gravity="center"
         android:text="@string/about_yourself_title"
         android:layout_margin="30dp"
         android:textSize="30sp"
         android:layout_marginStart="20dp"
-        android:textColor="@color/black"
-        >
+        android:textColor="@color/black"/>
 
-    </TextView>
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -170,6 +169,7 @@
             </com.google.android.material.textfield.TextInputEditText>
         </com.google.android.material.textfield.TextInputLayout>
     </androidx.cardview.widget.CardView>
+
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -178,9 +178,10 @@
         android:layout_centerInParent="true"
         android:background="@drawable/round_btn"
         android:layout_marginTop="20dp"
-        android:text="@string/next">
+        android:text="@string/next"/>
 
-    </Button>
         </RelativeLayout>
+
     </ScrollView>
+
 </RelativeLayout>

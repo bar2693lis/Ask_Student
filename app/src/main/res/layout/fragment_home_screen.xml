@@ -11,6 +11,7 @@
         <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tab_layout"
             android:layout_width="match_parent"
@@ -20,6 +21,7 @@
             app:tabIndicatorColor="#fff"
             app:tabTextColor="#4FFFFFFF"/>
         </com.google.android.material.appbar.AppBarLayout>
+
         <androidx.viewpager.widget.ViewPager
             android:id="@+id/view_pager"
             android:layout_width="match_parent"
@@ -28,12 +30,17 @@
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/floatingBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/floatingBtn"
             android:layout_gravity="bottom|end"
-            android:layout_marginBottom="20dp"
             android:layout_marginEnd="20dp"
-            android:src="@drawable/add_task" />
+            android:layout_marginBottom="20dp"
+            android:src="@drawable/add_post_icon"
+            app:backgroundTint="#94CB54"
+            app:fabSize="mini"
+            app:maxImageSize="27dp" />
+
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
 </LinearLayout>
