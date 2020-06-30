@@ -91,36 +91,37 @@ public class HomeScreenFragment extends Fragment {
         databaseReference.addValueEventListener(new ValueEventListener() { // reference to the chats of the current user
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                HomeScreenFragment.ViewPagerAdapter viewPagerAdapter = new HomeScreenFragment.ViewPagerAdapter(getActivity().getSupportFragmentManager());
+                if (getActivity() != null) {
+                    HomeScreenFragment.ViewPagerAdapter viewPagerAdapter = new HomeScreenFragment.ViewPagerAdapter(getActivity().getSupportFragmentManager());
 
-                int unreadMessages = 0;
+                    int unreadMessages = 0;
 
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    Chat chat = snapshot.getValue(Chat.class);
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        Chat chat = snapshot.getValue(Chat.class);
 
-                    if (chat.getReceiver().equals(firebaseUser.getUid()) && !chat.isIsseen()) { // Counts some unread messages
-                        unreadMessages++;
+                        if (chat.getReceiver().equals(firebaseUser.getUid()) && !chat.isIsseen()) { // Counts some unread messages
+                            unreadMessages++;
+                        }
                     }
-                }
 
-                if (unreadMessages == 0) {
-                    viewPagerAdapter.addFragment(new ChatsFragment(), getResources().getString(R.string.chats_tab));
-                }
-                else { // If there are some unread messages then it presents it in the tab
-                    viewPagerAdapter.addFragment(new ChatsFragment(), "(" + unreadMessages + ") " + getResources().getString(R.string.chats_tab));
-                }
+                    if (unreadMessages == 0) {
+                        viewPagerAdapter.addFragment(new ChatsFragment(), getResources().getString(R.string.chats_tab));
+                    } else { // If there are some unread messages then it presents it in the tab
+                        viewPagerAdapter.addFragment(new ChatsFragment(), "(" + unreadMessages + ") " + getResources().getString(R.string.chats_tab));
+                    }
 
-                viewPagerAdapter.addFragment(usersFragment, getResources().getString(R.string.users_tab));
-                viewPagerAdapter.addFragment(requestsFragment, getResources().getString(R.string.requests_tab));
-                viewPagerAdapter.addFragment(new ProfileFragment(), getResources().getString(R.string.profile_tab));
-                viewPager.setAdapter(viewPagerAdapter);
+                    viewPagerAdapter.addFragment(usersFragment, getResources().getString(R.string.users_tab));
+                    viewPagerAdapter.addFragment(requestsFragment, getResources().getString(R.string.requests_tab));
+                    viewPagerAdapter.addFragment(new ProfileFragment(), getResources().getString(R.string.profile_tab));
+                    viewPager.setAdapter(viewPagerAdapter);
 
-                tabLayout.setupWithViewPager(viewPager);
-                tabLayout.getTabAt(0).setIcon(R.drawable.chat);
-                tabLayout.getTabAt(1).setIcon(R.drawable.group);
-                tabLayout.getTabAt(2).setIcon(R.drawable.requests);
-                tabLayout.getTabAt(3).setIcon(R.drawable.profile);
-                tabLayout.getTabAt(0).select();
+                    tabLayout.setupWithViewPager(viewPager);
+                    tabLayout.getTabAt(0).setIcon(R.drawable.chat);
+                    tabLayout.getTabAt(1).setIcon(R.drawable.group);
+                    tabLayout.getTabAt(2).setIcon(R.drawable.requests);
+                    tabLayout.getTabAt(3).setIcon(R.drawable.profile);
+                    tabLayout.getTabAt(0).select();
+                }
             }
 
             @Override

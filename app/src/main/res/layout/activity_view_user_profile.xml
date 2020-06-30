@@ -130,16 +130,6 @@
                         android:textColor="@color/textWhite"
                         android:layout_gravity="center"
                         android:text="@string/experience"/>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="20sp"
-                        android:layout_margin="5dp"
-                        android:id="@+id/personal"
-                        android:textColor="@color/textWhite"
-                        android:layout_gravity="center"
-                        android:text="@string/personal_summary"/>
-
                     <LinearLayout
                         android:id="@+id/accounts"
                         android:layout_width="wrap_content"

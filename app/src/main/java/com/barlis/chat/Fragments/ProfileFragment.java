@@ -290,7 +290,7 @@ public class ProfileFragment extends Fragment {
                     databaseReference.updateChildren(hashMap);
 
                     accounts.setVisibility(View.VISIBLE);
-                    edit_details_layout.setVisibility(View.GONE);
+                    edit_details.setVisibility(View.GONE);
 
                     Toast.makeText(getContext(), getResources().getString(R.string.accounts_saved), Toast.LENGTH_SHORT).show();
                 }
