@@ -25,45 +25,115 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <TextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/needed_profession"
-                android:text="Needed profession : Programmer"
-                android:textSize="20sp"
-                android:layout_margin="20dp"/>
+                android:orientation="vertical"
+                android:layout_margin="12dp">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="descriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescription"
-                android:id="@+id/request_description"
-                android:textSize="20sp"
-                android:layout_margin="20dp"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Required Profession:  "
+                    android:textStyle="bold"
+                    android:textSize="22sp"/>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/qualifications"
-                android:text="Qualifications : java"
-                android:textSize="20sp"
-                android:layout_margin="20dp"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/needed_profession"
+                    android:text="Programmer"
+                    android:textSize="20sp"/>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/notes"
-                android:text="Needed profession : Programmer"
-                android:textSize="20sp"
-                android:layout_margin="20dp"/>
+            </LinearLayout>
 
-            <TextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/request_status"
-                android:text="Status : Available"
-                android:textSize="20sp"
-                android:layout_margin="20dp"/>
+                android:orientation="vertical"
+                android:layout_margin="12dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Job Description:  "
+                    android:textStyle="bold"
+                    android:textSize="22sp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="description"
+                    android:id="@+id/request_description"
+                    android:textSize="20sp"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_margin="12dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Qualifications:  "
+                    android:textStyle="bold"
+                    android:textSize="22sp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/qualifications"
+                    android:text="Java"
+                    android:textSize="20sp"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_margin="12dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Notes:  "
+                    android:textStyle="bold"
+                    android:textSize="22sp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/notes"
+                    android:text="Programmer"
+                    android:textSize="20sp"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_margin="12dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Status:  "
+                    android:textStyle="bold"
+                    android:textSize="22sp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/request_status"
+                    android:text="Available"
+                    android:textSize="20sp"/>
+
+            </LinearLayout>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -122,7 +192,9 @@
                     android:text="@string/remove_worker"
                     android:id="@+id/remove_worker"
                     android:background="@drawable/button_design"
-                    android:padding="8dp"/>
+                    android:padding="8dp"
+                    android:layout_gravity="center"
+                    android:gravity="center|center_horizontal"/>
 
                 <Button
                     android:layout_width="wrap_content"
@@ -132,7 +204,9 @@
                     android:text="@string/close_request"
                     android:id="@+id/close_request"
                     android:background="@drawable/button_design"
-                    android:padding="8dp"/>
+                    android:padding="8dp"
+                    android:layout_gravity="center"
+                    android:gravity="center|center_horizontal"/>
 
             </LinearLayout>
 
