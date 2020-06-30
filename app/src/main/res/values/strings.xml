@@ -8,7 +8,7 @@
     <string name="forgot_password">Forgot your password?</string>
     <string name="type_message_hint">Type a message...</string>
     <string name="create_acount_title">Create a new account</string>
-    <string name="user_name_hint">Username</string>
+    <string name="user_name_hint">First Name</string>
     <string name="register">Register</string>
     <string name="reset_password">Reset</string>
     <string name="reset_password_instructions">By clicking RESET,  you will receive an email to reset your password</string>
@@ -100,4 +100,5 @@
     <string name="user_or_password_incorrect">User or password is incorrect</string>
     <string name="in_range_of">in range of</string>
     <string name="km">kilometers</string>
+    <string name="last_name_hint">Last Name</string>
 </resources>

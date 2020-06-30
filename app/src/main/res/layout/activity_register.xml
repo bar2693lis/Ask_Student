@@ -41,6 +41,14 @@
             android:textColorHint="#BCFFFFFF"/>
 
         <EditText
+            android:id="@+id/last_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:hint="@string/last_name_hint"
+            android:textColorHint="#BCFFFFFF"/>
+
+        <EditText
             android:id="@+id/email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -58,18 +66,6 @@
             android:textColorHint="#BCFFFFFF"
             android:inputType="textPassword"/>
 
-        <!--
-        <Switch
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Im an employee"
-            android:checked="true"
-            android:layout_marginTop="10dp"
-            android:id="@+id/employeeSwitch"
-            >
-
-        </Switch>
-        -->
         <Button
             android:id="@+id/btn_register"
             android:layout_width="match_parent"

@@ -4,6 +4,7 @@ public class User {
 
     private String id;
     private String username;
+    private String lastName;
     private String imageURL;
     private String email;
 
@@ -24,15 +25,15 @@ public class User {
     private String employee;
     private String employer;
 
-    //Tom
     private float rating;
     private int numberOfReviews;
 
 
 
-    public User(String id, String username, String imageURL, String email, String status, String search, String facebook, String instagram, String github, String linkedin) {
+    public User(String id, String username, String lastName, String imageURL, String email, String status, String search, String facebook, String instagram, String github, String linkedin) {
         this.id = id;
         this.username = username;
+        this.lastName = lastName;
         this.imageURL = imageURL;
         this.email = email;
         this.status = status;
@@ -41,7 +42,6 @@ public class User {
         this.instagram = instagram;
         this.github = search;
         this.linkedin = linkedin;
-
     }
 
     public User() {
@@ -110,6 +110,10 @@ public class User {
     public void setUsername(String username) {
         this.username = username;
     }
+
+    public String getLastName() { return lastName; }
+
+    public void setLastName(String lastName) { this.lastName = lastName; }
 
     public String getImageURL() {
         return imageURL;

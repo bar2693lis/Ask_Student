@@ -26,7 +26,7 @@ import java.util.HashMap;
 
 public class RegisterActivity extends AppCompatActivity {
 
-    private EditText username_et, email_et, password_et;
+    private EditText username_et, lastName_et, email_et, password_et;
     private Button register_btn;
     private ProgressDialog dialog;
 
@@ -44,6 +44,7 @@ public class RegisterActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         username_et = findViewById(R.id.username);
+        lastName_et = findViewById(R.id.last_name);
         email_et = findViewById(R.id.email);
         password_et = findViewById(R.id.password);
 
@@ -54,23 +55,24 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String txt_username = username_et.getText().toString();
+                String txt_lastName = lastName_et.getText().toString();
                 String txt_email = email_et.getText().toString();
                 String txt_password = password_et.getText().toString();
 
-                if(TextUtils.isEmpty(txt_username) || TextUtils.isEmpty(txt_email) || TextUtils.isEmpty(txt_password)){ // Checks if the name or email or password is blank
+                if(TextUtils.isEmpty(txt_username) || TextUtils.isEmpty(txt_lastName) || TextUtils.isEmpty(txt_email) || TextUtils.isEmpty(txt_password)){ // Checks if the name or email or password is blank
                     Toast.makeText(RegisterActivity.this, "All fields are required", Toast.LENGTH_SHORT).show();
                 }
                 else if(txt_password.length() < 6) { // Checks if the password is greater than 6 characters
                     Toast.makeText(RegisterActivity.this, "Password must be at least 6 characters", Toast.LENGTH_SHORT).show();
                 }
                 else{
-                    register(txt_username, txt_email, txt_password);
+                    register(txt_username, txt_lastName, txt_email, txt_password);
                 }
             }
         });
     }
 
-    private void register (final String username, String email, String password){ // Creates a new user with their password and email
+    private void register (final String username, String lastName, String email, String password){ // Creates a new user with their password and email
         dialog = new ProgressDialog(RegisterActivity.this);
         dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         dialog.setMessage(getResources().getString(R.string.connecting));
@@ -88,6 +90,7 @@ public class RegisterActivity extends AppCompatActivity {
                     HashMap<String, String> hashMap = new HashMap<>();
                     hashMap.put("id", userId);
                     hashMap.put("username", username);
+                    hashMap.put("lastName", lastName);
                     hashMap.put("imageURL", "default");
                     hashMap.put("email", email);
                     hashMap.put("status", "offline");

@@ -110,7 +110,7 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
-                username_tv.setText(user.getUsername());
+                username_tv.setText(user.getUsername() + " " + user.getLastName());
                 profession_tv.setText(user.getProfession());
                 email_tv.setText(user.getEmail());
                 facebook_url = user.getFacebook();
