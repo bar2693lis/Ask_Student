@@ -1,6 +1,8 @@
 package com.barlis.chat;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
@@ -61,6 +63,7 @@ public class ViewUserProfileActivity extends AppCompatActivity implements RateUs
         WindowManager.LayoutParams params = getWindow().getAttributes();
         params.gravity = Gravity.CENTER;
         getWindow().setAttributes(params);
+        getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
         image_profile = findViewById(R.id.profile_image);
         username = findViewById(R.id.username);

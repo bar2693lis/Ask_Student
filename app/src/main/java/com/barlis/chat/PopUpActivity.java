@@ -1,6 +1,8 @@
 package com.barlis.chat;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
@@ -50,6 +52,7 @@ public class PopUpActivity extends AppCompatActivity {
         int height = displayMetrics.heightPixels;
         CardView cardView = findViewById(R.id.popUpCardView);
         getWindow().setLayout((int)(width*0.8),(int)(height*0.9));
+        getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         WindowManager.LayoutParams params = getWindow().getAttributes();
         params.gravity = Gravity.CENTER;
         params.x = 0;

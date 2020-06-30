@@ -1,6 +1,8 @@
 package com.barlis.chat;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
@@ -35,6 +37,7 @@ public class ViewRequestActivity extends AppCompatActivity {
         WindowManager.LayoutParams params = getWindow().getAttributes();
         params.gravity = Gravity.CENTER;
         getWindow().setAttributes(params);
+        getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         requestTitle = findViewById(R.id.request_title);
