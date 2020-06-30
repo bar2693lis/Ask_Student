@@ -53,10 +53,10 @@ public class ViewRequestActivity extends AppCompatActivity {
         // Take request from intent and fill the textViews
         Request request = (Request)getIntent().getSerializableExtra("request");
         requestTitle.setText(request.getRequestTitle());
-        profession.setText(getResources().getString(R.string.required_profession) + ": " + request.getRequiredProfession());
-        requestDescription.setText(getResources().getString(R.string.job_description) + ": " + request.getRequestDetails());
-        qualifications.setText(getResources().getString(R.string.qualifications) + ": " + request.getQualifications());
-        notes.setText(getResources().getString(R.string.notes) + ": " + request.getNotes());
+        profession.setText(request.getRequiredProfession());
+        requestDescription.setText(request.getRequestDetails());
+        qualifications.setText(request.getQualifications());
+        notes.setText(request.getNotes());
         switch (request.getStatus()) {
             case REQUEST_AVAILABLE:
                 requestStatus.setText(getResources().getString(R.string.status_available));
