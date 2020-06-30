@@ -59,10 +59,10 @@
     <string name="empty_message_alert">אי אפשר לשלוח הודעה ריקה</string>
     <string name="new_message_alert">הודעה חדשה מ -</string>
     <string name="job_taken_notification">רוצים לעבוד על הבקשה שלך!</string>
-    <string name="job_taken_message_body">לחצו כאן כדי לדבר איתם</string>
+    <string name="job_taken_message_body">התחברו כדי לדבר איתם</string>
     <string name="taken_by">נתפס על ידי:</string>
     <string name="back">חזרה</string>
-    <string name="accept">אישור</string>
+    <string name="accept">קבל בקשה</string>
     <string name="quit_request">ותר על הבקשה</string>
     <string name="remove_worker">ותר על העובד</string>
     <string name="required_profession">מקצוע נדרש</string>
@@ -96,4 +96,6 @@
     <string name="attach_image">צרף תמונה</string>
     <string name="take_picture">צלם תמונה</string>
     <string name="user_or_password_incorrect">שם משתמש או סיסמא לא נכונים</string>
+    <string name="in_range_of">במרחק</string>
+    <string name="km">קילומטרים</string>
 </resources>

@@ -191,7 +191,7 @@ public class HomeScreenFragment extends Fragment {
 
     public void removeWorkerFromRequest(int position, String workerId) {
         // Remove worker from request and send that user a notification
-        requestsFragment.removeWorkerFromRequest(position, workerId);
+        requestsFragment.removeWorkerFromRequest(position);
         NotificationBuilder.sendNotification(getContext(), firebaseUser.getUid(), workerId, userName + " " + getResources().getString(R.string.removed_from_request_alert), getResources().getString(R.string.request_update_alert));
     }
 
@@ -202,7 +202,7 @@ public class HomeScreenFragment extends Fragment {
     }
 
     public void quitFromRequest(int position, String creatorId) {
-        requestsFragment.removeWorkerFromRequest(position, firebaseUser.getUid());
+        requestsFragment.removeWorkerFromRequest(position);
         NotificationBuilder.sendNotification(getContext(), firebaseUser.getUid(), creatorId, userName + " " + getResources().getString(R.string.worker_quit_alert), getResources().getString(R.string.request_update_alert));
 
     }

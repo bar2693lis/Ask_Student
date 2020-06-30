@@ -58,24 +58,29 @@ public class RequestsFragment extends Fragment {
         requestReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                requests.clear();
-                // Collect all professions for filter
-                List<String> professions = new ArrayList<>();
-                professions.add(getResources().getString(R.string.any_profession));
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    Request request = snapshot.getValue(Request.class);
-                    request.setRequestId(snapshot.getKey());
-                    // Add only if not duplicate
-                    if (!professions.contains(request.getRequiredProfession().toLowerCase())) {
-                        professions.add(request.getRequiredProfession().toLowerCase());
+                if (getActivity() != null) {
+                    requests.clear();
+                    // Collect all professions for filter
+                    List<String> professions = new ArrayList<>();
+                    // Prevent IllegalStateException when reopening the app after closing
+
+                    professions.add(getResources().getString(R.string.any_profession));
+
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        Request request = snapshot.getValue(Request.class);
+                        request.setRequestId(snapshot.getKey());
+                        // Add only if not duplicate
+                        if (!professions.contains(request.getRequiredProfession().toLowerCase())) {
+                            professions.add(request.getRequiredProfession().toLowerCase());
+                        }
+                        requests.add(request);
                     }
-                    requests.add(request);
+                    professionAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_dropdown_item, professions.toArray(new String[professions.size()]));
+                    requestAdapter = new RequestAdapter(getActivity(), requests);
+                    recyclerView.setAdapter(requestAdapter);
+                    statusFilter.setAdapter(statusAdapter);
+                    professionFilter.setAdapter(professionAdapter);
                 }
-                professionAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_dropdown_item, professions.toArray(new String[professions.size()]));
-                requestAdapter = new RequestAdapter(getActivity(), requests);
-                recyclerView.setAdapter(requestAdapter);
-                statusFilter.setAdapter(statusAdapter);
-                professionFilter.setAdapter(professionAdapter);
             }
 
             @Override
@@ -134,7 +139,7 @@ public class RequestsFragment extends Fragment {
                     Request request = snapshot.getValue(Request.class);
                     int passedFilters = 0;
                     if (isFilterStatus) {
-                        if (request.getStatus().getValue() == statusFilter.getSelectedItemPosition()) {
+                        if (request.getStatus() == ERequestStatus.values()[statusFilter.getSelectedItemPosition() - 1]) {
                             passedFilters++;
                         }
                     }
@@ -208,7 +213,7 @@ public class RequestsFragment extends Fragment {
     }
 
     // Remove a worker from request at specific position, change state to available and update recycler
-    public void removeWorkerFromRequest(int position, String workerId) {
+    public void removeWorkerFromRequest(int position) {
         DatabaseReference requestReference = FirebaseDatabase.getInstance().getReference("Requests").child(requests.get(position).getRequestId());
         requestReference.child("workerId").removeValue();
         requestReference.child("workerName").removeValue();

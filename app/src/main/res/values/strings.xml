@@ -61,7 +61,7 @@
     <string name="empty_message_alert">You can\'t send an empty message</string>
     <string name="new_message_alert">New message from</string>
     <string name="job_taken_notification">wants to work on your request!</string>
-    <string name="job_taken_message_body">Click here to chat with them</string>
+    <string name="job_taken_message_body">go to app to chat with them</string>
     <string name="taken_by">Taken By:</string>
     <string name="back">Back</string>
     <string name="accept">Accept</string>
@@ -98,4 +98,6 @@
     <string name="attach_image">Attach Image</string>
     <string name="take_picture">Take Picture</string>
     <string name="user_or_password_incorrect">User or password is incorrect</string>
+    <string name="in_range_of">in range of</string>
+    <string name="km">kilometers</string>
 </resources>

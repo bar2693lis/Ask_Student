@@ -270,8 +270,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-
-
         // Getting information back from popUp activity
         if (requestCode == ERequestCodes.NEW_REQUEST.getValue()) { // Getting information back from popUp activity
             if (resultCode == EResultCodes.SEARCH_USER.getValue()) {
